@@ -20,12 +20,12 @@ void turnToAngle(okapi::QAngle targetAngle){
 	turnPID->reset();
 	turnPID->setTarget(targetAngle.convert(degree));
 
-	do{
+	do {
 		chassis->getOdometry()->step();
 		double power = turnPID->step(chassis->getState().theta.convert(degree));
 		(chassis->getModel())->tank(power, -power);
 		pros::delay(10);
-	}while(!turnPID->isSettled());
+	} while(!turnPID->isSettled());
 
 	(chassis->getModel())->stop();
 }
