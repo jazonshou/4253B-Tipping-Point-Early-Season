@@ -1,30 +1,27 @@
-#include "globals.hpp"
+#include "main.h"
 
 // CONTROLLER
-// Controller Globals::master(); //wtf
+Controller master(ControllerId::master); 
 
 // MOTORS - check rotation
-Motor Globals::leftFront(1, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor Globals::leftTop(20, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor Globals::leftBottom(19, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor Globals::rightFront(16, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor Globals::rightTop(17, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor Globals::rightBottom(18, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+MotorGroup leftDrive({1, 20, 19});
+MotorGroup rightDrive({16, 17, 18});
 
-Motor Globals::lift(15, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+Motor lift(15, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 
 //change port
-Motor Globals::roller(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees); 
+Motor roller(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees); 
 
 // SENSORS - check ports & rotation
-ADIEncoder Globals::trackLeft({14, 'A', 'B'}, false);
-ADIEncoder Globals::trackRight({14, 'C', 'D'}, false);
-ADIEncoder Globals::trackMiddle({14, 'E', 'F'}, false);
+ADIEncoder trackLeft({14, 'A', 'B'}, false);
+ADIEncoder trackRight({14, 'C', 'D'}, false);
+ADIEncoder trackMiddle({14, 'E', 'F'}, false);
 
-RotationSensor Globals::liftSensor(5, false); //check port
+RotationSensor liftSensor(5, false); //check port
 
 // PNEUMATICS
-pros::ADIDigitalOut Globals::mogoLeft({{14, 'G'}});
-pros::ADIDigitalOut Globals::mogoRight({{14, 'H'}});
+Pneumatic mogoLeft({{14, 'G'}});
+Pneumatic mogoRight({{14, 'H'}});
 
-pros::ADIDigitalOut Globals::claw('A'); //check port
+Pneumatic claw('A'); //check port
+

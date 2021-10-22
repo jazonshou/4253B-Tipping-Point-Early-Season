@@ -1,107 +1,50 @@
 #include "main.h"
 
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
-
-/**
- * Runs initialization code. This occurs as soon as the program is started.
- *
- * All other competition modes are blocked by initialize; it is recommended
- * to keep execution time for this mode under a few seconds.
- */
-void initialize() {
+void initialize(){
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
-
-	pros::lcd::register_btn1_cb(on_center_button);
 }
 
-/**
- * Runs while the robot is in the disabled state of Field Management System or
- * the VEX Competition Switch, following either autonomous or opcontrol. When
- * the robot is enabled, this task will exit.
- */
-void disabled() {}
+void disabled(){}
 
-/**
- * Runs after initialize(), and before autonomous when connected to the Field
- * Management System or the VEX Competition Switch. This is intended for
- * competition-specific initialization routines, such as an autonomous selector
- * on the LCD.
- *
- * This task will exit when the robot is enabled and autonomous or opcontrol
- * starts.
- */
-void competition_initialize() {}
+void competition_initialize(){}
 
-/**
- * Runs the user autonomous code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the autonomous
- * mode. Alternatively, this function may be called in initialize or opcontrol
- * for non-competition testing purposes.
- *
- * If the robot is disabled or communications is lost, the autonomous task
- * will be stopped. Re-enabling the robot will restart the task, not re-start it
- * from where it left off.
- */
-void autonomous() {}
+void autonomous(){
+    auto chassis = ChassisControllerBuilder()
+	    .withMotors(leftDrive, rightDrive)
+	    .withDimensions({AbstractMotor::gearset::blue, 5.0/30}, {{3.25_in, 12.25_in}, imev5BlueTPR}) // Drop Center Wheels
+	    .withSensors(trackLeft, trackRight, trackMiddle)
+	    .withOdometry({{2.75_in, 6.25_in}, quadEncoderTPR})
+	    .buildOdometry();
 
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
+	auto profileController = AsyncMotionProfileControllerBuilder()
+	    .withLimits({
+	    	1.0, // Maximum linear velocity of the Chassis in m/s
+	    	2.0, // Maximum linear acceleration of the Chassis in m/s/s
+	    	10.0 // Maximum linear jerk of the Chassis in m/s/s/s
+	    })
+	    .withOutput(chassis)
+	    .buildMotionProfileController();
 
-const double DEADBAND = 0.0500;
-const double rotationValLiftDown = 0.0;
-const double rotationValLiftUp = 0.0;
+    auto liftController =  AsyncPosControllerBuilder()
+    	.withMotor(lift) // Lift Motor: Port 7
+    	.withGains({0.001, 0.001, 0.0000}) // kP, kI, kD
+		.withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
+    	.build();
+    
+    liftController->tarePosition();
+    chassis->setState({0_in, 0_in, 0_deg});
+}
 
-PID liftWithMogo(0.0, 0.0, 0.0);
-PID liftWithoutMogo(0.0, 0.0, 0.0);
-
-bool quickTurn = false;
-bool liftToggle = false; //false = up, true = down
-bool released = true;
-
+// input range: [-1, 1]
+// output range: [-1, 1]
 std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickTurn){
-    // range: [-1, 1]
-    // moveC /= 100; turnC /= 100;
+    // Compute velocity, right stick = curvature if no quickturn, else power
+    double leftSpeed = moveC + (quickTurn ? turnC : abs(moveC) * turnC);
+    double rightSpeed = moveC - (quickTurn ? turnC : abs(moveC) * turnC);
 
-    double leftSpeed = 0.0;
-    double rightSpeed = 0.0;
-
-    if (quickTurn) {
-        leftSpeed = moveC + turnC;
-        rightSpeed = moveC - turnC;
-    } else {
-        leftSpeed = moveC + fabs(moveC) * turnC;
-        rightSpeed = moveC - fabs(moveC) * turnC;
-    }
-
-    // Normalize wheel speeds
-    double maxMagnitude = std::max(fabs(leftSpeed), fabs(rightSpeed));
+    // Normalize velocity
+    double maxMagnitude = std::max(abs(leftSpeed), abs(rightSpeed));
     if (maxMagnitude > 1.0) {
         leftSpeed /= maxMagnitude;
         rightSpeed /= maxMagnitude;
@@ -110,57 +53,56 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
     return std::make_pair(leftSpeed, rightSpeed);
 }
 
-Controller master = Controller();
-
 /**
  * Joysticks = drive
  * Left top & bottom button = lift toggle (up/down)
  * right top button = claw toggle (up/down)
  * Right bottom button = mogo lift
- * 
  */
 
-void opcontrol() {
-    while(true) {
+void opcontrol(){
+    auto liftController =  AsyncPosControllerBuilder()
+    	.withMotor(lift) // Lift Motor: Port 7
+    	.withGains({0.001, 0.001, 0.0000}) // kP, kI, kD
+		.withSensor(std::make_shared<okapi::RotationSensor>(liftSensor)) // Potentiometer: ADI Port 'G'
+    	.build();
+
+    liftController->tarePosition();
+    double liftPosition = 0;
+    bool mogoState = false;
+    bool prevBtnState = false, currentBtnState = false;
+
+    while(true){
         // gets controller input
-	    double leftC = std::fabs(master.getAnalog(ControllerAnalog::leftY)) <= DEADBAND 
-                       ? 0 : master.getAnalog(ControllerAnalog::leftY);
-        double rightC = std::fabs(master.getAnalog(ControllerAnalog::rightX)) <= DEADBAND 
-                        ? 0 : master.getAnalog(ControllerAnalog::rightX);
-        // check for quick turn
-        quickTurn = leftC == 0 ? true : false;
-        // gets motor vel
-        double leftSpeed = curvatureDrive(leftC, rightC, leftC == 0).first;
-        double rightSpeed = curvatureDrive(leftC, rightC, leftC == 0).second;
+	    auto power = master.getAnalog(ControllerAnalog::leftY) * 
+            (abs(master.getAnalog(ControllerAnalog::leftY)) >= DEADBAND);
+        auto curvature = master.getAnalog(ControllerAnalog::rightX) * 
+            (abs(master.getAnalog(ControllerAnalog::rightX)) >= DEADBAND);
+
+        // gets drive vel
+        auto speed = curvatureDrive(power, curvature, power == 0);
+
         //output
-        leftFront.moveVoltage(leftSpeed * 12000);
-        leftTop.moveVoltage(leftSpeed * 12000);
-        leftBottom.moveVoltage(leftSpeed * 12000);
-        rightFront.moveVoltage(rightSpeed * 12000);
-        rightTop.moveVoltage(rightSpeed * 12000);
-        rightBottom.moveVoltage(rightSpeed * 12000);
+        leftDrive.moveVoltage(speed.first * 12000);
+        rightDrive.moveVoltage(speed.second * 12000);
 
-        if(master.getDigital(ControllerDigital::L1)) {
-            lift.moveVoltage(120000);
-        } else if (master.getDigital(ControllerDigital::L2)) {
-            lift.moveVoltage(-120000);
-        } else {
-            lift.moveVoltage(0);
-        }
+        // lift control
+        liftPosition += master.getDigital(ControllerDigital::L1) * LIFTINCREMENT;
+        liftPosition -= master.getDigital(ControllerDigital::L2) * LIFTINCREMENT;
+        liftPosition = std::min(std::max(liftPosition, 0.0), MAXLIFTHEIGHT);
+        liftController->setTarget(liftPosition);
 
-        if(master.getDigital(ControllerDigital::R1)) {
-            claw.set_value(true);
-        } else {
-            claw.set_value(false);
-        }
+        // claw control - direct
+        claw.set_value(master.getDigital(ControllerDigital::R1));
+        claw.set_value(master.getDigital(ControllerDigital::R1));
 
-        if(master.getDigital(ControllerDigital::R2)) {
-            mogoLeft.set_value(true);
-            mogoRight.set_value(true);
-        } else {
-            mogoLeft.set_value(false);
-            mogoRight.set_value(false);
+        // mogo holder - toggle 
+        currentBtnState = master.getDigital(ControllerDigital::R2);
+        if(currentBtnState && !prevBtnState){
+            mogoLeft.set_value((mogoState = !mogoState));
+            mogoRight.set_value(mogoState);
         }
+        prevBtnState = currentBtnState;
 
         pros::delay(10);
     }

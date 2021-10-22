@@ -1,34 +1,34 @@
 #pragma once
 #include "main.h"
 
-class Globals {
-    public:
-    // CONTROLLER
-    // static Controller master;
+#define Pneumatic pros::ADIDigitalOut
+const double DEADBAND = 0.0500;
+const double MAXLIFTHEIGHT = 2000;
+const double LIFTINCREMENT = 100;
+
+// CONTROLLER
+Controller master;
 
     // MOTORS - check rotation
-    static Motor leftFront;
-    static Motor leftTop;
-    static Motor leftBottom;
-    static Motor rightFront;
-    static Motor rightTop;
-    static Motor rightBottom;
+MotorGroup leftDrive;
+MotorGroup rightDrive;
 
-    static Motor lift;
+Motor lift;
 
-    //change port
-    static Motor roller;
+//change port
+Motor roller;
 
-    // SENSORS - check ports & rotation
-    static ADIEncoder trackLeft;
-    static ADIEncoder trackRight;
-    static ADIEncoder trackMiddle;
+// SENSORS - check ports & rotation
+ADIEncoder trackLeft;
+ADIEncoder trackRight;
+ADIEncoder trackMiddle;
 
-    static RotationSensor liftSensor;
+RotationSensor liftSensor;
 
-    // PNEUMATICS
-    static pros::ADIDigitalOut mogoLeft;
-    static pros::ADIDigitalOut mogoRight;
+// PNEUMATICS
+Pneumatic mogoLeft;
+Pneumatic mogoRight;
 
-    static pros::ADIDigitalOut claw; //check port
-};
+Pneumatic claw; //check port
+
+
