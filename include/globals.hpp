@@ -7,28 +7,32 @@ const double MAXLIFTHEIGHT = 2000;
 const double LIFTINCREMENT = 100;
 
 // CONTROLLER
-Controller master;
+extern Controller master;
 
-    // MOTORS - check rotation
-MotorGroup leftDrive;
-MotorGroup rightDrive;
+// MOTORS - check rotation
+extern MotorGroup leftDrive;
+extern MotorGroup rightDrive;
 
-Motor lift;
+// LIFT
+extern Motor lift;
 
 //change port
-Motor roller;
+extern Motor roller;
 
 // SENSORS - check ports & rotation
-ADIEncoder trackLeft;
-ADIEncoder trackRight;
-ADIEncoder trackMiddle;
+extern ADIEncoder trackLeft;
+extern ADIEncoder trackRight;
+extern ADIEncoder trackMiddle;
 
-RotationSensor liftSensor;
+extern RotationSensor liftSensor;
 
 // PNEUMATICS
-Pneumatic mogoLeft;
-Pneumatic mogoRight;
+extern Pneumatic mogoLeft;
+extern Pneumatic mogoRight;
+extern Pneumatic claw; //check port
 
-Pneumatic claw; //check port
-
-
+// CUSTOM CONTROLLERS
+extern std::shared_ptr<OdomChassisController> chassis;
+extern std::shared_ptr<AsyncMotionProfileController> profiler;
+extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
+extern std::shared_ptr<IterativePosPIDController> turnPID;
