@@ -10,13 +10,8 @@ const double LIFT_INCREMENT = 100;
 extern Controller master;
 
 // MOTORS - check rotation
-<<<<<<< HEAD
-MotorGroup leftDrive;
-MotorGroup rightDrive;
-=======
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
->>>>>>> ryan
 
 // LIFT
 extern Motor lift;

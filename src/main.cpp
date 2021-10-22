@@ -24,12 +24,7 @@ void autonomous(){
 void opcontrol(){
     liftController->tarePosition();
     double liftPosition = 0.0;
-<<<<<<< HEAD
-    bool mogoState = false;
-    bool prevBtnState = false, currentBtnState = false;
-=======
     bool mogoState = false, prevBtnState = false, currentBtnState = false;
->>>>>>> ryan
 
     while(true){
         // gets controller input
