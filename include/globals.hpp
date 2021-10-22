@@ -24,6 +24,8 @@ class Globals {
     static ADIEncoder trackRight;
     static ADIEncoder trackMiddle;
 
+    static RotationSensor liftSensor;
+
     // PNEUMATICS
     static pros::ADIDigitalOut mogoLeft;
     static pros::ADIDigitalOut mogoRight;

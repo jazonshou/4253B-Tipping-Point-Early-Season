@@ -21,6 +21,8 @@ ADIEncoder Globals::trackLeft({14, 'A', 'B'}, false);
 ADIEncoder Globals::trackRight({14, 'C', 'D'}, false);
 ADIEncoder Globals::trackMiddle({14, 'E', 'F'}, false);
 
+RotationSensor Globals::liftSensor(5, false); //check port
+
 // PNEUMATICS
 pros::ADIDigitalOut Globals::mogoLeft({{14, 'G'}});
 pros::ADIDigitalOut Globals::mogoRight({{14, 'H'}});

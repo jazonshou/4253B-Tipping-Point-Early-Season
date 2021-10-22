@@ -76,6 +76,7 @@ void opcontrol(void);
  * You can add C++-only headers here
  */
 #include "globals.hpp"
+#include "PID.hpp"
 //#include <iostream>
 #endif
 

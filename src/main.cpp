@@ -75,7 +75,15 @@ void autonomous() {}
  */
 
 const double db = 0.0500;
+const double rotationValLiftDown = 0.0;
+const double rotationValLiftUp = 0.0;
+
+PID liftWithMogo(0.0, 0.0, 0.0);
+PID liftWithoutMogo(0.0, 0.0, 0.0);
+
 bool quickTurn = false;
+bool liftToggle = false; //false = up, true = down
+bool released = true;
 
 std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickTurn){
     // range: [-1, 1]
@@ -106,6 +114,14 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
 
 Controller master = Controller();
 
+/**
+ * Joysticks = drive
+ * Left top & bottom button = lift toggle (up/down)
+ * right top button = claw toggle (up/down)
+ * Right bottom button = mogo lift
+ * 
+ */
+
 void opcontrol() {
     while(true) {
         // gets controller input
@@ -125,6 +141,28 @@ void opcontrol() {
         Globals::rightFront.moveVoltage(rightSpeed * 120);
         Globals::rightTop.moveVoltage(rightSpeed * 120);
         Globals::rightBottom.moveVoltage(rightSpeed * 120);
+
+        if(master.getDigital(ControllerDigital::L1)) {
+            Globals::lift.moveVoltage(120000);
+        } else if (master.getDigital(ControllerDigital::L2)) {
+            Globals::lift.moveVoltage(-120000);
+        } else {
+            Globals::lift.moveVoltage(0);
+        }
+
+        if(master.getDigital(ControllerDigital::R1)) {
+            Globals::claw.set_value(true);
+        } else {
+            Globals::claw.set_value(false);
+        }
+
+        if(master.getDigital(ControllerDigital::R2)) {
+            Globals::mogoLeft.set_value(true);
+            Globals::mogoRight.set_value(true);
+        } else {
+            Globals::mogoLeft.set_value(false);
+            Globals::mogoRight.set_value(false);
+        }
 
         pros::delay(10);
     }
