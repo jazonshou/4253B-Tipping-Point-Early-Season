@@ -68,7 +68,7 @@ void opcontrol(){
     	.build();
 
     liftController->tarePosition();
-    double liftPosition = 0;
+    double liftPosition = 0.0;
     bool mogoState = false;
     bool prevBtnState = false, currentBtnState = false;
 
@@ -87,13 +87,12 @@ void opcontrol(){
         rightDrive.moveVoltage(speed.second * 12000);
 
         // lift control
-        liftPosition += master.getDigital(ControllerDigital::L1) * LIFTINCREMENT;
-        liftPosition -= master.getDigital(ControllerDigital::L2) * LIFTINCREMENT;
+        liftPosition += master.getDigital(ControllerDigital::L1) * LIFT_INCREMENT;
+        liftPosition -= master.getDigital(ControllerDigital::L2) * LIFT_INCREMENT;
         liftPosition = std::min(std::max(liftPosition, 0.0), MAXLIFTHEIGHT);
         liftController->setTarget(liftPosition);
 
         // claw control - direct
-        claw.set_value(master.getDigital(ControllerDigital::R1));
         claw.set_value(master.getDigital(ControllerDigital::R1));
 
         // mogo holder - toggle 

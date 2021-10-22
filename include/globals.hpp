@@ -4,12 +4,12 @@
 #define Pneumatic pros::ADIDigitalOut
 const double DEADBAND = 0.0500;
 const double MAXLIFTHEIGHT = 2000;
-const double LIFTINCREMENT = 100;
+const double LIFT_INCREMENT = 100;
 
 // CONTROLLER
 Controller master;
 
-    // MOTORS - check rotation
+// MOTORS - check rotation
 MotorGroup leftDrive;
 MotorGroup rightDrive;
 
