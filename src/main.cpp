@@ -74,7 +74,7 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 
-const double db = 0.0500;
+const double DEADBAND = 0.0500;
 const double rotationValLiftDown = 0.0;
 const double rotationValLiftUp = 0.0;
 
@@ -106,8 +106,6 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
         leftSpeed /= maxMagnitude;
         rightSpeed /= maxMagnitude;
     }
-    leftSpeed *= 100;
-    rightSpeed *= 100;
 
     return std::make_pair(leftSpeed, rightSpeed);
 }
@@ -125,43 +123,43 @@ Controller master = Controller();
 void opcontrol() {
     while(true) {
         // gets controller input
-	    double leftC = std::fabs(master.getAnalog(ControllerAnalog::leftY)) <= db 
+	    double leftC = std::fabs(master.getAnalog(ControllerAnalog::leftY)) <= DEADBAND 
                        ? 0 : master.getAnalog(ControllerAnalog::leftY);
-        double rightC = std::fabs(master.getAnalog(ControllerAnalog::rightX)) <= db 
+        double rightC = std::fabs(master.getAnalog(ControllerAnalog::rightX)) <= DEADBAND 
                         ? 0 : master.getAnalog(ControllerAnalog::rightX);
         // check for quick turn
         quickTurn = leftC == 0 ? true : false;
         // gets motor vel
-        double leftSpeed = curvatureDrive(leftC, rightC, quickTurn).first;
-        double rightSpeed = curvatureDrive(leftC, rightC, quickTurn).second;
+        double leftSpeed = curvatureDrive(leftC, rightC, leftC == 0).first;
+        double rightSpeed = curvatureDrive(leftC, rightC, leftC == 0).second;
         //output
-        Globals::leftFront.moveVoltage(leftSpeed * 120);
-        Globals::leftTop.moveVoltage(leftSpeed * 120);
-        Globals::leftBottom.moveVoltage(leftSpeed * 120);
-        Globals::rightFront.moveVoltage(rightSpeed * 120);
-        Globals::rightTop.moveVoltage(rightSpeed * 120);
-        Globals::rightBottom.moveVoltage(rightSpeed * 120);
+        leftFront.moveVoltage(leftSpeed * 12000);
+        leftTop.moveVoltage(leftSpeed * 12000);
+        leftBottom.moveVoltage(leftSpeed * 12000);
+        rightFront.moveVoltage(rightSpeed * 12000);
+        rightTop.moveVoltage(rightSpeed * 12000);
+        rightBottom.moveVoltage(rightSpeed * 12000);
 
         if(master.getDigital(ControllerDigital::L1)) {
-            Globals::lift.moveVoltage(120000);
+            lift.moveVoltage(120000);
         } else if (master.getDigital(ControllerDigital::L2)) {
-            Globals::lift.moveVoltage(-120000);
+            lift.moveVoltage(-120000);
         } else {
-            Globals::lift.moveVoltage(0);
+            lift.moveVoltage(0);
         }
 
         if(master.getDigital(ControllerDigital::R1)) {
-            Globals::claw.set_value(true);
+            claw.set_value(true);
         } else {
-            Globals::claw.set_value(false);
+            claw.set_value(false);
         }
 
         if(master.getDigital(ControllerDigital::R2)) {
-            Globals::mogoLeft.set_value(true);
-            Globals::mogoRight.set_value(true);
+            mogoLeft.set_value(true);
+            mogoRight.set_value(true);
         } else {
-            Globals::mogoLeft.set_value(false);
-            Globals::mogoRight.set_value(false);
+            mogoLeft.set_value(false);
+            mogoRight.set_value(false);
         }
 
         pros::delay(10);
