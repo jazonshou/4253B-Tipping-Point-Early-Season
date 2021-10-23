@@ -36,3 +36,8 @@ extern std::shared_ptr<OdomChassisController> chassis;
 extern std::shared_ptr<AsyncMotionProfileController> profiler;
 extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;
+
+extern std::map<int, std::function<void()>> auton;
+extern std::map<int, std::function<void()>> path;
+
+extern int selectedAuton = 0;

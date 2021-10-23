@@ -75,10 +75,15 @@ void opcontrol(void);
 /**
  * You can add C++-only headers here
  */
-
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <map>
 #include "globals.hpp"
 #include "drive.hpp"
-#include <iostream>
+#include "auton.hpp"
+#include "gif-pros/gifclass.hpp"
+
 
 #endif
 
