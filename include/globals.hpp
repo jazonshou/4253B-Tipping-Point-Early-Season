@@ -1,44 +1,39 @@
 #pragma once
 #include "main.h"
+using Pneumatic = pros::ADIDigitalOut;
 
-#define Pneumatic pros::ADIDigitalOut
+// CONSTANTS
 const double DEADBAND = 0.0500;
-const double MAXLIFTHEIGHT = 2000;
-const double LIFT_INCREMENT = 10;
+const double MAXLIFTHEIGHT = 2000; // #TODO - Tune Max Lift Tick
+const double LIFT_INCREMENT = 10; // #TODO - Tune incrememt to match actual lift velocity
 
 // CONTROLLER
 extern Controller master;
 
-// MOTORS - check rotation
+// MOTORS
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
-
-// LIFT
 extern Motor lift;
-
-//change port
 extern Motor roller;
 
-// SENSORS - check ports & rotation
+// SENSORS\
 extern ADIEncoder trackLeft;
 extern ADIEncoder trackRight;
 extern ADIEncoder trackMiddle;
-
 extern RotationSensor liftSensor;
 
 // PNEUMATICS
-// extern Pneumatic mogoLeft;
-// extern Pneumatic mogoRight;
 extern Pneumatic mogo;
-extern Pneumatic claw; //check port
+extern Pneumatic claw;
 
-// CUSTOM CONTROLLERS
+// SUBSYSTEM CONTROLLERS
 extern std::shared_ptr<OdomChassisController> chassis;
 extern std::shared_ptr<AsyncMotionProfileController> profiler;
 extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;
 
+// AUTONOMOUS CONTROLLER
+extern int selectedAuton;
 extern std::map<int, std::function<void()>> auton;
 extern std::map<int, std::function<void()>> path;
 
-extern int selectedAuton;

@@ -1,6 +1,5 @@
 #include "main.h"
 
-// input range: [-1, 1]
 std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickTurn){
     // Compute velocity, right stick = curvature if no quickturn, else power
     double leftSpeed = moveC + (quickTurn ? turnC : abs(moveC) * turnC);
@@ -29,3 +28,4 @@ void turnToAngle(okapi::QAngle targetAngle){
 
 	(chassis->getModel())->stop();
 }
+
