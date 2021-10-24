@@ -4,7 +4,7 @@ void initialize(){
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "LCD Initialized");
 
-	liftController->tarePosition();
+	// liftController->tarePosition();
     pros::lcd::set_text(2, "Subsysytems initialized");
 
     auton.insert(std::make_pair(0, [](){})); // lambda ftw
@@ -25,9 +25,9 @@ void initialize(){
 
     pros::lcd::set_text(3, "Auton Initialized, Please Select Your Auton");
 
-    while(true){
-        pros::delay(10);
-    }
+    // while(true){
+    //     pros::delay(10);
+    // }
 
     pros::lcd::set_text(4, "Generating Path...");
 
@@ -50,12 +50,23 @@ void autonomous(){
  * right top button = claw toggle (up/down)
  * Right bottom button = mogo lift
  */
+
 void opcontrol(){
-    liftController->tarePosition();
+    // liftController->tarePosition();
     double liftPosition = 0.0;
     bool mogoState = false, prevBtnState = false, currentBtnState = false;
 
-    Gif gif("/usd/logo.gif", lv_scr_act());
+    // Gif gif("/usd/logo.gif", lv_scr_act());
+
+    pros::lcd::clear();
+    lift.setBrakeMode(AbstractMotor::brakeMode::brake);
+
+    // claw.set_value(true);
+    // pros::delay(2000);
+    // claw.set_value(false);
+    // pros::delay(2000);
+    // claw.set_value(true);
+    // pros::delay(2000);
 
     while(true){
         // gets controller input
@@ -71,19 +82,32 @@ void opcontrol(){
 		(chassis->getModel())->tank(speed.first, speed.second);
 
         // lift control
-        liftPosition += master.getDigital(ControllerDigital::L1) * LIFT_INCREMENT;
-        liftPosition -= master.getDigital(ControllerDigital::L2) * LIFT_INCREMENT;
-        liftPosition = std::min(std::max(liftPosition, 0.0), MAXLIFTHEIGHT);
-    	liftController->setTarget(liftPosition);
+        // liftPosition += master.getDigital(ControllerDigital::L1) * LIFT_INCREMENT;
+        // liftPosition -= master.getDigital(ControllerDigital::L2) * LIFT_INCREMENT;
+        // liftPosition = std::min(std::max(liftPosition, 0.0), MAXLIFTHEIGHT);
+    	// liftController->setTarget(liftPosition);
+        // pros::lcd::set_text(1, "lift pos: " + liftPosition);
+        // pros::lcd::set_text(2, "rotation sensor: " + liftSensor.get());
+        if(master.getDigital(ControllerDigital::L1)) lift.moveVoltage(12000);
+        else if (master.getDigital(ControllerDigital::L2))lift.moveVoltage(-12000);
+        else lift.moveVoltage(0);
+
+
 
         // claw control - direct
-        claw.set_value(master.getDigital(ControllerDigital::R1));
+        // std::printf("Claw val: %d", claw.set_value(!master.getDigital(ControllerDigital::R1)));
+
+        if(master.getDigital(ControllerDigital::R1)) claw.set_value(true);
+        else claw.set_value(false);
+
+        // std::printf("claw button: %d", master.getDigital(ControllerDigital::R1));
+        // std::printf("limit: %d", limit.get_value());
 
         // mogo holder - toggle 
         currentBtnState = master.getDigital(ControllerDigital::R2);
         if(currentBtnState && !prevBtnState){
-            mogoLeft.set_value((mogoState = !mogoState));
-            mogoRight.set_value(mogoState);
+            std::cout << mogo.set_value((mogoState = !mogoState));
+            // mogoRight.set_value(mogoState);
         }
         prevBtnState = currentBtnState;
 

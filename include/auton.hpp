@@ -1,44 +1,26 @@
 #pragma once
 #include "main.h"
 
-void genSkills(){}
+void genSkills();
 
-void skills(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+void skills();
 
-void genRedLeft(){
-    profiler->generatePath({{0_in, 0_in, 0_deg}, {3_in, 0_in, 0_deg}}, "COCK");
-}
+void genRedLeft();
 
-void redLeft(){
-    chassis->setState({0_in, 0_in, 0_deg});
-    profiler->setTarget("COCK");
-    profiler->waitUntilSettled();
+void redLeft();
 
-    turnToAngle(90_deg);
-}
+void genRedRight();
 
-void genRedRight(){}
+void redRight();
 
-void redRight(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+void genBlueLeft();
 
-void genBlueLeft(){}
+void blueLeft();
 
-void blueLeft(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+void genBlueRight();
 
-void genBlueRight(){}
+void blueRight();
 
-void blueRight(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+void genAwp();
 
-void genAwp(){}
-
-void awp(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+void awp();

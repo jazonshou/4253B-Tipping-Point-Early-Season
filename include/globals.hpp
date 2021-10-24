@@ -4,7 +4,7 @@
 #define Pneumatic pros::ADIDigitalOut
 const double DEADBAND = 0.0500;
 const double MAXLIFTHEIGHT = 2000;
-const double LIFT_INCREMENT = 100;
+const double LIFT_INCREMENT = 10;
 
 // CONTROLLER
 extern Controller master;
@@ -27,8 +27,9 @@ extern ADIEncoder trackMiddle;
 extern RotationSensor liftSensor;
 
 // PNEUMATICS
-extern Pneumatic mogoLeft;
-extern Pneumatic mogoRight;
+// extern Pneumatic mogoLeft;
+// extern Pneumatic mogoRight;
+extern Pneumatic mogo;
 extern Pneumatic claw; //check port
 
 // CUSTOM CONTROLLERS
@@ -40,4 +41,4 @@ extern std::shared_ptr<IterativePosPIDController> turnPID;
 extern std::map<int, std::function<void()>> auton;
 extern std::map<int, std::function<void()>> path;
 
-extern int selectedAuton = 0;
+extern int selectedAuton;
