@@ -13,7 +13,8 @@ extern Controller master;
 // MOTORS
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
-extern Motor lift;
+// extern Motor lift;
+extern pros::Motor lift;
 extern Motor roller;
 
 // SENSORS\
@@ -21,16 +22,18 @@ extern ADIEncoder trackLeft;
 extern ADIEncoder trackRight;
 extern ADIEncoder trackMiddle;
 extern RotationSensor liftSensor;
+extern IMU imu; 
 
 // PNEUMATICS
 extern Pneumatic mogo;
 extern Pneumatic claw;
 
 // SUBSYSTEM CONTROLLERS
-extern std::shared_ptr<OdomChassisController> chassis;
+extern std::shared_ptr<ChassisController> chassis;
 extern std::shared_ptr<AsyncMotionProfileController> profiler;
 extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;
+
 
 // AUTONOMOUS CONTROLLER
 extern int selectedAuton;

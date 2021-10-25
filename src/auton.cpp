@@ -1,43 +1,43 @@
-#include "main.h"
+// #include "main.h"
 
-void genSkills(){}
+// void genSkills(){}
 
-void skills(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+// void skills(){
+//     chassis->setState({0_in, 0_in, 0_deg});
+// }
 
-void genRedLeft(){
-    profiler->generatePath({{0_in, 0_in, 0_deg}, {3_in, 0_in, 0_deg}}, "COCK");
-}
+// void genRedLeft(){
+//     profiler->generatePath({{0_in, 0_in, 0_deg}, {0_in, 24_in, 0_deg}}, "Test");
+// }
 
-void redLeft(){
-    chassis->setState({0_in, 0_in, 0_deg});
-    profiler->setTarget("COCK");
-    profiler->waitUntilSettled();
+// void redLeft(){
+//     chassis->setState({0_in, 0_in, 0_deg});
+//     profiler->setTarget("Test");
+//     profiler->waitUntilSettled();
 
-    turnToAngle(90_deg);
-}
+//     turnToAngle(90_deg);
+// }
 
-void genRedRight(){}
+// void genRedRight(){}
 
-void redRight(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+// void redRight(){
+//     chassis->setState({0_in, 0_in, 0_deg});
+// }
 
-void genBlueLeft(){}
+// void genBlueLeft(){}
 
-void blueLeft(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+// void blueLeft(){
+//     chassis->setState({0_in, 0_in, 0_deg});
+// }
 
-void genBlueRight(){}
+// void genBlueRight(){}
 
-void blueRight(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+// void blueRight(){
+//     chassis->setState({0_in, 0_in, 0_deg});
+// }
 
-void genAwp(){}
+// void genAwp(){}
 
-void awp(){
-    chassis->setState({0_in, 0_in, 0_deg});
-}
+// void awp(){
+//     chassis->setState({0_in, 0_in, 0_deg});
+// }
