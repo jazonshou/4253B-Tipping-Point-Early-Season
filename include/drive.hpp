@@ -21,3 +21,7 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
  */
 void turnToAngle(okapi::QAngle targetAngle);
 
+double velControl(QSpeed velocity, QAcceleration accel, QSpeed currSpeed);
+
+std::vector<double> pathToRPM(std::vector<std::vector<double>> path);
+
