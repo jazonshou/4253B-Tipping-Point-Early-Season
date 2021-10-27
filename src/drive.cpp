@@ -32,6 +32,18 @@ std::vector<double> pathToRPM(std::vector<std::vector<double>> path) {
     return newPath;
 }
 
+void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel) {
+    std::vector<double> left = pathToRPM(leftVel); std::vector<double> right = pathToRPM(rightVel);
+    for(int i = 0; i < left.size() || i < right.size(); i++) {
+        leftDrive.moveVelocity(left[i]);
+        rightDrive.moveVelocity(right[i]);
+        pros::delay(10);
+        // pros::Task::delay_until(&now, 10);
+    }
+    leftDrive.moveVelocity(0);
+    rightDrive.moveVelocity(0);
+}
+
 // std::vector<std::vector<double>> testLeft = {
 //         {0,0},
 //         {0.0815,8.1309},

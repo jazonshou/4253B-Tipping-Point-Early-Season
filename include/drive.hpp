@@ -25,3 +25,4 @@ double velControl(QSpeed velocity, QAcceleration accel, QSpeed currSpeed);
 
 std::vector<double> pathToRPM(std::vector<std::vector<double>> path);
 
+void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel);
