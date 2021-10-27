@@ -4,8 +4,8 @@ using Pneumatic = pros::ADIDigitalOut;
 
 // CONSTANTS
 const double DEADBAND = 0.0500;
-const double MAXLIFTHEIGHT = 2000; // #TODO - Tune Max Lift Tick
-const double LIFT_INCREMENT = 10; // #TODO - Tune incrememt to match actual lift velocity
+const double MAXLIFTHEIGHT = 2000; // TODO - Tune Max Lift Tick
+const double LIFT_INCREMENT = 10; // TODO - Tune incrememt to match actual lift velocity
 
 // CONTROLLER
 extern Controller master;
@@ -17,7 +17,7 @@ extern MotorGroup rightDrive;
 extern pros::Motor lift;
 extern Motor roller;
 
-// SENSORS\
+// SENSORS
 extern ADIEncoder trackLeft;
 extern ADIEncoder trackRight;
 extern ADIEncoder trackMiddle;
