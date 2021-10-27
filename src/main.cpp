@@ -369,7 +369,7 @@ void autonomous(){
     // profiler->waitUntilSettled();
     std::vector<double> left = pathToRPM(testLeft); std::vector<double> right = pathToRPM(testRight);
     std::uint32_t now = pros::millis();
-    for(int i = 0; i < left.size(); i++) {
+    for(int i = 0; i < left.size() || i < right.size(); i++) {
         leftDrive.moveVelocity(left[i]);
         rightDrive.moveVelocity(right[i]);
         pros::delay(10);

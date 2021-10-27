@@ -4,8 +4,14 @@
 Controller master(ControllerId::master); 
 
 // MOTORS
-MotorGroup leftDrive({4, -5, 6});
-MotorGroup rightDrive({-7, 8, -9});
+Motor leftTop(4, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor leftMiddle(5, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor leftBottom(6, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightTop(7, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightMiddle(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightBottom(9, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+MotorGroup leftDrive({leftTop, leftMiddle, leftBottom});
+MotorGroup rightDrive({rightTop, rightMiddle, rightBottom});
 // Motor lift(10, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 pros::Motor lift(10, true);
 // Motor roller(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees); // TODO - Change Port
