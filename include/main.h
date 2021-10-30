@@ -83,6 +83,9 @@ void opcontrol(void);
 #include "globals.hpp"
 #include "drive.hpp"
 #include "auton.hpp"
+#include "paths/leftPaths.hpp"
+#include "paths/awp.hpp"
+#include "paths/rightPaths.hpp"
 #include "gif-pros/gifclass.hpp"
 
 
