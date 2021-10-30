@@ -36,27 +36,24 @@ void disabled(){}
 void competition_initialize(){}
 
 void autonomous(){
-    // pros::delay(5000);
+    // INITIALIZATION
     lift.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
     
     //----------------------------------------------------------------------//
-    // followPath(LeftPaths::pathLeft, LeftPaths::pathRight);
-    
-    // claw.set_value(true);
-    // mogo.set_value(true);
-    // pros::delay(250);
-
-    // lift.move_relative(360, 200);
-
-    // followPath(LeftPaths::pathLeftR, LeftPaths::pathRightR);
-
-    // mogo.set_value(false);
-
-    // followPath(LeftPaths::fwdLeft, LeftPaths::fwdRight);
+    // LEFT AUTON
+    followPath(LeftPaths::pathLeft, LeftPaths::pathRight);
+    claw.set_value(true);
+    mogo.set_value(true);
+    pros::delay(250);
+    lift.move_relative(360, 200);
+    followPath(LeftPaths::pathLeftR, LeftPaths::pathRightR);
+    mogo.set_value(false);
+    followPath(LeftPaths::fwdLeft, LeftPaths::fwdRight);
 
     //---------------------------------------------------------------------------------//
+    // AWP AUTON
     mogo.set_value(true);
     followPath(AWP::fwdRLeft, AWP::fwdRRight);
     mogo.set_value(false);
@@ -66,12 +63,13 @@ void autonomous(){
     rightDrive.moveRelative(1500, 600);
 
     //-----------------------------------------------------------------------------------------//
-    // followPath(RightPaths::curveLeft, RightPaths::curveRight);
-    // lift.move_relative(500, 200);
-    // mogo.set_value(true);
-    // followPath(RightPaths::curveRLeft, RightPaths::curveRRight);
-    // mogo.set_value(false);
-    // followPath(RightPaths::fwdLeft, RightPaths::fwdRight);
+    // RIGHT AUTON
+    followPath(RightPaths::curveLeft, RightPaths::curveRight);
+    lift.move_relative(500, 200);
+    mogo.set_value(true);
+    followPath(RightPaths::curveRLeft, RightPaths::curveRRight);
+    mogo.set_value(false);
+    followPath(RightPaths::fwdLeft, RightPaths::fwdRight);
 }
 
 void opcontrol(){
