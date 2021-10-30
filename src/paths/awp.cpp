@@ -1029,4 +1029,3 @@ std::vector<std::vector<double>> AWP::loopbackRight = {
         {0.0635}
     }
 ;
-    

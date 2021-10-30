@@ -1,3 +1,9 @@
+/**
+ * @brief Unfortunately due to time constraints and bugs, we were never
+ *        able to finish our auton selector/organizational system
+ * 
+ */
+
 // #include "main.h"
 
 // void genSkills(){}
