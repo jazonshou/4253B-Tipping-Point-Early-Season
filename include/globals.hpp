@@ -32,7 +32,8 @@ extern Controller master;
  */
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
-extern pros::Motor lift;
+// extern pros::Motor lift;
+extern Motor lift;
 extern Motor roller;
 
 // SENSORS
@@ -63,7 +64,7 @@ extern Pneumatic claw;
  *        use these. 
  * 
  */
-extern std::shared_ptr<ChassisController> chassis;
+extern std::shared_ptr<OdomChassisController> chassis;
 extern std::shared_ptr<AsyncMotionProfileController> profiler;
 extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;

@@ -13,6 +13,9 @@ class LeftPaths {
     static std::vector<std::vector<double>> pathLeft;
     static std::vector<std::vector<double>> pathRight;
 
+    static std::vector<std::vector<double>> pathRLeft;
+    static std::vector<std::vector<double>> pathRRight;
+
     static std::vector<std::vector<double>> pathLeftR;
     static std::vector<std::vector<double>> pathRightR;
 

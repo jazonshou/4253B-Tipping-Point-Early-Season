@@ -12,8 +12,8 @@ Motor rightMiddle(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoder
 Motor rightBottom(9, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 MotorGroup leftDrive({leftTop, leftMiddle, leftBottom});
 MotorGroup rightDrive({rightTop, rightMiddle, rightBottom});
-// Motor lift(10, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
-pros::Motor lift(10, true);
+Motor lift(10, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+// pros::Motor lift(10, true);
 // Motor roller(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees); // TODO - Change Port
 
 // SENSORS
@@ -28,14 +28,14 @@ Pneumatic mogo('C');
 Pneumatic claw('D'); // TODO - Change Port
 
 // SUBSYSTEM CONTROLLERS
-std::shared_ptr<ChassisController> chassis = ChassisControllerBuilder()
+std::shared_ptr<OdomChassisController> chassis = ChassisControllerBuilder()
 	.withMotors(leftDrive, rightDrive)
 	.withDimensions({AbstractMotor::gearset::blue, 5.0/3.0}, {{3.25_in, 38.5_cm}, imev5BlueTPR}) // TODO - Change Track Width
 	// .withSensors(trackLeft, trackRight, trackMiddle)
 	// .withOdometry({{2.75_in, 6.25_in}, quadEncoderTPR}) // TODO - Change Track Width
-    // .withOdometry()
-	// .buildOdometry();
-    .build();
+    .withOdometry()
+	.buildOdometry();
+    // .build();
 
 std::shared_ptr<AsyncMotionProfileController> profiler = AsyncMotionProfileControllerBuilder()
     .withLimits({ // TODO - Tune Max Robot Velocity / Acceleration
@@ -46,11 +46,11 @@ std::shared_ptr<AsyncMotionProfileController> profiler = AsyncMotionProfileContr
     .withOutput(chassis)
     .buildMotionProfileController();
 
-// std::shared_ptr<AsyncPositionController<double, double>> liftController =  AsyncPosControllerBuilder()
-//     .withMotor(lift)
-//     .withGains({0.01, 0.001, 0.0000}) // TODO - Slightly tune constant
-//     .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
-//     .build();
+std::shared_ptr<AsyncPositionController<double, double>> liftController =  AsyncPosControllerBuilder()
+    .withMotor(lift)
+    .withGains({0.01, 0.001, 0.0000}) // TODO - Slightly tune constant
+    .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
+    .build();
 
 std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0, 0, 0, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms)); // #TODO - Tune Constant
 
