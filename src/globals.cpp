@@ -4,28 +4,32 @@
 Controller master(ControllerId::master); 
 
 // MOTORS
-Motor leftTop(4, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor leftMiddle(5, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor leftBottom(6, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor rightTop(7, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor rightMiddle(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
-Motor rightBottom(9, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor leftTop(1, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor leftMiddle(2, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor leftBottom(3, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightTop(10, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightMiddle(9, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor rightBottom(8, true, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 MotorGroup leftDrive({leftTop, leftMiddle, leftBottom});
 MotorGroup rightDrive({rightTop, rightMiddle, rightBottom});
-Motor lift(10, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
-// pros::Motor lift(10, true);
+Motor lift(5, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
+// pros::Motor lift(5, true);
 // Motor roller(8, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees); // TODO - Change Port
 
 // SENSORS
 ADIEncoder trackLeft({14, 'A', 'B'}, false); // TODO - Change Port, reverse?
 ADIEncoder trackRight({14, 'C', 'D'}, false); // TODO - Change Port, reverse?
 ADIEncoder trackMiddle({14, 'E', 'F'}, false); // TODO - Change Port, reverse?
-RotationSensor liftSensor(20, false); // TODO - Change Port, reverse?
-IMU imu(14);
+RotationSensor liftSensor(4, false); // TODO - Change Port, reverse?
+RotationSensor mogoSensor(15, true);
+IMU imu(6);
 
 // PNEUMATICS
-Pneumatic mogo('C');
-Pneumatic claw('D'); // TODO - Change Port
+// Pneumatic mogo('C');
+Motor mogo(20, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees); //TODO - port?
+// pros::Motor mogo(20, true);
+Pneumatic claw('C'); // TODO - Change Port
+Pneumatic wings('B');
 
 // SUBSYSTEM CONTROLLERS
 std::shared_ptr<OdomChassisController> chassis = ChassisControllerBuilder()
@@ -46,11 +50,24 @@ std::shared_ptr<AsyncMotionProfileController> profiler = AsyncMotionProfileContr
     .withOutput(chassis)
     .buildMotionProfileController();
 
-std::shared_ptr<AsyncPositionController<double, double>> liftController =  AsyncPosControllerBuilder()
+std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
     .withMotor(lift)
     .withGains({0.01, 0.001, 0.0000}) // TODO - Slightly tune constant
     .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
     .build();
+
+// std::shared_ptr<AsyncPositionController<double, double>> rollerController = AsyncPosControllerBuilder()
+//     .withMotor(roller)
+//     .withGains({0.01, 0.001, 0.0000})
+//     .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
+//     .build();
+
+std::shared_ptr<AsyncPositionController<double, double>> mogoController = AsyncPosControllerBuilder()
+    .withMotor(mogo)
+    .withGains({0.0225, 0.0, 0.0005})
+    .withSensor(std::make_shared<okapi::RotationSensor>(mogoSensor))
+    .build();
+
 
 std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0, 0, 0, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms)); // #TODO - Tune Constant
 

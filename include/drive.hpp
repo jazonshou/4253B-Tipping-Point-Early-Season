@@ -44,7 +44,7 @@
      * @param currSpeed current speed of the motor(s)
      * @return output for the motor(s)
      */
-    double velControl(QSpeed velocity, QAcceleration accel, QSpeed currSpeed);
+    double velControl(double velocity, double accel, double currSpeed);
 
     /**
      * @brief The trajectory generator we use outputs linear velocity (ft/s). In order for us to 

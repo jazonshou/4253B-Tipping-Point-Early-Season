@@ -5,31 +5,12 @@ void initialize(){
     master.setText(0, 0, "Current Autonomous: " + std::to_string(selectedAuton));
     pros::lcd::set_text(4, "init");
 
-
-
+    //TODO bruh
     // Initializes Controller
-    // liftController->tarePosition();
-
-    // Adds autonomous
-    // auton.insert(std::make_pair(0, [](){})); // lambda ftw
-    // auton.insert(std::make_pair(1, redLeft));
-    // auton.insert(std::make_pair(2, redRight));
-    // auton.insert(std::make_pair(3, blueLeft));
-    // auton.insert(std::make_pair(4, blueRight));
-    // auton.insert(std::make_pair(5, awp));
-    // auton.insert(std::make_pair(6, skills));
-
-    // // Adds path generation functions
-    // path.insert(std::make_pair(0, [](){}));
-    // path.insert(std::make_pair(1, genRedLeft));
-    // path.insert(std::make_pair(2, genRedRight));
-    // path.insert(std::make_pair(3, genBlueLeft));
-    // path.insert(std::make_pair(4, genBlueRight));
-    // path.insert(std::make_pair(5, genAwp));
-    // path.insert(std::make_pair(6, genSkills));
-
-    // // Generates path based on pre-selected auton
-    // path[selectedAuton]();
+    mogoController->tarePosition();
+    mogoController->reset();
+    liftController->reset();
+    pros::lcd::set_text(2, "mogo & lift sensor reset");
 }
 
 void disabled(){}
@@ -39,7 +20,7 @@ void competition_initialize(){}
 void autonomous(){
     // INITIALIZATION
     // lift.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
-    lift.setBrakeMode(AbstractMotor::brakeMode::hold);
+    // lift.setBrakeMode(AbstractMotor::brakeMode::hold);
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
 
@@ -855,8 +836,6 @@ void autonomous(){
     }
     ;
 
-
-
     // mogo.set_value(true);
     // followPath(curveLeft, curveRight);
     // // claw.set_value(true);
@@ -867,16 +846,13 @@ void autonomous(){
     // leftDrive.moveVelocity(200); rightDrive.moveVelocity(-200);
     // pros::delay(1000);
     // leftDrive.moveVelocity(0); rightDrive.moveVelocity(0);
-
-
-
     //----------------------------------------------------------------------//
     // LEFT AUTON
     followPath(LeftPaths::pathLeft, LeftPaths::pathRight);
     claw.set_value(true);
     // mogo.set_value(true);
     pros::delay(150);
-    lift.moveRelative(360, 200);
+    // lift.moveRelative(360, 200);
     followPath(LeftPaths::pathRLeft, LeftPaths::pathRRight);
     // followPath(LeftPaths::pathLeftR, LeftPaths::pathRightR);
     // pros::delay(500);
@@ -909,11 +885,14 @@ void autonomous(){
 }
 
 void opcontrol(){
+    mogoController->reset();
+    liftController->reset();
     // Configures brake type for drive & lift
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     lift.setBrakeMode(AbstractMotor::brakeMode::brake);
-
+    mogo.setBrakeMode(AbstractMotor::brakeMode::hold);
+    
     // Initializes driver control variable
     double liftPosition = 0.0;
     bool mogoState = false, prevBtnState = false, currentBtnState = false;
@@ -931,6 +910,8 @@ void opcontrol(){
         double curvature = master.getAnalog(ControllerAnalog::rightX) * (abs(master.getAnalog(ControllerAnalog::rightX)) >= DEADBAND);
         auto speed = curvatureDrive(power, curvature, power == 0);
 		(chassis->getModel())->tank(speed.first, speed.second);
+        // leftDrive.moveVelocity(speed.first*600);
+        // rightDrive.moveVelocity(speed.second*600);
 
         /**
          * @brief Lift Control
@@ -939,9 +920,12 @@ void opcontrol(){
          * Both are pressed / both aren't pressed -> lift stays in the current position
          */
         // lift.moveVoltage((master.getDigital(ControllerDigital::L1) - master.getDigital(ControllerDigital::L2)) * 12000);
-        if(master.getDigital(ControllerDigital::L1)) lift.moveVoltage(12000);
-        else if(master.getDigital(ControllerDigital::L2)) lift.moveVoltage(-12000);
-        else lift.moveVoltage(0);
+        // if(master.getDigital(ControllerDigital::L1)) lift.move_voltage(12000);
+        // else if(master.getDigital(ControllerDigital::L2)) lift.move_voltage(-12000);
+        // else lift.move_voltage(0);
+        if(master.getDigital(ControllerDigital::L1)) lift.moveVelocity(200);
+        else if(master.getDigital(ControllerDigital::L2)) lift.moveVelocity(-200);
+        else lift.moveVelocity(0);
 
         /**
          * @brief Claw Control
@@ -949,16 +933,23 @@ void opcontrol(){
          * R1 (Right Top) not pressed -> claw opens
          */
         claw.set_value(master.getDigital(ControllerDigital::R1));
+        wings.set_value(master.getDigital(ControllerDigital::Y));
 
         /**
          * @brief Mogo Holder Control
          * The solenoid toggles between the two states every time R2 (Right Bottom) is pressed
          */
+        // TODO - tune lift height & PID
         currentBtnState = master.getDigital(ControllerDigital::R2);
         if(currentBtnState && !prevBtnState){
-            mogo.set_value((mogoState = !mogoState));
+            // mogo.set_value((mogoState = !mogoState));
+            mogoState = !mogoState;
+            mogoController->setTarget(mogoState ? MAX_MOGO_DISTANCE : 0);
         }
         prevBtnState = currentBtnState;
+        
+        double err = mogoController->getError();
+        pros::lcd::set_text(1, "Error: " + std::to_string(err));
 
         pros::delay(10);
     }

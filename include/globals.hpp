@@ -14,7 +14,8 @@ using Pneumatic = pros::ADIDigitalOut;
  * 
  */
 const double DEADBAND = 0.0500;
-const double MAXLIFTHEIGHT = 2000; 
+const double MAX_LIFT_HEIGHT = 2000; 
+const double MAX_MOGO_DISTANCE = 35; 
 const double LIFT_INCREMENT = 10; 
 
 // CONTROLLER
@@ -33,6 +34,7 @@ extern Controller master;
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
 // extern pros::Motor lift;
+
 extern Motor lift;
 extern Motor roller;
 
@@ -46,7 +48,10 @@ extern Motor roller;
 extern ADIEncoder trackLeft;
 extern ADIEncoder trackRight;
 extern ADIEncoder trackMiddle;
+
 extern RotationSensor liftSensor;
+extern RotationSensor mogoSensor;
+
 extern IMU imu; 
 
 // PNEUMATICS
@@ -54,8 +59,11 @@ extern IMU imu;
  * @brief Globally declares our solenoids (one for claw, one for back mogo lift)
  * 
  */
-extern Pneumatic mogo;
+// extern Pneumatic mogo;
+extern Motor mogo;
+// extern pros::Motor mogo;
 extern Pneumatic claw;
+extern Pneumatic wings;
 
 // SUBSYSTEM CONTROLLERS
 /**
@@ -67,6 +75,8 @@ extern Pneumatic claw;
 extern std::shared_ptr<OdomChassisController> chassis;
 extern std::shared_ptr<AsyncMotionProfileController> profiler;
 extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
+// extern std::shared_ptr<AsyncPositionController<double, double>> rollerController;
+extern std::shared_ptr<AsyncPositionController<double, double>> mogoController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;
 
 

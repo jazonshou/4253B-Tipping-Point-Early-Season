@@ -25,9 +25,18 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
     return std::make_pair(leftSpeed, rightSpeed);
 }
 
-double velControl(QSpeed velocity, QAcceleration accel, QSpeed currSpeed) {
+double velControl(double velocity, double accel, double currSpeed) {
     double kV = 0.0, kA = 0.0, kP = 0.0;
-    return kV * velocity.convert(okapi::mps) + kA * accel.convert(okapi::mps2) + kP * (velocity - currSpeed).convert(okapi::mps);
+    return kV * velocity + kA * accel + kP * (velocity - currSpeed);
+}
+
+// TODO - make rpm to velocity conversion - also make ftps to mps convertor 
+void followPathAccel(std::vector<std::vector<double>> leftPath, std::vector<std::vector<double>> rightPath) {
+    for(int i = 0; i < path.size(); i++) {
+        leftDrive.moveVoltage(velControl(leftPath[i][0], leftPath[i][1], leftDrive.getActualVelocity()));
+        rightDrive.moveVoltage(velControl(rightPath[i][0], rightPath[i][1], rightDrive.getActualVelocity()));
+        pros::delay(10);
+    }
 }
 
 // velocity only, doesn't use custon velControl

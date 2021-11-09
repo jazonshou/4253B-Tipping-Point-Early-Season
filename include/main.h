@@ -84,7 +84,7 @@ void opcontrol(void);
 #include "drive.hpp"
 #include "auton.hpp"
 
-
+#include "paths/skills.hpp"
 #include "paths/leftPaths.hpp"
 #include "paths/awp.hpp"
 #include "paths/rightPaths.hpp"
