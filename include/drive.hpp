@@ -1,6 +1,10 @@
 #pragma once
 #include"main.h"
 
+enum class Side {
+    LEFT, RIGHT
+};
+
     void setBrakeMode(AbstractMotor::brakeMode brakeMode);
 
     void setVelocity(double l, double r);

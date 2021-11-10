@@ -25,9 +25,10 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
     return std::make_pair(leftSpeed, rightSpeed);
 }
 
-double velControl(double velocity, double accel, double currSpeed) {
-    double kV = 0.0, kA = 0.0, kP = 0.0;
-    return kV * velocity + kA * accel + kP * (velocity - currSpeed);
+double velControl(double velocity, double accel, double currSpeed, Side side) {
+    // double kV = 0.0, kA = 0.0, kP = 0.0;
+    return side == Side::LEFT ? LEFT_kV * velocity + LEFT_kA * accel + LEFT_kP * (velocity - currSpeed) : 
+                                RIGHT_kV * velocity + RIGHT_kA * accel + RIGHT_kP * (velocity - currSpeed);
 }
 
 // TODO - make rpm to velocity conversion - also make ftps to mps convertor 

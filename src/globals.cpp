@@ -21,12 +21,12 @@ ADIEncoder trackLeft({14, 'A', 'B'}, false); // TODO - Change Port, reverse?
 ADIEncoder trackRight({14, 'C', 'D'}, false); // TODO - Change Port, reverse?
 ADIEncoder trackMiddle({14, 'E', 'F'}, false); // TODO - Change Port, reverse?
 RotationSensor liftSensor(4, false); // TODO - Change Port, reverse?
-RotationSensor mogoSensor(15, true);
+RotationSensor mogoSensor(15, false);
 IMU imu(6);
 
 // PNEUMATICS
 // Pneumatic mogo('C');
-Motor mogo(20, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees); //TODO - port?
+Motor mogo(16, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees); //TODO - port?
 // pros::Motor mogo(20, true);
 Pneumatic claw('C'); // TODO - Change Port
 Pneumatic wings('B');
