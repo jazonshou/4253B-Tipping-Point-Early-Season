@@ -34,10 +34,19 @@ double velControl(double velocity, double accel, double currSpeed, Side side) {
 // TODO - make rpm to velocity conversion - also make ftps to mps convertor 
 void followPathAccel(std::vector<std::vector<double>> leftPath, std::vector<std::vector<double>> rightPath) {
     for(int i = 0; i < path.size(); i++) {
-        leftDrive.moveVoltage(velControl(leftPath[i][0], leftPath[i][1], leftDrive.getActualVelocity()));
-        rightDrive.moveVoltage(velControl(rightPath[i][0], rightPath[i][1], rightDrive.getActualVelocity()));
+        double l = rpmToLinVel(leftDrive.getActualVelocity());
+        double r = rpmToLinVel(rightDrive.getActualVelocity());
+        leftDrive.moveVoltage(velControl(leftPath[i][0], leftPath[i][1], l, Side::LEFT));
+        rightDrive.moveVoltage(velControl(rightPath[i][0], rightPath[i][1], r, Side::RIGHT));
+
+        // for plotting
+        std::cout << l << std::endl << r << std::endl;
         pros::delay(10);
     }
+}
+
+double rpmToLinVel(double rpm) {
+    return rpm * 3.25 * 3.14159265359 / 720; // don't judge, constants are overrated anyways
 }
 
 // velocity only, doesn't use custon velControl
@@ -52,6 +61,7 @@ std::vector<double> pathToRPM(std::vector<std::vector<double>> path) {
     return newPath;
 }
 
+// also not for custon vel control
 void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel) {
     std::vector<double> left = pathToRPM(leftVel); std::vector<double> right = pathToRPM(rightVel);
     for(int i = 0; i < left.size() || i < right.size(); i++) {

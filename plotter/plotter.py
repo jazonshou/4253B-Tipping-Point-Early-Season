@@ -3,8 +3,8 @@ import numpy as np
 
 leftOriginal = open('leftOriginal.txt')
 rightOriginal = open('rightOriginal.txt')
-leftRaw = open('leftRaw.txt')
-rightRaw = open('rightRaw.txt')
+
+raw = open('raw.txt')
 
 
 originalValLeft = []
@@ -17,10 +17,10 @@ for x in leftOriginal:
 for x in rightOriginal:
     originalValRight.append(x)
 
-for x in leftRaw:
-    rawValLeft.append(x)
-for x in rightRaw:
-    rawValRight.append(x)
+for x in range(len(raw)-1):
+    rawValLeft.append(raw[x])
+    rawValRight.append(raw[x+1])
+
 # print(originalValLeft)
 
 fig, (ax1, ax2) = plt.subplots(2)

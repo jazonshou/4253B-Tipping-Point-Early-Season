@@ -1,5 +1,6 @@
 #pragma once
-#include"main.h"
+#include "main.h"
+// #include <math.h> // ah yes, that again
 
 enum class Side {
     LEFT, RIGHT
