@@ -71,6 +71,8 @@ void autonomous(){
     liftController->setTarget(110);
     followPath(Skills::path2Left, Skills::path2Right);
     claw.set_value(false);
+    leftDrive.moveVelocity(600); rightDrive.moveVelocity(600); pros::delay(500); leftDrive.moveVelocity(0); rightDrive.moveVelocity(0);
+    followPath(Skills::path3Left, Skills::path3Right);
 }
 
 void opcontrol(){
