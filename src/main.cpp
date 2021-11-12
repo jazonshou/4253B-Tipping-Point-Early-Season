@@ -20,13 +20,9 @@ void competition_initialize(){}
 
 void autonomous(){
     // INITIALIZATION
-    // lift.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
-    // lift.setBrakeMode(AbstractMotor::brakeMode::hold);
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
-    // mogoController->reset();
-    // liftController->reset();
-
+    
     // -----------------------------------------------------------------------
     // RIGHT AUTON
     // wings.set_value(true);
@@ -110,10 +106,6 @@ void opcontrol(){
          * L2 (Left Bottom) Pressed -> Lift goes down
          * Both are pressed / both aren't pressed -> lift stays in the current position
          */
-        // lift.moveVoltage((master.getDigital(ControllerDigital::L1) - master.getDigital(ControllerDigital::L2)) * 12000);
-        // if(master.getDigital(ControllerDigital::L1)) lift.move_voltage(12000);
-        // else if(master.getDigital(ControllerDigital::L2)) lift.move_voltage(-12000);
-        // else lift.move_voltage(0);
         if(master.getDigital(ControllerDigital::L1)) lift.moveVelocity(200); //liftController->setTarget(100);
         else if(master.getDigital(ControllerDigital::L2)) lift.moveVelocity(-200); //liftController->setTarget(0);
         else lift.moveVelocity(0);

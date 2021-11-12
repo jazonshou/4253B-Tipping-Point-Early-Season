@@ -174,7 +174,7 @@ std::vector<std::vector<double>> LeftPaths::path1Left = {
         {-0.0897}
     }
 ;    
-std::vector<std::vector<double>> LeftPaths:: path1Right = {
+std::vector<std::vector<double>> LeftPaths::path1Right = {
         {0},
         {-0.0386},
         {-0.0976},
@@ -349,7 +349,7 @@ std::vector<std::vector<double>> LeftPaths:: path1Right = {
     }
 ;
 
-std::vector<std::vector<double>> LeftPaths:: path2Left = {
+std::vector<std::vector<double>> LeftPaths::path2Left = {
         {0},
         {0.0358},
         {0.0993},
@@ -597,7 +597,7 @@ std::vector<std::vector<double>> LeftPaths:: path2Left = {
         {0.0612}
     }
 ;
-    std::vector<std::vector<double>> LeftPaths:: path2Right = {
+std::vector<std::vector<double>> LeftPaths::path2Right = {
         {0},
         {0.0217},
         {0.0525},

@@ -163,7 +163,7 @@ std::vector<std::vector<double>> Skills::path0Right = {
     }
 ;
 
-std::vector<std::vector<double>> Skills:: path1Left = {
+std::vector<std::vector<double>> Skills::path1Left = {
         {0},
         {0.0267},
         {0.0666},
@@ -492,7 +492,7 @@ std::vector<std::vector<double>> Skills:: path1Left = {
         {0.037}
     }
 ;
-    std::vector<std::vector<double>> Skills:: path1Right = {
+std::vector<std::vector<double>> Skills::path1Right = {
         {0},
         {0.0234},
         {0.0567},
@@ -822,7 +822,7 @@ std::vector<std::vector<double>> Skills:: path1Left = {
     }
 ;
 
-std::vector<std::vector<double>> Skills:: path2Left = {
+std::vector<std::vector<double>> Skills::path2Left = {
         {0},
         {0.0408},
         {0.085},
@@ -1062,7 +1062,7 @@ std::vector<std::vector<double>> Skills:: path2Left = {
         {0.0098}
     }
 ;
-    std::vector<std::vector<double>> Skills:: path2Right = {
+std::vector<std::vector<double>> Skills::path2Right = {
         {0},
         {0.0364},
         {0.073},
@@ -1303,7 +1303,7 @@ std::vector<std::vector<double>> Skills:: path2Left = {
     }
 ;
 
-std::vector<std::vector<double>> Skills:: path3Left = {
+std::vector<std::vector<double>> Skills::path3Left = {
         {0},
         {-0.0387},
         {-0.1105},
@@ -1453,7 +1453,7 @@ std::vector<std::vector<double>> Skills:: path3Left = {
         {-0.0608}
     }
 ;
-    std::vector<std::vector<double>> Skills:: path3Right = {
+std::vector<std::vector<double>> Skills::path3Right = {
         {0},
         {-0.0188},
         {-0.0422},

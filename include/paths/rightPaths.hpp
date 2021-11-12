@@ -2,7 +2,7 @@
 #include "main.h"
 
 /**
- * @brief The following class contains all paths used in the right auton. 
+ * @brief The following class contains all paths used in the old right auton. 
  *        The right auton begins by curving to the tall neutral mogo, tipping
  *        it over, and going back to score 2 rings on our right alliance mogo.
  * 

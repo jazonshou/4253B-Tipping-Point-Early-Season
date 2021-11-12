@@ -9,8 +9,7 @@ using Pneumatic = pros::ADIDigitalOut;
 
 // CONSTANTS
 /**
- * @brief Here is our constants (though we only ended up really using
- *        DEADBAND since we had no time to tune lift)
+ * @brief Here is our constants for our lift & PID
  * 
  */
 const double DEADBAND = 0.0500;
@@ -33,24 +32,28 @@ const double RIGHT_kP = 1500.0;
  */
 extern Controller master;
 
-// MOTORS
+// MOTOR GROUPS
 /**
- * @brief These are all the motors we used 
- *        (each of our drive motor groups have 3 individual motors)
+ * @brief These are the 2 motor groups for the left & right side of the drive
  * 
  */
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
-// extern pros::Motor lift;
 
+// MOTORS
+/**
+ * @brief These are the motors for our lift & back mogo
+ * 
+ */
 extern Motor lift;
-extern Motor roller;
+// extern Motor roller;
+extern Motor mogo;
 
 // SENSORS
 /**
- * @brief These were all sensors we were planning on using. But due to 
- *        time constraints, mechanical issues, and our insanely accurate 
- *        pathing algorithm, we found no need to use these sensors. 
+ * @brief Here are all the sensors we were planning on using. 
+ *        Though in the end, we only ended up using the liftSensor & 
+ *        mogoSensor because of time constraints. 
  * 
  */
 extern ADIEncoder trackLeft;
@@ -64,12 +67,10 @@ extern IMU imu;
 
 // PNEUMATICS
 /**
- * @brief Globally declares our solenoids (one for claw, one for back mogo lift)
+ * @brief Globally declares our solenoids (one for claw, one for wings)
  * 
  */
 // extern Pneumatic mogo;
-extern Motor mogo;
-// extern pros::Motor mogo;
 extern Pneumatic claw;
 extern Pneumatic wings;
 
@@ -97,4 +98,3 @@ extern std::shared_ptr<IterativePosPIDController> turnPID;
 extern int selectedAuton;
 extern std::map<int, std::function<void()>> auton;
 extern std::map<int, std::function<void()>> path;
-

@@ -1,3 +1,16 @@
+/**
+ * @file main.cpp
+ * @author Jason Zhou (24JasonZ@students.tas.tw)
+ * @brief This is a custom C++ script used to convert our path matrices to 
+ *        plain values in "leftOriginal.txt" and "rightOriginal.txt". 
+ *        Through this custom script, we are able to plot it with matplotlib. 
+ * @version 0.1
+ * @date 2021-11-12
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -252,8 +265,8 @@ std::vector<std::vector<double>> pathLeft = {
         {0.11,-6.013},
         {0.0498,-5.9624}
     }
-    ;
-    std::vector<std::vector<double>> pathRight = {
+;
+std::vector<std::vector<double>> pathRight = {
         {0,0},
         {0.0339,3.2998},
         {0.0911,5.8399},
@@ -499,12 +512,10 @@ std::vector<std::vector<double>> pathLeft = {
         {0.11,-6.013},
         {0.0498,-5.9624}
     }
-    ;
+;
     
 int main()
 {
-    cout << "hi";
-    // file.open("leftOriginal.txt", ios::trunc);
     file.open("leftOriginal.txt", ios::trunc);
     for(int i = 0; i < pathLeft.size(); i++) {
         file << pathLeft[i][0] << endl;
@@ -516,4 +527,6 @@ int main()
         file << pathRight[i][0] << endl;
     }
     file.close();
+
+    return 0;
 }

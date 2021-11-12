@@ -1,6 +1,11 @@
 #pragma once
 #include "main.h"
 
+/**
+ * @brief The following class contains all motion profile paths for the right auton. 
+ * 
+ */
+
 class RightNew {
     public:
     static std::vector<std::vector<double>> pathBackLeft;

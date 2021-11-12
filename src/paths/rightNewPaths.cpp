@@ -1,6 +1,6 @@
 #include "main.h"
 
-std::vector<std::vector<double>> RightNew:: pathBackLeft = {
+std::vector<std::vector<double>> RightNew::pathBackLeft = {
         {0},
         {0.0368},
         {0.092},
@@ -170,7 +170,7 @@ std::vector<std::vector<double>> RightNew:: pathBackLeft = {
         {0.0632}
     }
 ;
-    std::vector<std::vector<double>> RightNew:: pathBackRight = {
+std::vector<std::vector<double>> RightNew::pathBackRight = {
         {0},
         {0.0368},
         {0.092},
@@ -342,7 +342,7 @@ std::vector<std::vector<double>> RightNew:: pathBackLeft = {
 ;
 
 
-std::vector<std::vector<double>> RightNew:: pathRLeft= {
+std::vector<std::vector<double>> RightNew::pathRLeft= {
         {0},
         {-0.0317},
         {-0.0905},
@@ -475,7 +475,7 @@ std::vector<std::vector<double>> RightNew:: pathRLeft= {
         {-0.0329}
     }
 ;
-    std::vector<std::vector<double>> RightNew:: pathRRight = {
+std::vector<std::vector<double>> RightNew::pathRRight = {
         {0},
         {-0.0317},
         {-0.0905},
@@ -609,7 +609,7 @@ std::vector<std::vector<double>> RightNew:: pathRLeft= {
     }
 ;
 
-std::vector<std::vector<double>> RightNew:: shortTurnLeft = {
+std::vector<std::vector<double>> RightNew::shortTurnLeft = {
         {0},
         {-0.0243},
         {-0.0631},
@@ -752,7 +752,7 @@ std::vector<std::vector<double>> RightNew:: shortTurnLeft = {
         {-0.0538}
     }
 ;
-    std::vector<std::vector<double>> RightNew:: shortTurnRight = {
+std::vector<std::vector<double>> RightNew::shortTurnRight = {
         {0},
         {-0.0318},
         {-0.0883},
@@ -896,7 +896,7 @@ std::vector<std::vector<double>> RightNew:: shortTurnLeft = {
     }
 ;
 
-std::vector<std::vector<double>> RightNew:: backLeft = {
+std::vector<std::vector<double>> RightNew::backLeft = {
         {0},
         {-0.0367},
         {-0.1044},
@@ -1035,7 +1035,7 @@ std::vector<std::vector<double>> RightNew:: backLeft = {
         {-0.003}
     }
 ;
-    std::vector<std::vector<double>> RightNew:: backRight = {
+std::vector<std::vector<double>> RightNew::backRight = {
         {0},
         {-0.0201},
         {-0.0478},
@@ -1175,7 +1175,7 @@ std::vector<std::vector<double>> RightNew:: backLeft = {
     }
 ;
 
-std::vector<std::vector<double>> RightNew:: forwardLeft = {
+std::vector<std::vector<double>> RightNew::forwardLeft = {
         {0},
         {0.0284},
         {0.0761},
@@ -1305,7 +1305,7 @@ std::vector<std::vector<double>> RightNew:: forwardLeft = {
         {0.0481}
     }
 ;
-    std::vector<std::vector<double>> RightNew:: forwardRight = {
+std::vector<std::vector<double>> RightNew::forwardRight = {
         {0},
         {0.0284},
         {0.0761},

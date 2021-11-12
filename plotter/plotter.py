@@ -1,3 +1,5 @@
+## This Python script is used to plot our motion profiles for better visualization
+
 import matplotlib.pyplot as plt
 import numpy as np
 
