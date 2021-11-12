@@ -10,8 +10,19 @@ enum class Side {
     LEFT, RIGHT
 };
 
+/**
+ * @brief Sets the brake mode for the drive
+ * 
+ * @param brakeMode brake type - hold, brake, coast
+ */
 void setBrakeMode(AbstractMotor::brakeMode brakeMode);
 
+/**
+ * @brief Sets velocity (RPM) of drive
+ * 
+ * @param l left velocity
+ * @param r right velocity
+ */
 void setVelocity(double l, double r);
 
 /**
