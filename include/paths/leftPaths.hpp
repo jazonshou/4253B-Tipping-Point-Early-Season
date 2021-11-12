@@ -10,15 +10,9 @@
  */
 class LeftPaths {
     public:
-    static std::vector<std::vector<double>> pathLeft;
-    static std::vector<std::vector<double>> pathRight;
+    static std::vector<std::vector<double>> path1Left;
+    static std::vector<std::vector<double>> path1Right;
 
-    static std::vector<std::vector<double>> pathRLeft;
-    static std::vector<std::vector<double>> pathRRight;
-
-    static std::vector<std::vector<double>> pathLeftR;
-    static std::vector<std::vector<double>> pathRightR;
-
-    static std::vector<std::vector<double>> fwdLeft;
-    static std::vector<std::vector<double>> fwdRight;
+    static std::vector<std::vector<double>> path2Left;
+    static std::vector<std::vector<double>> path2Right;
 };

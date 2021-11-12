@@ -2,6 +2,7 @@
 #include "main.h"
 
 class Skills {
+    public:
     // back mogo down
     // path0 - 1.5 ft back
     static std::vector<std::vector<double>> path0Left;

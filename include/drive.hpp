@@ -51,6 +51,10 @@ enum class Side {
      */
     double velControl(double velocity, double accel, double currSpeed);
 
+    void followPathAccel(std::vector<std::vector<double>> leftPath, std::vector<std::vector<double>> rightPath);
+
+    double rpmToLinVel(double rpm);
+
     /**
      * @brief The trajectory generator we use outputs linear velocity (ft/s). In order for us to 
      *        make use of that, we must convert the linear velocity to RPM, which the motors follow. 

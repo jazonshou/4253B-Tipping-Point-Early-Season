@@ -91,6 +91,7 @@ void opcontrol(void);
 #include "paths/leftPaths.hpp"
 #include "paths/awp.hpp"
 #include "paths/rightPaths.hpp"
+#include "paths/rightNewPaths.hpp"
 #include "gif-pros/gifclass.hpp"
 
 

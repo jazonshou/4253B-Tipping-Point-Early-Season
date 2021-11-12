@@ -6,6 +6,8 @@ rightOriginal = open('rightOriginal.txt')
 
 raw = open('raw.txt')
 
+rawList = raw.readlines()
+
 
 originalValLeft = []
 originalValRight = []
@@ -17,9 +19,14 @@ for x in leftOriginal:
 for x in rightOriginal:
     originalValRight.append(x)
 
-for x in range(len(raw)-1):
-    rawValLeft.append(raw[x])
-    rawValRight.append(raw[x+1])
+for x in range (len(rawList)-1):
+    rawValLeft.append(rawList[x])
+    rawValRight.append(rawList[x+1])
+
+
+print(rawValLeft)
+print('--------------------------------------')
+print(rawValRight)
 
 # print(originalValLeft)
 

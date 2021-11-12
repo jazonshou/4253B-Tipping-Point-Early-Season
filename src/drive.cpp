@@ -33,15 +33,26 @@ double velControl(double velocity, double accel, double currSpeed, Side side) {
 
 // TODO - make rpm to velocity conversion - also make ftps to mps convertor 
 void followPathAccel(std::vector<std::vector<double>> leftPath, std::vector<std::vector<double>> rightPath) {
-    for(int i = 0; i < path.size(); i++) {
+    std::vector<double> left, right;
+    for(int i = 0; i < leftPath.size(); i++) {
         double l = rpmToLinVel(leftDrive.getActualVelocity());
         double r = rpmToLinVel(rightDrive.getActualVelocity());
         leftDrive.moveVoltage(velControl(leftPath[i][0], leftPath[i][1], l, Side::LEFT));
         rightDrive.moveVoltage(velControl(rightPath[i][0], rightPath[i][1], r, Side::RIGHT));
 
         // for plotting
-        std::cout << l << std::endl << r << std::endl;
+        left.push_back(l); right.push_back(r);
+        // std::cout << l << std::endl << r << std::endl;
         pros::delay(10);
+    }
+    leftDrive.moveVoltage(0.0);
+    rightDrive.moveVoltage(0.0);
+    // for(double i : left) {
+    //     std::cout << i << std::endl;
+    // }
+    std::cout << "--------------------------------\n";
+    for(double i : right) {
+        std::cout << i << std::endl;
     }
 }
 

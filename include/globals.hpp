@@ -18,13 +18,13 @@ const double MAX_LIFT_HEIGHT = 2000;
 const double MAX_MOGO_DISTANCE = 35; 
 const double LIFT_INCREMENT = 10; 
 
-const double LEFT_kV = 0.0;
-const double LEFT_kA = 0.0;
-const double LEFT_kP = 0.0;
+const double LEFT_kV = 1500.0;
+const double LEFT_kA = 250.0;
+const double LEFT_kP = 1500.0;
 
-const double RIGHT_kV = 0.0;
-const double RIGHT_kA = 0.0;
-const double RIGHT_kP = 0.0;
+const double RIGHT_kV = 1500.0;
+const double RIGHT_kA = 250.0;
+const double RIGHT_kP = 1500.0;
 
 // CONTROLLER
 /**

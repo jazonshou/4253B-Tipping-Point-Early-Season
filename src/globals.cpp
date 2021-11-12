@@ -52,7 +52,7 @@ std::shared_ptr<AsyncMotionProfileController> profiler = AsyncMotionProfileContr
 
 std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
     .withMotor(lift)
-    .withGains({0.01, 0.001, 0.0000}) // TODO - Slightly tune constant
+    .withGains({0.035, 0.0, 0.0005}) // TODO - Slightly tune constant
     .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
     .build();
 
@@ -64,7 +64,7 @@ std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncP
 
 std::shared_ptr<AsyncPositionController<double, double>> mogoController = AsyncPosControllerBuilder()
     .withMotor(mogo)
-    .withGains({0.0225, 0.0, 0.0005})
+    .withGains({0.015, 0.0001, 0.0005}) // 0.0225, 0.0, 0.0005
     .withSensor(std::make_shared<okapi::RotationSensor>(mogoSensor))
     .build();
 
