@@ -83,7 +83,7 @@ extern Pneumatic wings;
  */
 extern std::shared_ptr<OdomChassisController> chassis;
 extern std::shared_ptr<AsyncMotionProfileController> profiler;
-extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
+// extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 // extern std::shared_ptr<AsyncPositionController<double, double>> rollerController;
 extern std::shared_ptr<AsyncPositionController<double, double>> mogoController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;

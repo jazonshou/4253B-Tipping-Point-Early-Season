@@ -8,9 +8,9 @@ void initialize(){
     //TODO bruh
     // Initializes Controller
     mogoController->tarePosition();
-    liftController->tarePosition();
+    // liftController->tarePosition();
     mogoController->reset();
-    liftController->reset();
+    // liftController->reset();
     pros::lcd::set_text(2, "mogo & lift sensor reset");
 }
 
@@ -19,18 +19,25 @@ void disabled(){}
 void competition_initialize(){}
 
 void autonomous(){
+    std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
+        .withMotor(lift)
+        .withGains({0.035, 0.0, 0.0005}) // TODO - Slightly tune constant
+        .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
+        .build();
     // INITIALIZATION
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
+    liftController->tarePosition();
+    liftController->reset();
     
     // -----------------------------------------------------------------------
     // RIGHT AUTON
-    // wings.set_value(true);
-    // mogoController->setTarget(45);
-    // followPath(RightNew::pathRLeft, RightNew::pathRRight);
-    // wings.set_value(false);
-    // followPath(RightNew::pathBackLeft, RightNew::pathBackRight);
-    // wings.set_value(true); pros::delay(250); wings.set_value(false);
+    wings.set_value(true);
+    mogoController->setTarget(45);
+    followPath(RightNew::pathRLeft, RightNew::pathRRight);
+    wings.set_value(false);
+    followPath(RightNew::pathBackLeft, RightNew::pathBackRight);
+    wings.set_value(true); pros::delay(500); wings.set_value(false);
     // followPath(RightNew::shortTurnLeft, RightNew::shortTurnRight);
     // mogoController->setTarget(0);
     // mogoController->waitUntilSettled();
@@ -41,6 +48,7 @@ void autonomous(){
     // LEFT AUTON
     // followPath(LeftPaths::path1Left, LeftPaths::path1Right);
     // mogoController->setTarget(45);
+    // pros::delay(250);
     // followPath(LeftPaths::path2Left, LeftPaths::path2Right);
     // claw.set_value(true);
     // -----------------------------------------------------------------------
@@ -56,24 +64,25 @@ void autonomous(){
     // leftDrive.moveRelative(600, 600);
     // -----------------------------------------------------------------------
     // SKILLS AUTON
-    mogoController->setTarget(0);
-    wings.set_value(true); pros::delay(100); wings.set_value(false);
-    mogoController->waitUntilSettled();
-    followPath(Skills::path0Left, Skills::path0Right);
-    mogoController->setTarget(45);
-    followPath(Skills::path1Left, Skills::path1Right);
-    pros::delay(250);
-    claw.set_value(true);
-    liftController->setTarget(110);
-    followPath(Skills::path2Left, Skills::path2Right);
-    claw.set_value(false);
-    leftDrive.moveVelocity(600); rightDrive.moveVelocity(600); pros::delay(500); leftDrive.moveVelocity(0); rightDrive.moveVelocity(0);
-    followPath(Skills::path3Left, Skills::path3Right);
+    // mogoController->setTarget(0);
+    // wings.set_value(true); pros::delay(100); wings.set_value(false);
+    // mogoController->waitUntilSettled();
+    // followPath(Skills::path0Left, Skills::path0Right);
+    // mogoController->setTarget(45);
+    // followPath(Skills::path1Left, Skills::path1Right);
+    // pros::delay(250);
+    // claw.set_value(true);
+    // liftController->setTarget(110);
+    // followPath(Skills::path2Left, Skills::path2Right);
+    // claw.set_value(false);
+    // liftController->setTarget(100);
+    // // leftDrive.moveVelocity(600); rightDrive.moveVelocity(600); pros::delay(500); leftDrive.moveVelocity(0); rightDrive.moveVelocity(0);
+    // followPath(Skills::backLeft, Skills::backRight);
 }
 
 void opcontrol(){
     // mogoController->reset();
-    liftController->reset();
+    // liftController->reset();
     // Configures brake type for drive & lift
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
@@ -106,10 +115,10 @@ void opcontrol(){
          * L2 (Left Bottom) Pressed -> Lift goes down
          * Both are pressed / both aren't pressed -> lift stays in the current position
          */
-        if(master.getDigital(ControllerDigital::L1)) lift.moveVelocity(200); //liftController->setTarget(100);
-        else if(master.getDigital(ControllerDigital::L2)) lift.moveVelocity(-200); //liftController->setTarget(0);
-        else lift.moveVelocity(0);
-        pros::lcd::set_text(3, "lift error : " + std::to_string(liftController->getError()));
+        if(master.getDigital(ControllerDigital::L1)) lift.moveVoltage(12000);//lift.moveVelocity(200); //liftController->setTarget(100);
+        else if(master.getDigital(ControllerDigital::L2)) lift.moveVoltage(-12000);//lift.moveVelocity(-200); //liftController->setTarget(0);
+        else lift.moveVoltage(0);
+        // pros::lcd::set_text(3, "lift error : " + std::to_string(liftController->getError()));
 
         /**
          * @brief Claw Control

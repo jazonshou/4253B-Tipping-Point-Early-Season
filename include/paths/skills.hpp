@@ -27,6 +27,9 @@ class Skills {
     // path3 - back, front facing west
     static std::vector<std::vector<double>> path3Left;
     static std::vector<std::vector<double>> path3Right;
+
+    static std::vector<std::vector<double>> backLeft;
+    static std::vector<std::vector<double>> backRight;
     // lift down async
     // path4 - collects left blue mogo
     static std::vector<std::vector<double>> path4Left;
