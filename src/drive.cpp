@@ -73,10 +73,17 @@ std::vector<double> pathToRPM(std::vector<std::vector<double>> path) {
 }
 
 // also not for custon vel control
-void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel) {
+void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel, bool _imu) {
     std::vector<double> left = pathToRPM(leftVel); std::vector<double> right = pathToRPM(rightVel);
+    imu.reset();
+    const double kP = 7.5;
     for(int i = 0; i < left.size() || i < right.size(); i++) {
-        setVelocity(left[i], right[i]);
+        if(!_imu) {
+            setVelocity(left[i], right[i]);
+        } else {
+            double val = imu.get()*kP;
+            setVelocity(left[i] - val, right[i] + val);
+        }
         pros::delay(10);
         // pros::Task::delay_until(&now, 10);
     }

@@ -12,4 +12,11 @@ class AWP {
 
     static std::vector<std::vector<double>> loopbackLeft;
     static std::vector<std::vector<double>> loopbackRight;
+
+    // ---------------------------------------------
+    static std::vector<std::vector<double>> path1NewLeft;
+    static std::vector<std::vector<double>> path1NewRight;
+
+    static std::vector<std::vector<double>> testLeft;
+    static std::vector<std::vector<double>> testRight;
 };

@@ -104,4 +104,4 @@ std::vector<double> pathToRPM(std::vector<std::vector<double>> path);
  * @param leftVel 2D vector of left velocity
  * @param rightVel 2D vector of right velocity
  */
-void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel);
+void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel, bool _imu);
