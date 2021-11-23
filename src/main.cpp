@@ -66,13 +66,16 @@ void autonomous(){
     mogoController->setTarget(45);
     liftController->waitUntilSettled();
     followPath(AWP::path1NewLeft, AWP::path1NewRight, false);
-    mogoController->setTarget(0);
     setVelocity(300, 300); pros::delay(500); setVelocity(0,0);
+    mogoController->setTarget(0);
     followPath(AWP::testLeft, AWP::testRight, true);
+    liftController->setTarget(0);
     mogoController->setTarget(45);
     pros::delay(500);
     setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
     mogoController->setTarget(0);
+    mogoController->waitUntilSettled();
+    pros::delay(1000);
     setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
     // --------------------------------
     // mogoController->setTarget(0);

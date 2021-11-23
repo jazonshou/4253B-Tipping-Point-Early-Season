@@ -81,7 +81,8 @@ void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vecto
         if(!_imu) {
             setVelocity(left[i], right[i]);
         } else {
-            double val = imu.get()*kP;
+            double desiredRotation = leftVel[i][1];
+            double val = (imu.get() - desiredRotation) * kP;
             setVelocity(left[i] - val, right[i] + val);
         }
         pros::delay(10);
