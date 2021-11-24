@@ -75,14 +75,15 @@ std::vector<double> pathToRPM(std::vector<std::vector<double>> path) {
 // also not for custon vel control
 void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel, bool _imu) {
     std::vector<double> left = pathToRPM(leftVel); std::vector<double> right = pathToRPM(rightVel);
-    imu.reset();
+    // imu.reset();
+    double imuZeroTheta = imu.get();
     const double kP = 7.5;
     for(int i = 0; i < left.size() || i < right.size(); i++) {
         if(!_imu) {
             setVelocity(left[i], right[i]);
         } else {
-            double desiredRotation = leftVel[i][1];
-            double val = (imu.get() - desiredRotation) * kP;
+            double val = (imu.get() - imuZeroTheta) * kP;
+            std::cout << imu.get() << std::endl;
             setVelocity(left[i] - val, right[i] + val);
         }
         pros::delay(10);
@@ -96,8 +97,9 @@ void turnToAngle(okapi::QAngle targetAngle){
 	turnPID->setTarget(targetAngle.convert(degree));
 
 	do {
-		chassis->getOdometry()->step();
-		double power = turnPID->step(chassis->getState().theta.convert(degree));
+		// chassis->getOdometry()->step();
+		// double power = turnPID->step(chassis->getState().theta.convert(degree));
+        double power = turnPID->step(imu.getRemapped(-180, 180));
 		(chassis->getModel())->tank(power, -power);
 		pros::delay(10);
 	} while(!turnPID->isSettled());

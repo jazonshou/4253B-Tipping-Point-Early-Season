@@ -62,21 +62,24 @@ void autonomous(){
     // claw.set_value(true);
     // -----------------------------------------------------------------------
     // AWP AUTON
-    liftController->setTarget(100);
-    mogoController->setTarget(45);
-    liftController->waitUntilSettled();
-    followPath(AWP::path1NewLeft, AWP::path1NewRight, false);
-    setVelocity(300, 300); pros::delay(500); setVelocity(0,0);
-    mogoController->setTarget(0);
-    followPath(AWP::testLeft, AWP::testRight, true);
-    liftController->setTarget(0);
-    mogoController->setTarget(45);
-    pros::delay(500);
-    setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
-    mogoController->setTarget(0);
-    mogoController->waitUntilSettled();
-    pros::delay(1000);
-    setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
+    turnToAngle(90_deg);
+    // turnToAngle(180_deg);
+    
+    // liftController->setTarget(100);
+    // mogoController->setTarget(45);
+    // liftController->waitUntilSettled();
+    // followPath(AWP::path1NewLeft, AWP::path1NewRight, true);
+    // setVelocity(300, 300); pros::delay(500); setVelocity(0,0);
+    // mogoController->setTarget(0);
+    // followPath(AWP::testLeft, AWP::testRight, true);
+    // liftController->setTarget(0);
+    // mogoController->setTarget(45);
+    // pros::delay(500);
+    // setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
+    // mogoController->setTarget(0);
+    // mogoController->waitUntilSettled();
+    // pros::delay(1000);
+    // setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
     // --------------------------------
     // mogoController->setTarget(0);
     // wings.set_value(true); pros::delay(100); wings.set_value(false);

@@ -69,7 +69,7 @@ std::shared_ptr<AsyncPositionController<double, double>> mogoController = AsyncP
     .build();
 
 
-std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0, 0, 0, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms)); // #TODO - Tune Constant
+std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.025, 0, 0, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms)); // #TODO - Tune Constant
 
 
 // AUTONOMOUS CONTROLLER
