@@ -96,11 +96,17 @@ void turnToAngle(okapi::QAngle targetAngle){
 	turnPID->reset();
 	turnPID->setTarget(targetAngle.convert(degree));
 
+    pros::lcd::set_text(6, "here");
+
 	do {
 		// chassis->getOdometry()->step();
 		// double power = turnPID->step(chassis->getState().theta.convert(degree));
-        double power = turnPID->step(imu.getRemapped(-180, 180));
+        double power = turnPID->step(imu.getRemapped(0, 360));
+        // double power = turnPID->step(imu.get());
 		(chassis->getModel())->tank(power, -power);
+
+        // pros::lcd::set_text(0, "turn error: " + std::to_string(turnPID->getError()));
+        std::cout << "turn error: " + std::to_string(turnPID->getError()) << "imu reading: " + std::to_string(imu.get()) << std::endl;
 		pros::delay(10);
 	} while(!turnPID->isSettled());
 

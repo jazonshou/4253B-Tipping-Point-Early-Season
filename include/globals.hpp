@@ -46,8 +46,8 @@ extern MotorGroup rightDrive;
  * 
  */
 extern Motor lift;
-// extern Motor roller;
-extern Motor mogo;
+extern Motor roller;
+// extern Motor mogo;
 
 // SENSORS
 /**
@@ -61,7 +61,7 @@ extern ADIEncoder trackRight;
 extern ADIEncoder trackMiddle;
 
 extern RotationSensor liftSensor;
-extern RotationSensor mogoSensor;
+// extern RotationSensor mogoSensor;
 
 extern IMU imu; 
 
@@ -70,7 +70,8 @@ extern IMU imu;
  * @brief Globally declares our solenoids (one for claw, one for wings)
  * 
  */
-// extern Pneumatic mogo;
+extern Pneumatic mogo;
+extern Pneumatic mogoClamp;
 extern Pneumatic claw;
 extern Pneumatic wings;
 

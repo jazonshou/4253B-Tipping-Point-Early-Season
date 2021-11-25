@@ -7,9 +7,9 @@ void initialize(){
 
     //TODO bruh
     // Initializes Controller
-    mogoController->tarePosition();
+    // mogoController->tarePosition();
     // liftController->tarePosition();
-    mogoController->reset();
+    // mogoController->reset();
     // liftController->reset();
     pros::lcd::set_text(2, "mogo & lift sensor reset");
 
@@ -23,16 +23,16 @@ void disabled(){}
 void competition_initialize(){}
 
 void autonomous(){
-    std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
-        .withMotor(lift)
-        .withGains({0.035, 0.0, 0.0005}) // TODO - Slightly tune constant
-        .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
-        .build();
+    // std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
+    //     .withMotor(lift)
+    //     .withGains({0.035, 0.0, 0.0005}) // TODO - Slightly tune constant
+    //     .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
+    //     .build();
     // INITIALIZATION
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
-    liftController->tarePosition();
-    liftController->reset();
+    // liftController->tarePosition();
+    // liftController->reset();
     // mogoController->tarePosition();
     // mogoController->reset();
     
@@ -62,13 +62,14 @@ void autonomous(){
     // claw.set_value(true);
     // -----------------------------------------------------------------------
     // AWP AUTON
-    turnToAngle(90_deg);
+    turnToAngle(10_deg);
     // turnToAngle(180_deg);
+
     
     // liftController->setTarget(100);
     // mogoController->setTarget(45);
     // liftController->waitUntilSettled();
-    // followPath(AWP::path1NewLeft, AWP::path1NewRight, true);
+    // followPath(AWP::path1NewLeft, AWP::path1NewRight, false);
     // setVelocity(300, 300); pros::delay(500); setVelocity(0,0);
     // mogoController->setTarget(0);
     // followPath(AWP::testLeft, AWP::testRight, true);
@@ -114,6 +115,7 @@ void autonomous(){
 }
 
 void opcontrol(){
+    // turnToAngle(180_deg);
     
     // mogoController->reset();
     // liftController->reset();
@@ -121,16 +123,18 @@ void opcontrol(){
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     lift.setBrakeMode(AbstractMotor::brakeMode::brake);
-    mogo.setBrakeMode(AbstractMotor::brakeMode::hold);
+    // mogo.setBrakeMode(AbstractMotor::brakeMode::hold);
     
     // Initializes driver control variable
     double liftPosition = 0.0;
     bool mogoState = false, prevBtnState = false, currentBtnState = false;
+    bool _mogoState = false, _prevBtnState = false, _currentBtnState = false;
     
     // Initializes logo on the brain screen
     // Gif gif("/usd/logo.gif", lv_scr_act()); // TODO - Make Gif Run in opcontrol
 
     while(true){
+        wings.set_value(false);
         /** 
          * @brief Chassis Control
          * Left Analog Y Stick -> Linear velocity the chassis drives in
@@ -149,9 +153,14 @@ void opcontrol(){
          * L2 (Left Bottom) Pressed -> Lift goes down
          * Both are pressed / both aren't pressed -> lift stays in the current position
          */
-        if(master.getDigital(ControllerDigital::L1)) lift.moveVoltage(12000);//lift.moveVelocity(200); //liftController->setTarget(100);
+        if(master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2)) roller.moveVoltage(12000); 
+        else if(master.getDigital(ControllerDigital::L1)) lift.moveVoltage(12000);//lift.moveVelocity(200); //liftController->setTarget(100);
         else if(master.getDigital(ControllerDigital::L2)) lift.moveVoltage(-12000);//lift.moveVelocity(-200); //liftController->setTarget(0);
-        else lift.moveVoltage(0);
+        else if(master.getDigital(ControllerDigital::A)) roller.moveVoltage(-12000);
+        else {
+            lift.moveVoltage(0);
+            roller.moveVoltage(0);
+        }
         // pros::lcd::set_text(3, "lift error : " + std::to_string(liftController->getError()));
 
         /**
@@ -161,6 +170,7 @@ void opcontrol(){
          */
         claw.set_value(master.getDigital(ControllerDigital::R1));
         wings.set_value(master.getDigital(ControllerDigital::Y));
+        // mogo.set_value(master.getDigital(ControllerDigital::R2));
 
         /**
          * @brief Mogo Holder Control
@@ -169,15 +179,17 @@ void opcontrol(){
         // TODO - tune lift height & PID
         currentBtnState = master.getDigital(ControllerDigital::R2);
         if(currentBtnState && !prevBtnState){
-            // mogo.set_value((mogoState = !mogoState));
             mogoState = !mogoState;
-            mogoController->setTarget(mogoState ? MAX_MOGO_DISTANCE : 0);
+            mogoClamp.set_value(mogoState);
         }
         prevBtnState = currentBtnState;
 
-        
-        double err = mogoController->getError();
-        pros::lcd::set_text(1, "Error: " + std::to_string(err));
+        _currentBtnState = master.getDigital(ControllerDigital::X);
+        if(_currentBtnState && !_prevBtnState){
+            _mogoState = !_mogoState;
+            mogo.set_value(_mogoState);
+        }
+        _prevBtnState = _currentBtnState;
 
         pros::delay(10);
         
