@@ -1,10 +1,5 @@
 #include "main.h"
 
-void setBrakeMode(AbstractMotor::brakeMode brakeMode) {
-    leftDrive.setBrakeMode(brakeMode);
-    rightDrive.setBrakeMode(brakeMode);
-}
-
 void setVelocity(double l, double r) {
     leftDrive.moveVelocity(l);
     rightDrive.moveVelocity(r);
@@ -25,91 +20,51 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
     return std::make_pair(leftSpeed, rightSpeed);
 }
 
-double velControl(double velocity, double accel, double currSpeed, Side side) {
-    // double kV = 0.0, kA = 0.0, kP = 0.0;
-    return side == Side::LEFT ? LEFT_kV * velocity + LEFT_kA * accel + LEFT_kP * (velocity - currSpeed) : 
-                                RIGHT_kV * velocity + RIGHT_kA * accel + RIGHT_kP * (velocity - currSpeed);
-}
-
-// TODO - make rpm to velocity conversion - also make ftps to mps convertor 
-void followPathAccel(std::vector<std::vector<double>> leftPath, std::vector<std::vector<double>> rightPath) {
-    std::vector<double> left, right;
-    for(int i = 0; i < leftPath.size(); i++) {
-        double l = rpmToLinVel(leftDrive.getActualVelocity());
-        double r = rpmToLinVel(rightDrive.getActualVelocity());
-        leftDrive.moveVoltage(velControl(leftPath[i][0], leftPath[i][1], l, Side::LEFT));
-        rightDrive.moveVoltage(velControl(rightPath[i][0], rightPath[i][1], r, Side::RIGHT));
-
-        // for plotting
-        left.push_back(l); right.push_back(r);
-        // std::cout << l << std::endl << r << std::endl;
-        pros::delay(10);
-    }
-    leftDrive.moveVoltage(0.0);
-    rightDrive.moveVoltage(0.0);
-    // for(double i : left) {
-    //     std::cout << i << std::endl;
-    // }
-    std::cout << "--------------------------------\n";
-    for(double i : right) {
-        std::cout << i << std::endl;
-    }
-}
-
-double rpmToLinVel(double rpm) {
-    return rpm * 3.25 * 3.14159265359 / 720; // don't judge, constants are overrated anyways
-}
-
-// velocity only, doesn't use custon velControl
-std::vector<double> pathToRPM(std::vector<std::vector<double>> path) {
-    std::vector<double> newPath;
-    double val = 0.0;
-    for(int i = 0; i < path.size(); i++) {
-        // max vel = 4.92126 ft/s, max rpm = 600 --> convert values to rpm
-        val = (path[i][0] * 600) / 4.92126;
-        newPath.push_back(val);
-    }
-    return newPath;
-}
-
-// also not for custon vel control
-void followPath(std::vector<std::vector<double>> leftVel, std::vector<std::vector<double>> rightVel, bool _imu) {
-    std::vector<double> left = pathToRPM(leftVel); std::vector<double> right = pathToRPM(rightVel);
-    // imu.reset();
-    double imuZeroTheta = imu.get();
-    const double kP = 7.5;
-    for(int i = 0; i < left.size() || i < right.size(); i++) {
-        if(!_imu) {
-            setVelocity(left[i], right[i]);
-        } else {
-            double val = (imu.get() - imuZeroTheta) * kP;
-            std::cout << imu.get() << std::endl;
-            setVelocity(left[i] - val, right[i] + val);
-        }
-        pros::delay(10);
-        // pros::Task::delay_until(&now, 10);
-    }
-    setVelocity(0, 0);
-}
-
 void turnToAngle(okapi::QAngle targetAngle){
 	turnPID->reset();
-	turnPID->setTarget(targetAngle.convert(degree));
-
-    pros::lcd::set_text(6, "here");
+    turnPID->setTarget(0);
 
 	do {
-		// chassis->getOdometry()->step();
-		// double power = turnPID->step(chassis->getState().theta.convert(degree));
-        double power = turnPID->step(imu.getRemapped(0, 360));
-        // double power = turnPID->step(imu.get());
-		(chassis->getModel())->tank(power, -power);
-
-        // pros::lcd::set_text(0, "turn error: " + std::to_string(turnPID->getError()));
-        std::cout << "turn error: " + std::to_string(turnPID->getError()) << "imu reading: " + std::to_string(imu.get()) << std::endl;
+        (chassis->getModel())->arcade(0, turnPID->step(-Math::rescale180(targetAngle.convert(degree)-imu.get())));
 		pros::delay(10);
 	} while(!turnPID->isSettled());
 
 	(chassis->getModel())->stop();
 }
+
+void followPath(const Trajectory& path){
+    for(int i = 0; i < path.size(); i++){
+        TrajectoryPoint pt = path[i];
+        setVelocity(Math::ftpsToRPM(pt.leftVelocity), Math::ftpsToRPM(pt.rightVelocity));
+        pros::delay(10);
+    }
+    chassis->stop();
+}
+
+void followPathCustom(const Trajectory& path){
+    //okapi::EmaFilter filter(0.65); double leftPosition = 0, leftPrevPosition = 0;
+    leftDrive.tarePosition();
+    rightDrive.tarePosition();
+    for(int i = 0; i < path.size(); i++){
+        TrajectoryPoint pt = path[i];
+
+        double leftPower = leftMotorController.step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftDrive.getPosition(), leftDrive.getActualVelocity());
+        double rightPower = rightMotorController.step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightDrive.getPosition(), rightDrive.getActualVelocity());
+        (chassis->getModel())->tank(leftPower, rightPower);
+
+
+        // leftPosition = Math::tickToFt(leftDrive.getPosition());
+        // std::cout << filter.filter((leftPosition - leftPrevPosition)/0.01) << std::endl;
+        // leftPrevPosition = leftPosition;
+
+        // std::cout << filter.filter(Math::rpmToFtps(leftDrive.getActualVelocity())) << std::endl; 
+
+        // std::cout << Math::tickToFt(rightDrive.getPosition()) << std::endl;
+        // std::cout << Math::tickToFt(leftDrive.getPosition()) << std::endl;
+        pros::delay(10);
+    }
+    chassis->stop();
+}
+
+
 

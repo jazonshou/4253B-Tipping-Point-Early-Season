@@ -1,49 +1,19 @@
-/**
- * @brief Unfortunately due to time constraints and bugs, we were never
- *        able to finish our auton selector/organizational system
- * 
- */
+#include "auton.hpp"
 
-// #include "main.h"
+void skill(){
 
-// void genSkills(){}
+}
 
-// void skills(){
-//     chassis->setState({0_in, 0_in, 0_deg});
-// }
+void left(){
 
-// void genRedLeft(){
-//     profiler->generatePath({{0_in, 0_in, 0_deg}, {0_in, 24_in, 0_deg}}, "Test");
-// }
+}
 
-// void redLeft(){
-//     chassis->setState({0_in, 0_in, 0_deg});
-//     profiler->setTarget("Test");
-//     profiler->waitUntilSettled();
+void right(){
+    
+}
 
-//     turnToAngle(90_deg);
-// }
+void awp(){
 
-// void genRedRight(){}
+}
 
-// void redRight(){
-//     chassis->setState({0_in, 0_in, 0_deg});
-// }
 
-// void genBlueLeft(){}
-
-// void blueLeft(){
-//     chassis->setState({0_in, 0_in, 0_deg});
-// }
-
-// void genBlueRight(){}
-
-// void blueRight(){
-//     chassis->setState({0_in, 0_in, 0_deg});
-// }
-
-// void genAwp(){}
-
-// void awp(){
-//     chassis->setState({0_in, 0_in, 0_deg});
-// }

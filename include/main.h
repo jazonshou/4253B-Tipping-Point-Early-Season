@@ -78,21 +78,22 @@ void opcontrol(void);
  */
 #include <iostream>
 #include <cmath>
-
-
-
 #include <algorithm>
 #include <map>
+
+#include "lib/Math.hpp"
+#include "lib/Trajectory.hpp"
+#include "lib/FeedForward.hpp"
 #include "globals.hpp"
 #include "drive.hpp"
 #include "auton.hpp"
+#include "gif-pros/gifclass.hpp"
 
 #include "paths/skills.hpp"
 #include "paths/leftPaths.hpp"
 #include "paths/awp.hpp"
 #include "paths/rightPaths.hpp"
 #include "paths/rightNewPaths.hpp"
-#include "gif-pros/gifclass.hpp"
 
 
 #endif
