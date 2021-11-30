@@ -18,7 +18,7 @@ extern Motor lift;
 extern Motor roller;
 
 // SENSORS
-extern RotationSensor liftSensor;
+// extern RotationSensor liftSensor;
 extern IMU imu; 
 
 // PNEUMATICS
