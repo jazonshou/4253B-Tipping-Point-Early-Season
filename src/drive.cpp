@@ -68,3 +68,17 @@ void followPathCustom(const Trajectory& path){
 
 
 
+void alignMogo() {
+    // const double kP = 0.005;
+    
+    do {
+        pros::vision_object_s_t rtn = vision_sensor.get_by_size(0);
+        std::cout << "sig: " << rtn.x_middle_coord << std::endl;
+
+        (chassis->getModel())->arcade(0, mogoAlignerController->step(-rtn.x_middle_coord));
+
+		pros::delay(10);
+	} while(!mogoAlignerController->isSettled());
+
+	(chassis->getModel())->stop();
+}

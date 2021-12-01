@@ -329,6 +329,11 @@ void initialize(){
     // liftController->reset();
     pros::lcd::set_text(2, "mogo & lift sensor reset");
 
+    pros::vision_signature_s_t RED_SIG = pros::Vision::signature_from_utility(1, 7615, 8151, 7883, -1647, -1383, -1515, 11.000, 0);
+    // pros::vision_signature_s_t BLUE_SIG = pros::Vision::signature_from_utility()
+
+    vision_sensor.set_signature(1, &RED_SIG);
+
     imu.calibrate();
     pros::delay(2000);
     pros::lcd::set_text(2, "imu calibrated");
@@ -350,8 +355,7 @@ void autonomous(){
     lift.setBrakeMode(AbstractMotor::brakeMode::hold);
     liftController->tarePosition();
     liftController->reset();
-    // mogoController->tarePosition();
-    // mogoController->reset();
+    
     // ------------------------------------------------------------
     
     mogoClamp.set_value(true);
@@ -381,13 +385,28 @@ void autonomous(){
     liftController->setTarget(400);
     followPathCustom(Skills::path5Left);
     liftController->setTarget(700);
+    roller.moveVoltage(12000);
     followPathCustom(Skills::path6Left);
+    roller.moveVoltage(0);
     claw.set_value(false);
+    turnToAngle(270_deg);
 
     followPathCustom(Skills::path7Left);
     turnToAngle(0_deg);
-    followPathCustom(Skills::path8Left);
-    // mogoClamp.set_value(true); pros::delay(250); mogo.set_value(true);
+    alignMogo();
+    liftController->setTarget(0);
+    (chassis->getModel())->tank(-0.5, -0.5); pros::delay(1000); (chassis->getModel())->tank(0, 0);
+    (chassis->getModel())->tank(0.2, 0.2); pros::delay(250); (chassis->getModel())->tank(0, 0);
+    // followPathCustom(Skills::path8Left);
+    mogoClamp.set_value(true); pros::delay(250); mogo.set_value(true);
+    (chassis->getModel())->tank(0.4, 0.4); pros::delay(250); (chassis->getModel())->tank(0, 0);
+
+    turnToAngle(0_deg);
+    followPathCustom(Skills::path9Left);
+    claw.set_value(true);
+    liftController->setTarget(700);
+    roller.moveVoltage(12000);
+    followPathCustom(Skills::path10Left);
 
     // -----------------------------------------------------------------------
     // RIGHT AUTON
@@ -489,8 +508,9 @@ void opcontrol(){
     double value = 0;;
     leftDrive.tarePosition();
     rightDrive.tarePosition();
-    
+
     while(true){
+        
         wings.set_value(false);
         /** 
          * @brief Chassis Control

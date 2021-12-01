@@ -1,7 +1,8 @@
 #pragma once
 #include "main.h"
 
-void setVelocity(double l, double r);
+
+void setVoltage(double l, double r);
 
 /**
  * @brief Computes the desired drive speed to control the chassis using curvature control
@@ -26,3 +27,5 @@ void turnToAngle(okapi::QAngle targetAngle);
 void followPath(const Trajectory& path);
 
 void followPathCustom(const Trajectory& path);
+
+void alignMogo();

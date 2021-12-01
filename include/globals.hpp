@@ -20,6 +20,7 @@ extern Motor roller;
 // SENSORS
 // extern RotationSensor liftSensor;
 extern IMU imu; 
+extern pros::Vision vision_sensor;
 
 // PNEUMATICS
 extern Pneumatic mogo;
@@ -31,6 +32,9 @@ extern Pneumatic wings;
 extern std::shared_ptr<ChassisController> chassis;
 extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;
+extern std::shared_ptr<IterativePosPIDController> mogoAlignerController;
+
+
 
 // VELOCITY CONTROLLERS
 class FFVelocityController;
