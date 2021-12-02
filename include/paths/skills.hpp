@@ -59,4 +59,10 @@ class Skills {
 
     static Trajectory path10Left;
 
+    static Trajectory path11Left;
+
+    static Trajectory path12Left;
+
+    static Trajectory path13Left;
+
 };

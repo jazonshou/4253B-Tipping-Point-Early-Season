@@ -34,8 +34,6 @@ extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<IterativePosPIDController> turnPID;
 extern std::shared_ptr<IterativePosPIDController> mogoAlignerController;
 
-
-
 // VELOCITY CONTROLLERS
 class FFVelocityController;
 extern FFVelocityController leftMotorController;

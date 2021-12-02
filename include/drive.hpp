@@ -1,7 +1,12 @@
 #pragma once
 #include "main.h"
 
-
+/**
+ * @brief Sets voltage of drive
+ * 
+ * @param l left voltage [-12000, 12000]
+ * @param r right voltage [-12000, 12000]
+ */
 void setVoltage(double l, double r);
 
 /**
@@ -24,8 +29,22 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
  */
 void turnToAngle(okapi::QAngle targetAngle);
 
+/**
+ * @brief Follows a path using the internal motor velocity controller
+ * 
+ * @param path 
+ */
 void followPath(const Trajectory& path);
 
+/**
+ * @brief Follows a path using our custon feedforward velocity controller
+ * 
+ * @param path 
+ */
 void followPathCustom(const Trajectory& path);
 
+/**
+ * @brief Uses the vision sensor & PID to align the back mogo holder to a red goal
+ * 
+ */
 void alignMogo();

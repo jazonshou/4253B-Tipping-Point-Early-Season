@@ -19,4 +19,6 @@ class AWP {
 
     static std::vector<std::vector<double>> testLeft;
     static std::vector<std::vector<double>> testRight;
+
+    static Trajectory path0Left;
 };
