@@ -38,8 +38,8 @@ std::shared_ptr<ChassisController> chassis = ChassisControllerBuilder()
 //     .withGains({0.0, 0.0, 0.0}) // TODO - Slightly tune constant 0.035, 0.0, 0.0005
 //     // .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
 //     .build();
-
-std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.037, 0.0, 0.00065, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms)); // #TODO - Tune Constant
+// 0.037, 0.001
+std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.065, 0.01, 0.00065, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms)); // #TODO - Tune Constant
 
 std::shared_ptr<IterativePosPIDController> mogoAlignerController = std::make_shared<IterativePosPIDController>(0.01, 0.0, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(5, 2, 100_ms)); // #TODO - Tune Constant
 

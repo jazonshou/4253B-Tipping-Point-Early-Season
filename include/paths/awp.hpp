@@ -21,4 +21,14 @@ class AWP {
     static std::vector<std::vector<double>> testRight;
 
     static Trajectory path0Left;
+
+    static Trajectory path1Left;
+
+    static Trajectory pathLeft;
+
+    static Trajectory pathBackLeft;
+
+    static Trajectory pathNew0Left;
+
+    static Trajectory leftShortPathLeft;
 };
