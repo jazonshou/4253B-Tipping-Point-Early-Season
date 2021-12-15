@@ -522,6 +522,7 @@ void autonomous(){
     followPathCustom(Skills::path13Left);
     liftController->setTarget(0);
     turnToAngle(90_deg);
+
     // followPathCustom(Skills::path12Left);
     // claw.set_value(true);
     // liftController->setTarget(400);
@@ -554,6 +555,15 @@ void autonomous(){
 }
 
 void opcontrol(){
+    wings.set_value(true);
+    translate(-3.5_ft);
+    while(translatePID->getError() > 50) {
+        pros::delay(20);
+    }
+    wings.set_value(false);
+    translate(2.5_ft);
+    // (chassis->getModel())->arcade(1, 0);
+
     // liftController->reset();
     // Configures brake type for drive & lift
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
@@ -642,6 +652,8 @@ void opcontrol(){
             mogo.set_value(_mogoState);
         }
         _prevBtnState = _currentBtnState;
+
+
 
         pros::delay(10);
     }

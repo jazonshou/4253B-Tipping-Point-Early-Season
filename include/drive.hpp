@@ -48,3 +48,5 @@ void followPathCustom(const Trajectory& path);
  * 
  */
 void alignMogo();
+
+void translate(QLength target);

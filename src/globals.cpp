@@ -43,6 +43,7 @@ std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativeP
 
 std::shared_ptr<IterativePosPIDController> mogoAlignerController = std::make_shared<IterativePosPIDController>(0.01, 0.0, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(5, 2, 100_ms)); // #TODO - Tune Constant
 
+std::shared_ptr<IterativePosPIDController> translatePID = std::make_shared<IterativePosPIDController>(0.1, 0.0, 0.002, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms));
 
 FFVelocityController leftMotorController(0.187, 0.04, 0.025, 2.5, 0.3);
 FFVelocityController rightMotorController(0.1915, 0.043, 0.02, 2.5, 0.1);

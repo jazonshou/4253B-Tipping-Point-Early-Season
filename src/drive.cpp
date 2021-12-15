@@ -69,8 +69,6 @@ void followPathCustom(const Trajectory& path){
 
 
 void alignMogo() {
-    // const double kP = 0.005;
-    
     do {
         pros::vision_object_s_t rtn = vision_sensor.get_by_size(0);
         std::cout << "sig: " << rtn.x_middle_coord << std::endl;
@@ -79,6 +77,28 @@ void alignMogo() {
 
 		pros::delay(10);
 	} while(!mogoAlignerController->isSettled());
+	(chassis->getModel())->stop();
+}
+
+
+void translate(QLength target){
+    double headingCorrection_kP = 0.118;
+
+	translatePID->reset();
+    translatePID->setTarget(0);
+    (chassis->getModel())->resetSensors();
+    imu.reset();
+
+	do {
+        double encAvg = ((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2;
+        double dist = (encAvg/360) * (3.25*PI);
+        double error = target.convert(inch) - dist;
+        
+        double power = -translatePID->step(error);        
+
+        (chassis->getModel())->arcade(power, -imu.get()*headingCorrection_kP);
+		pros::delay(10);
+	} while(!translatePID->isSettled());
 
 	(chassis->getModel())->stop();
 }
