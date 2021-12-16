@@ -41,5 +41,3 @@ std::shared_ptr<IterativePosPIDController> translatePID = std::make_shared<Itera
 
 FFVelocityController leftMotorController(0.187, 0.04, 0.025, 2.5, 0.3);
 FFVelocityController rightMotorController(0.1915, 0.043, 0.02, 2.5, 0.1);
-
-

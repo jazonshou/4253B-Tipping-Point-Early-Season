@@ -1,6 +1,9 @@
 #pragma once
 #include "main.h"
 
+#define LVGL_SCREEN_WIDTH 480
+#define LVGL_SCREEN_HEIGHT 240
+
 using Pneumatic = pros::ADIDigitalOut;
 
 // CONSTANTS
