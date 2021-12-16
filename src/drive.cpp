@@ -51,16 +51,6 @@ void followPathCustom(const Trajectory& path){
         double leftPower = leftMotorController.step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftDrive.getPosition(), leftDrive.getActualVelocity());
         double rightPower = rightMotorController.step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightDrive.getPosition(), rightDrive.getActualVelocity());
         (chassis->getModel())->tank(leftPower, rightPower);
-
-
-        // leftPosition = Math::tickToFt(leftDrive.getPosition());
-        // std::cout << filter.filter((leftPosition - leftPrevPosition)/0.01) << std::endl;
-        // leftPrevPosition = leftPosition;
-
-        // std::cout << filter.filter(Math::rpmToFtps(leftDrive.getActualVelocity())) << std::endl; 
-
-        // std::cout << Math::tickToFt(rightDrive.getPosition()) << std::endl;
-        // std::cout << Math::tickToFt(leftDrive.getPosition()) << std::endl;
         pros::delay(10);
     }
     chassis->stop();

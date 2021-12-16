@@ -321,18 +321,13 @@ Trajectory path = {
 
 void initialize(){
 	pros::lcd::initialize();
-    pros::lcd::set_text(1, "init");
-
-    //TODO bruh
-    // Initializes Controller
-    // liftController->tarePosition();
-    // liftController->reset();
-    pros::lcd::set_text(2, "mogo & lift sensor reset");
-
+    
     pros::vision_signature_s_t RED_SIG = pros::Vision::signature_from_utility(1, 5685, 8135, 6910, -1963, -1705, -1834, 4.000, 0);
     // pros::vision_signature_s_t BLUE_SIG = pros::Vision::signature_from_utility()
 
     vision_sensor.set_signature(1, &RED_SIG);
+
+    pros::lcd::set_text(2, "imu calibrating..............");
 
     imu.calibrate();
     pros::delay(2000);
@@ -344,228 +339,18 @@ void disabled(){}
 void competition_initialize(){}
 
 void autonomous(){
-    std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
-        .withMotor(lift)
-        .withGains({0.00875, 0.0, 0.000075}) // TODO - Slightly tune constant
-        // .withSensor(std::make_shared<okapi::RotationSensor>(liftSensor))
-        .build();
-    // INITIALIZATION
-    leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
-    rightDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
-    lift.setBrakeMode(AbstractMotor::brakeMode::hold);
-    liftController->tarePosition();
-    liftController->reset();
-    // turnToAngle(180_deg);
-    // ------------------------------------------------------------
-    // SKILLS AUTON
-    /*
-    mogoClamp.set_value(true);
-    pros::delay(250);
-    mogo.set_value(true);
-    roller.moveVoltage(12000);
-    followPathCustom(Skills::path1Left);
-    // setVelocity(300, 300); pros::delay(100); setVelocity(0, 0);
-    roller.moveVoltage(0);
-    claw.set_value(true);
-    pros::delay(250);
-    liftController->setTarget(700);
-    roller.moveVoltage(12000);
-    followPathCustom(Skills::path2Left);
-    
-    roller.moveVoltage(0);
-    
-    claw.set_value(false);
-    
-    followPathCustom(Skills::path3Left);
-    turnToAngle(0_deg);
-
-    liftController->setTarget(0);
-    mogo.set_value(false); pros::delay(250); mogoClamp.set_value(false);
-    followPathCustom(Skills::path4Left);
-    claw.set_value(true);
-    liftController->setTarget(400);
-    followPathCustom(Skills::path5Left);
-    liftController->setTarget(700);
-    roller.moveVoltage(12000);
-    followPathCustom(Skills::path6Left);
-    roller.moveVoltage(0);
-    claw.set_value(false);
-    turnToAngle(270_deg);
-
-    followPathCustom(Skills::path7Left);
-    turnToAngle(0_deg);
-    alignMogo();
-    liftController->setTarget(0);
-    (chassis->getModel())->tank(-0.5, -0.5); pros::delay(1500); (chassis->getModel())->tank(0, 0);
-    pros::delay(500);
-    (chassis->getModel())->tank(0.1, 0.1); pros::delay(100); (chassis->getModel())->tank(0, 0);
-    // followPathCustom(Skills::path8Left);
-    mogoClamp.set_value(true); pros::delay(500); mogo.set_value(true);
-    (chassis->getModel())->tank(0.4, 0.4); pros::delay(250); (chassis->getModel())->tank(0, 0);
-
-    turnToAngle(0_deg);
-    followPathCustom(Skills::path9Left);
-    claw.set_value(true);
-    liftController->setTarget(700);
-    roller.moveVoltage(12000);
-    followPathCustom(Skills::path10Left);
-    claw.set_value(false);
-    
-    followPathCustom(Skills::path11Left);
-    followPathCustom(Skills::path12Left);
-    mogo.set_value(false); pros::delay(250); mogoClamp.set_value(false);
-    followPathCustom(Skills::path12Left);
-    liftController->setTarget(0);
-    roller.moveVoltage(0);
-    turnToAngle(0_deg);
-    followPathCustom(Skills::path12Left);
-    followPathCustom(Skills::path12Left);
-    claw.set_value(true);
-    liftController->setTarget(700);
-    
-    followPathCustom(Skills::path13Left);
-    turnToAngle(90_deg);
-    followPathCustom(Skills::path12Left);
-    claw.set_value(false);
-    */
-
-
-    // -----------------------------------------------------------------------
-    // RIGHT AUTON
-    // -----------------------------------------------------------------------
-    // LEFT AUTON
-    // wings.set_value(true); pros::delay(100); wings.set_value(false);
-    // mogoController->setTarget(0);
-    // followPath(LeftPaths::path1Left, LeftPaths::path1Right);
-    // mogoController->setTarget(45);
-    // pros::delay(250);
-    // followPath(LeftPaths::path2Left, LeftPaths::path2Right);
-    // claw.set_value(true);
-    // -----------------------------------------------------------------------
-    // AWP AUTON
-    // liftController->setTarget(100);
-    // mogoController->setTarget(45);
-    // liftController->waitUntilSettled();
-    // followPath(AWP::path1NewLeft, AWP::path1NewRight, false);
-    // setVelocity(300, 300); pros::delay(500); setVelocity(0,0);
-    // mogoController->setTarget(0);
-    // followPath(AWP::testLeft, AWP::testRight, true);
-    // liftController->setTarget(0);
-    // mogoController->setTarget(45);
-    // pros::delay(500);
-    // setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
-    // mogoController->setTarget(0);
-    // mogoController->waitUntilSettled();
-    // pros::delay(1000);
-    // setVelocity(300, 300); pros::delay(1000); setVelocity(0, 0);
-    // --------------------------------
-    // mogoController->setTarget(0);
-    // wings.set_value(true); pros::delay(100); wings.set_value(false);
-    // mogoController->waitUntilSettled();
-    // followPath(AWP::fwdRLeft, AWP::fwdRRight);
-    // mogoController->setTarget(45);
-    // followPath(AWP::loopbackLeft, AWP::loopbackRight);
-    // claw.set_value(true);
-    // rightDrive.moveRelative(-300, 600);
-    // leftDrive.moveRelative(600, 600);
-    // -----------------------------------------------------------------------
-    // SKILLS AUTON    
-    // LEFT AUTON
-    // mogoClamp.set_value(true);
-    // pros::delay(250);
-    // mogo.set_value(true);
-    // liftController->setTarget(700);
-    // roller.moveVoltage(12000);
-    // followPathCustom(AWP::path0Left);
-    // // pros::delay(1000);
-    // roller.moveVoltage(-12000);
-    // followPathCustom(Skills::path13Left);
-    // turnToAngle(90_deg);
-
-    // mogo.set_value(false);
-    // pros::delay(250);
-    // mogoClamp.set_value(false);
-    // roller.moveVoltage(12000);
-    // liftController->setTarget(0);
-    // liftController->waitUntilSettled();
-    //---------------------------
-    // followPathCustom(AWP::leftShortPathLeft);
-    // claw.set_value(true);
-    // (chassis->getModel())->tank(-0.4, -0.4); pros::delay(500);(chassis->getModel())->tank(0, 0);
-    
-    // followPathCustom(AWP::path1Left);
-    // followPathCustom(Skills::path13Left);
-    // liftController->setTarget(0);
-    // followPathCustom(Skills::path12Left);
-
-    // (chassis->getModel())->tank(600, 300); pros::delay(500); (chassis->getModel())->tank(0, 0);
-    // claw.set_value(true);
-    // liftController->setTarget(700);
-    // liftController->waitUntilSettled();
-
-    // 
-    // (chassis->getModel())->tank(-500, -500); pros::delay(500); (chassis->getModel())->tank(0, 0);
-    
-    // ----------------------------------------------------------
-    // RIGHT AUTON
-    wings.set_value(true);
-    followPathCustom(AWP::pathLeft);
-    wings.set_value(false);
-    pros::delay(325);
-    followPathCustom(AWP::pathBackLeft);
-    turnToAngle(280_deg);
-    liftController->setTarget(700);
-    followPathCustom(AWP::pathBackLeft);
-    turnToAngle(0_deg);
-    (chassis->getModel())->tank(300, 300); pros::delay(1000);(chassis->getModel())->tank(0, 0);
-    wings.set_value(true); pros::delay(250); wings.set_value(false);
-    followPathCustom(Skills::path13Left);
-    liftController->setTarget(0);
-    turnToAngle(90_deg);
-
-    // followPathCustom(Skills::path12Left);
-    // claw.set_value(true);
-    // liftController->setTarget(400);
-    // liftController->waitUntilSettled();
-
-    //--------------------------
-
-    /////////
-    // pros::delay(7500);
-    // liftController->setTarget(700);
-    // liftController->waitUntilSettled();
-    // liftController->setTarget(0);
-    // followPathCustom(AWP::pathNew0Left);
-    // claw.set_value(true);
-    // liftController->setTarget(400);
-    // followPathCustom(Skills::path13Left);
-
-    //////////
-    
-
-    //---------------------------------------------------
-
-
-
-    //left();
-    //right();
-    //awp();
-    // skills();
-
+    Auton auton = Auton();
+    auton.init();
+    auton.wingGrab();
 }
 
 void opcontrol(){
-    
-    // (chassis->getModel())->arcade(1, 0);
-
-    // liftController->reset();
     // Configures brake type for drive & lift
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     lift.setBrakeMode(AbstractMotor::brakeMode::brake);
     
     imu.reset();
-    //turnToAngle(180_deg);
 
     // Initializes driver control variable
     double liftPosition = 0.0;
@@ -646,8 +431,6 @@ void opcontrol(){
             mogo.set_value(_mogoState);
         }
         _prevBtnState = _currentBtnState;
-
-
 
         pros::delay(10);
     }

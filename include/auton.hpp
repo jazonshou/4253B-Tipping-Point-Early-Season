@@ -1,20 +1,23 @@
 #pragma once
 #include "main.h"
 
-/**
- * @brief Originally, our plan was to use an auton selector, but due to 
- *        time constraints and bugs, we were unable to finish it on time. 
- * 
- */
+class Auton {
+    private:
+    std::shared_ptr<AsyncPositionController<double, double>> liftController;
 
-//-----------------------------------------------------------//
+    public:
+    Auton();
 
-void wingGrab();
+    void init();
 
-void skill();
+    void wingGrab();
 
-void left();
+    void skills();
 
-void right();
+    void left();
 
-void awp();
+    void right();
+
+    void awp();
+
+};
