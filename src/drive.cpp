@@ -5,6 +5,12 @@ void setVelocity(double l, double r) {
     rightDrive.moveVelocity(r);
 }
 
+void moveTime(std::pair<double, double> speed, QTime time) {
+    (chassis->getModel())->tank(speed.first, speed.second);
+    pros::delay(time.convert(millisecond));
+    (chassis->getModel())->tank(0, 0);
+}
+
 std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickTurn){
     // Compute velocity, right stick = curvature if no quickturn, else power
     double leftSpeed = moveC + (quickTurn ? turnC : abs(moveC) * turnC);
@@ -20,13 +26,14 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
     return std::make_pair(leftSpeed, rightSpeed);
 }
 
-void turnToAngle(okapi::QAngle targetAngle){
+void turnToAngle(QAngle targetAngle){
 	turnPID->reset();
     turnPID->setTarget(0);
 
 	do {
         (chassis->getModel())->arcade(0, turnPID->step(-Math::rescale180(targetAngle.convert(degree)-imu.get())));
-		pros::delay(10);
+        
+        pros::delay(10);
 	} while(!turnPID->isSettled());
 
 	(chassis->getModel())->stop();

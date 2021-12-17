@@ -345,6 +345,10 @@ void autonomous(){
 }
 
 void opcontrol(){
+    Auton auton = Auton();
+    auton.init();
+    auton.right();
+    
     // Creates a black background
     lv_obj_t *background;
     lv_style_t backgroundStyle;
@@ -361,7 +365,7 @@ void opcontrol(){
     lv_obj_align(background, NULL, LV_ALIGN_CENTER, 0, 0);
 
     // Starts crab rave gif
-    Gif gif("/usd/crab-rave.gif", lv_scr_act());
+    // Gif gif("/usd/crab-rave.gif", lv_scr_act());
 
     // Configures brake type for drive & lift
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);

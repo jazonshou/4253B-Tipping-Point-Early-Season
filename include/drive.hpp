@@ -10,6 +10,14 @@
 void setVoltage(double l, double r);
 
 /**
+ * @brief Moves for set amount of time at set speed
+ * 
+ * @param speed speed [-1, 1]
+ * @param time time
+ */
+void moveTime(std::pair<double, double> speed, QTime time);
+
+/**
  * @brief Computes the desired drive speed to control the chassis using curvature control
  *        The turn power is scaled with the linear power in order to allow finer control
  *        of the chassis.
@@ -27,7 +35,7 @@ std::pair<double, double> curvatureDrive(double moveC, double turnC, bool quickT
  * 
  * @param targetAngle - the target odometry global angle to turn to, normalized to [-pi, pi]
  */
-void turnToAngle(okapi::QAngle targetAngle);
+void turnToAngle(QAngle targetAngle);
 
 /**
  * @brief Follows a path using the internal motor velocity controller

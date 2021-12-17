@@ -29,61 +29,39 @@ void Auton::init() {
  * 
  */
 void Auton::wingGrab() {
+    std::cout << "hello world\n";
     wings.set_value(true);
+    std::cout << "moving \n\n";
     translate(-3.5_ft);
-    while(translatePID->getError() > 50) {
-        pros::delay(20);
-    }
+
     wings.set_value(false);
-    translate(2.5_ft);
+    pros::delay(250);
+    translate(4.25_ft);
+
+    wings.set_value(true); pros::delay(250); wings.set_value(false); pros::delay(250);
 }
 
 void Auton::left(){
-    mogoClamp.set_value(true);
-    pros::delay(250);
-    mogo.set_value(true);
-    liftController->setTarget(700);
-    roller.moveVoltage(12000);
-    followPathCustom(AWP::path0Left);
-    // pros::delay(1000);
-    roller.moveVoltage(-12000);
-    followPathCustom(Skills::path13Left);
-    turnToAngle(90_deg);
-
-    mogo.set_value(false);
-    pros::delay(250);
-    mogoClamp.set_value(false);
-    roller.moveVoltage(12000);
-    liftController->setTarget(0);
-    liftController->waitUntilSettled();
+    
 }
 
 void Auton::right(){
-    wings.set_value(true);
-    followPathCustom(AWP::pathLeft);
-    wings.set_value(false);
-    pros::delay(325);
-    followPathCustom(AWP::pathBackLeft);
-    turnToAngle(280_deg);
-    liftController->setTarget(700);
-    followPathCustom(AWP::pathBackLeft);
-    turnToAngle(0_deg);
-    (chassis->getModel())->tank(300, 300); pros::delay(1000);(chassis->getModel())->tank(0, 0);
-    wings.set_value(true); pros::delay(250); wings.set_value(false);
-    followPathCustom(Skills::path13Left);
-    liftController->setTarget(0);
+    wingGrab();
+    
+    translate(-2_ft);
     turnToAngle(90_deg);
+
+    translate(-4_ft);
+    moveTime({-0.5, -0.5}, 250_ms);
+    pros::delay(250);
+    mogoClamp.set_value(true); pros::delay(250); mogo.set_value(true);
+
+    followPathCustom(AWP::p0Left);
+    claw.set_value(true);
 }
 
 void Auton::awp(){
-    pros::delay(7500);
-    liftController->setTarget(700);
-    liftController->waitUntilSettled();
-    liftController->setTarget(0);
-    followPathCustom(AWP::pathNew0Left);
-    claw.set_value(true);
-    liftController->setTarget(400);
-    followPathCustom(Skills::path13Left);
+    
 }
 
 
