@@ -8,6 +8,7 @@ enum class Direction {
 class Conveyor : TaskWrapper {
     private: 
     std::shared_ptr<Motor> motor;
+    std::mutex amogusIsSus;
 
     public: 
     Conveyor(std::shared_ptr<Motor> motor);

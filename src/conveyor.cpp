@@ -18,6 +18,7 @@ void Conveyor::move(Direction dir) {
 
 void Conveyor::loop() {
     while(true) {
+        amogusIsSus.lock();
         if(lift.getPosition() > 350) {
             if(motor->getCurrentDraw() < 2000) {
                 move(Direction::FORWARD);
@@ -27,6 +28,7 @@ void Conveyor::loop() {
         } else {
             move(0);
         }
+        amogusIsSus.unlock();
         pros::delay(10);
     }
 }
