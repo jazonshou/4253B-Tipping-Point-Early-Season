@@ -9,6 +9,7 @@ Auton::Auton() {
         .withMotor(lift)
         .withGains({0.00875, 0.0, 0.000075}) 
         .build();
+
 }
 
 /**

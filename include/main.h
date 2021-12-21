@@ -84,9 +84,12 @@ void opcontrol(void);
 #include "lib/Math.hpp"
 #include "lib/Trajectory.hpp"
 #include "lib/FeedForward.hpp"
+#include "lib/TaskWrapper.hpp"
+
 #include "globals.hpp"
 #include "drive.hpp"
 #include "auton.hpp"
+#include "conveyor.hpp"
 #include "gif-pros/gifclass.hpp"
 
 #include "paths/skills.hpp"

@@ -345,10 +345,14 @@ void autonomous(){
 }
 
 void opcontrol(){
-    Auton auton = Auton();
-    auton.init();
-    auton.right();
-    
+    std::unique_ptr<Auton> auton(new Auton());
+    auton->init();
+    auton->right();
+    auton.reset();
+
+    std::unique_ptr<Conveyor> c(new Conveyor(std::make_shared<Motor> (roller)));
+    c->loop();
+
     // Creates a black background
     lv_obj_t *background;
     lv_style_t backgroundStyle;

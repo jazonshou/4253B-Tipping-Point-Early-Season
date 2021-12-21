@@ -4,6 +4,7 @@
 class Auton {
     private:
     std::shared_ptr<AsyncPositionController<double, double>> liftController;
+    std::shared_ptr<AsyncPositionController<double, double>> turn;
 
     public:
     Auton();
