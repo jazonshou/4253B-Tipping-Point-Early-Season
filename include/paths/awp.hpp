@@ -5,7 +5,6 @@
  * @brief The follow class contains all paths used in the auton win point (AWP) auton
  * 
  */
-class AWP {
-    public:
+namespace AWP {
     static Trajectory p0Left;
 };

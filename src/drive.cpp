@@ -87,15 +87,14 @@ void translate(QLength target){
     imu.reset();
 
 	do {
-        double encAvg = ((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2;
-        double dist = (encAvg/360) * (3.25*PI);
+        double dist = Math::tickToFt(((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2) * 12;
         double error = target.convert(inch) - dist;
-        
-        double power = -translatePID->step(error);        
-
-        (chassis->getModel())->arcade(power, -imu.get()*headingCorrection_kP);
+        (chassis->getModel())->arcade(translatePID->step(-error), -imu.get()*headingCorrection_kP);
 		pros::delay(10);
 	} while(!translatePID->isSettled());
 
 	(chassis->getModel())->stop();
 }
+
+
+

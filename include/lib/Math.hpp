@@ -55,4 +55,11 @@ double rescale180(double angle);
  */
 double rescale360(double angle);
 
+
+/*
+    x1 is larger solution, x1 is smaller
+    jason write a description for this
+*/
+std::pair<double, double> quadraticFormula(double a, double b, double c);
+
 };

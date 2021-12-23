@@ -31,11 +31,22 @@ struct  TrajectoryPoint{
      */
     TrajectoryPoint(double leftP, double rightP, double leftV, double rightV, double leftA, double rightA);
 
+    friend std::ostream& operator<<(std::ostream& os, TrajectoryPoint& pt);
+
     double leftPosition, rightPosition, leftVelocity, leftAcceleration, rightVelocity, rightAcceleration;
 };
 
-/**
- * @brief Basically 'Trajectory'-ies are just vectors of TrajectoryPoints
- * 
- */
-using Trajectory = std::vector<TrajectoryPoint>;
+std::ostream& operator<<(std::ostream& os, TrajectoryPoint& pt);
+
+class Trajectory{
+    private:
+    std::vector<TrajectoryPoint> path;
+
+    public:
+    Trajectory() = default;
+    ~Trajectory() = default;
+    Trajectory(const std::initializer_list<TrajectoryPoint>& iPath);
+    
+    TrajectoryPoint operator[](int index) const;
+    int size() const;
+};

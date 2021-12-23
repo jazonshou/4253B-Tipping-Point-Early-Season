@@ -28,3 +28,20 @@ double Math::rescale360(double angle){
     return angle - 360.0 * (std::floor(angle * (1.0 / 360.0)));
 }
 
+std::pair<double, double> Math::quadraticFormula(double a, double b, double c){
+    double discriminant = b * b - 4 * a * c;
+
+    if(discriminant < 0){
+        throw std::runtime_error("Quadratic Formula: No Real Solution!");
+    }
+    else if(abs(discriminant) <= 0.001){
+        return {-b / 2 * a, -b / 2 * a};
+    }
+    else{
+        double x1 = (-b + sqrt(discriminant)) / (2 * a);
+        double x2 = (-b - sqrt(discriminant)) / (2 * a);
+
+        return {x1, x2};
+    }
+}
+

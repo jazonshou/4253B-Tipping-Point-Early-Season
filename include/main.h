@@ -77,17 +77,23 @@ void opcontrol(void);
  * You can add C++-only headers here
  */
 #include <iostream>
-#include <cmath>
+#include <cmath> 
 #include <algorithm>
 #include <map>
 
+#include "lib/Units.hpp"
 #include "lib/Math.hpp"
+#include "lib/TaskWrapper.hpp"
+#include "lib/StateMachine.hpp"
 #include "lib/Trajectory.hpp"
 #include "lib/FeedForward.hpp"
+#include "lib/LinearMotionProfile.hpp"
+#include "lib/Profiler.hpp"
+#include "gif-pros/gifclass.hpp"
+
 #include "globals.hpp"
 #include "drive.hpp"
 #include "auton.hpp"
-#include "gif-pros/gifclass.hpp"
 
 #include "paths/skills.hpp"
 #include "paths/leftPaths.hpp"
@@ -99,3 +105,4 @@ void opcontrol(void);
 #endif
 
 #endif  // _PROS_MAIN_H_
+
