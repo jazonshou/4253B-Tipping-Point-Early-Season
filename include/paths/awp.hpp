@@ -6,5 +6,5 @@
  * 
  */
 namespace AWP {
-    static Trajectory p0Left;
+    extern Trajectory p0Left;
 };
