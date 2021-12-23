@@ -94,15 +94,13 @@ void opcontrol(void);
 #include "globals.hpp"
 #include "drive.hpp"
 #include "conveyor.hpp"
+#include "auton.hpp"
 
 #include "paths/skills.hpp"
 #include "paths/leftPaths.hpp"
+#include "paths/awp.hpp"
 #include "paths/rightPaths.hpp"
 #include "paths/rightNewPaths.hpp"
-#include "paths/awp.hpp"
-
-#include "auton.hpp"
-
 
 
 #endif

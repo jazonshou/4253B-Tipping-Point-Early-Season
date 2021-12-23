@@ -14,10 +14,16 @@ void TaskWrapper::resumeTask(){
 
 void TaskWrapper::stopTask(){
     task->remove();
-    task = {nullptr};
+    task = nullptr;
 }
 
 const char* TaskWrapper::getName(){
     return task->get_name();
 }
 
+void TaskWrapper::trampoline(void* iparam){
+    if(iparam){
+        TaskWrapper* that = static_cast<TaskWrapper*>(iparam);
+        that->loop();
+    }
+}
