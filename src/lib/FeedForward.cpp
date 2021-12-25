@@ -1,4 +1,4 @@
-#include "FeedForward.hpp"
+#include "main.h"
 
 FFVelocityController::FFVelocityController(double ikV, double ikAU, double ikAD, double ikP_Pos, double ikP_Vel){
     kV = ikV, kA_Up = ikAU, kA_Down = ikAD, kP_Pos = ikP_Pos, kP_Vel = ikP_Vel;

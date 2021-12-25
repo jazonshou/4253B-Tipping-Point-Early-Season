@@ -40,7 +40,7 @@ class LinearMotionProfile{
     virtual TrajectoryPoint get(QTime time) const = 0;
 };
 
-class TrapezoidalMotionProfile : LinearMotionProfile{
+class TrapezoidalMotionProfile : public LinearMotionProfile{
     private:
     QLength min3Stage = 0_m;
 
@@ -59,7 +59,7 @@ class TrapezoidalMotionProfile : LinearMotionProfile{
     TrajectoryPoint get(QTime time) const override;
 };
 
-class SCurveMotionProfile : LinearMotionProfile{
+class SCurveMotionProfile : public LinearMotionProfile{
     QLength fullDist = 0_m;
     QLength minDist = 0_m;
     bool fullAccel{true};

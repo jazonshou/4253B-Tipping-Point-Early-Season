@@ -4,11 +4,9 @@
 #define LVGL_SCREEN_WIDTH 480
 #define LVGL_SCREEN_HEIGHT 240
 
-using Pneumatic = pros::ADIDigitalOut;
-
 // CONSTANTS
 const double DEADBAND = 0.0500;
-const double MAX_LIFT_HEIGHT = 2000; 
+const double MAX_LIFT_HEIGHT = 780; 
 const double LIFT_INCREMENT = 10; 
 
 // CONTROLLER
@@ -26,10 +24,10 @@ extern IMU imu;
 extern pros::Vision vision_sensor;
 
 // PNEUMATICS
-extern Pneumatic mogo;
-extern Pneumatic mogoClamp;
-extern Pneumatic claw;
-extern Pneumatic wings;
+extern Pneumatics mogo;
+extern Pneumatics mogoClamp;
+extern Pneumatics claw;
+extern Pneumatics wings;
 
 // SUBSYSTEM CONTROLLERS
 extern std::shared_ptr<ChassisController> chassis;

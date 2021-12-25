@@ -81,26 +81,25 @@ void opcontrol(void);
 #include <algorithm>
 #include <map>
 
+#include "gif-pros/gifclass.hpp"
+
 #include "lib/Units.hpp"
 #include "lib/Math.hpp"
 #include "lib/TaskWrapper.hpp"
+#include "lib/Pneumatics.hpp"
 #include "lib/StateMachine.hpp"
 #include "lib/Trajectory.hpp"
 #include "lib/FeedForward.hpp"
 #include "lib/LinearMotionProfile.hpp"
 #include "lib/Profiler.hpp"
-#include "gif-pros/gifclass.hpp"
 
-#include "globals.hpp"
-#include "drive.hpp"
-#include "conveyor.hpp"
-#include "auton.hpp"
+#include "Subsystem/Globals.hpp"
+#include "Subsystem/Drive.hpp"
+#include "Subsystem/Conveyor.hpp"
+#include "Subsystem/Auton.hpp"
 
-#include "paths/skills.hpp"
-#include "paths/leftPaths.hpp"
-#include "paths/awp.hpp"
-#include "paths/rightPaths.hpp"
-#include "paths/rightNewPaths.hpp"
+#include "Path/Skills.hpp"
+#include "Path/Match.hpp"
 
 
 #endif

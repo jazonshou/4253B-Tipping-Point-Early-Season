@@ -2,13 +2,13 @@
 
 // Profile Constraint
 ProfileConstraint::ProfileConstraint(QSpeed maxVel, QAcceleration maxAccel, QJerk maxJerk){
-    if(this->maxVelocity == 0_mps){
+    if(maxVel == 0_mps){
         throw std::invalid_argument("ProfileConstraint: Max Velocity can't be zero");
     }
-    else if(this->maxAcceleration == 0_mps2){
+    else if(maxAccel == 0_mps2){
         throw std::invalid_argument("ProfileConstraint: Max Acceleration can't be zero");
     }
-    else if(this->maxJerk == 0_mps3){
+    else if(maxJerk == 0_mps3){
         throw std::invalid_argument("ProfileConstraint: Max Jerk can't be zero (choose an arbitrary large number if you want a trapezoidal profile)");
     }
 

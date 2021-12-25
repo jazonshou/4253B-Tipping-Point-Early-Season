@@ -1,5 +1,10 @@
 #include "main.h"
 
+TaskWrapper::~TaskWrapper(){
+    task->remove();
+    task.reset(nullptr);
+}
+
 void TaskWrapper::startTask(const char* iname){
     task = std::move(std::make_unique<pros::Task>(trampoline, this, iname));
 }

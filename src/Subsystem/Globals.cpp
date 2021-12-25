@@ -22,10 +22,10 @@ pros::Vision vision_sensor (17, pros::E_VISION_ZERO_CENTER);
 
   
 // PNEUMATICS
-Pneumatic mogo('E');
-Pneumatic mogoClamp('F');
-Pneumatic claw('D');
-Pneumatic wings('H');
+Pneumatics mogo('E');
+Pneumatics mogoClamp('F');
+Pneumatics claw('D');
+Pneumatics wings('H');
 
 // SUBSYSTEM CONTROLLERS
 std::shared_ptr<ChassisController> chassis = ChassisControllerBuilder()

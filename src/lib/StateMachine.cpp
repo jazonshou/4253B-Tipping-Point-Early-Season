@@ -1,4 +1,9 @@
-#include "StateMachine.hpp"
+#include "main.h"
+
+template<typename State, State initState>
+StateMachine<State, initState>::StateMachine(){
+    state = initState;
+}
 
 template<typename State, State initState>
 State StateMachine<State, initState>::getState(){

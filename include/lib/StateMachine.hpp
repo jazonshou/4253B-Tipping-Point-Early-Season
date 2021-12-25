@@ -8,6 +8,7 @@ class StateMachine{
     pros::Mutex stateLock;
 
     public:
+    StateMachine();
     State getState();
     void setState(State iState);
 };
