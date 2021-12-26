@@ -18,7 +18,7 @@ AsyncMotionProfiler::AsyncMotionProfiler(std::shared_ptr<ChassisController> iCha
 
 }
 
-void AsyncMotionProfiler::moveDistance(QLength distance){
+void AsyncMotionProfiler::setTarget(QLength distance){
     lock.take(5);
     setState(MotionProfileState::MOVE);
     profiler->setDistance(distance);
@@ -30,20 +30,7 @@ void AsyncMotionProfiler::moveDistance(QLength distance){
     lock.give();
 }
 
-void AsyncMotionProfiler::turnAngle(QAngle angle){
-    lock.take(5);
-    setState(MotionProfileState::TURN);
-    QLength arc = angle.convert(radian) * (chassis->getChassisScales().wheelTrack/2);
-    profiler->setDistance(arc);
-    leftMotor->tarePosition();
-    rightMotor->tarePosition();
-    chassis->getModel()->tank(0, 0);
-    maxTime = profiler->getTotalTime() + 0.02_s;
-    timer->placeMark();
-    lock.give();
-}
-
-void AsyncMotionProfiler::followPath(const Trajectory& iPath){
+void AsyncMotionProfiler::setTarget(const Trajectory& iPath){
     lock.take(5);
     setState(MotionProfileState::FOLLOW);
     leftMotor->tarePosition();
@@ -83,12 +70,6 @@ void AsyncMotionProfiler::loop(){
             leftPower = leftVelController->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
             rightPower = rightVelController->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
             chassis->getModel()->tank(leftPower, rightPower);
-        }
-        else if(getState() == MotionProfileState::TURN){
-            pt = profiler->get(time);
-            leftPower = leftVelController->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
-            rightPower = rightVelController->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
-            chassis->getModel()->tank(leftPower, -rightPower);
         }
         else if(getState() == MotionProfileState::FOLLOW){
             pt = path[(int)(time.convert(millisecond) / 10)];
@@ -132,8 +113,8 @@ AsyncMotionProfilerBuilder& AsyncMotionProfilerBuilder::withVelocityController(F
     return *this;
 }
 
-std::unique_ptr<AsyncMotionProfiler> AsyncMotionProfilerBuilder::build(){
-    std::unique_ptr<AsyncMotionProfiler> ret(new AsyncMotionProfiler(std::move(chassis), 
+std::shared_ptr<AsyncMotionProfiler> AsyncMotionProfilerBuilder::build(){
+    std::shared_ptr<AsyncMotionProfiler> ret(new AsyncMotionProfiler(std::move(chassis), 
                                           std::move(profile), 
                                           std::make_unique<FFVelocityController>(left), 
                                           std::make_unique<FFVelocityController>(right), 

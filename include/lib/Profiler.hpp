@@ -1,13 +1,10 @@
 #pragma once
 #include "main.h"
 
-class FFVelocityController;
-template<typename State, State initState> class StateMachine;
-class AsyncMotionProfilerBuilder;
-
 enum class MotionProfileState{
-    MOVE, TURN, FOLLOW, IDLE
+    MOVE, FOLLOW, IDLE
 };
+
 template class StateMachine<MotionProfileState>;
 
 class AsyncMotionProfiler : public StateMachine<MotionProfileState, MotionProfileState::IDLE>, public TaskWrapper{
@@ -39,11 +36,9 @@ class AsyncMotionProfiler : public StateMachine<MotionProfileState, MotionProfil
 
     public:
 
-    void moveDistance(QLength iDistance);
+    void setTarget(QLength iDistance);
 
-    void turnAngle(QAngle iAngle);
-
-    void followPath(const Trajectory& iPath);
+    void setTarget(const Trajectory& iPath);
 
     void stop();
 
@@ -62,7 +57,7 @@ class AsyncMotionProfilerBuilder{
 
     AsyncMotionProfilerBuilder& withVelocityController(FFVelocityController iLeft, FFVelocityController iRight);
 
-    std::unique_ptr<AsyncMotionProfiler> build();
+    std::shared_ptr<AsyncMotionProfiler> build();
 
     private:
     std::unique_ptr<LinearMotionProfile> profile;

@@ -9,7 +9,7 @@ void Pneumatics::toggle(){
     piston.set_value(state);
 }
 
-void Pneumatics::setState(bool iState){
+void Pneumatics::set(bool iState){
     state = iState;
     piston.set_value(iState);
 }

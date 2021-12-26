@@ -6,8 +6,8 @@
 
 // CONSTANTS
 const double DEADBAND = 0.0500;
-const double MAX_LIFT_HEIGHT = 780; 
-const double LIFT_INCREMENT = 10; 
+const int MAX_LIFT_HEIGHT = 750; 
+const int LIFT_STEP = 11; 
 
 // CONTROLLER
 extern Controller master;
@@ -19,7 +19,6 @@ extern Motor lift;
 extern Motor roller;
 
 // SENSORS
-// extern RotationSensor liftSensor;
 extern IMU imu; 
 extern pros::Vision vision_sensor;
 
@@ -32,14 +31,18 @@ extern Pneumatics wings;
 // SUBSYSTEM CONTROLLERS
 extern std::shared_ptr<ChassisController> chassis;
 extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
+extern std::shared_ptr<AsyncMotionProfiler> profiler;
+
+// PID CONTROLLERS
 extern std::shared_ptr<IterativePosPIDController> turnPID;
-extern std::shared_ptr<IterativePosPIDController> mogoAlignerController;
-extern std::shared_ptr<IterativePosPIDController> translatePID;
+extern std::shared_ptr<IterativePosPIDController> visionPID;
+extern std::shared_ptr<IterativePosPIDController> movePID;
+extern std::shared_ptr<IterativePosPIDController> headingPID;
 
-
-// VELOCITY CONTROLLERS
-class FFVelocityController;
+// MOTION PROFILE CONSTANTS
+extern ProfileConstraint constraint;
 extern FFVelocityController leftMotorController;
 extern FFVelocityController rightMotorController;
+
 
 

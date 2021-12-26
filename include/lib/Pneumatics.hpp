@@ -7,6 +7,7 @@ class Pneumatics{
 
     public:
     Pneumatics(char iPort, bool initState = false);
+    ~Pneumatics() = default;
     void toggle();
-    void setState(bool iState);
+    void set(bool iState);
 };
