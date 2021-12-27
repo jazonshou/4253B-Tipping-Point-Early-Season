@@ -2,18 +2,18 @@
 #include "main.h"
 
 class TaskWrapper {
-    protected:
+        protected:
         TaskWrapper() = default;
         TaskWrapper(const TaskWrapper& iTask) = delete;
         TaskWrapper(TaskWrapper&& iTask) = default;
-        virtual ~TaskWrapper() = default;
+        virtual ~TaskWrapper();
     
         /**
          * Override this function to implement a custom task loop.
          */
         virtual void loop() = 0;
 
-    public:
+        public:
         /**   
          * Start the task.
          *

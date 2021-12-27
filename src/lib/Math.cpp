@@ -19,7 +19,6 @@ double Math::tickToFt(double tick){
     return (tick/300)*(3.0/5)*(3.25*M_PI)/12;
 }
 
-
 double Math::rescale180(double angle){
     return angle - 360.0 * std::floor((angle + 180.0) * (1.0 / 360.0));
 }
