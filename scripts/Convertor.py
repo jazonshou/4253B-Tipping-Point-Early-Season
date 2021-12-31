@@ -11,7 +11,7 @@ out = ''
 
 # Opens the file where the path is stored temporarily
 # Deletes all content of the file after processing
-with open('../paths/abattoir.txt', 'r+') as f:
+with open("scripts/text.txt", 'r+') as f:
     for line in f:
         out += line
     f.truncate(0)

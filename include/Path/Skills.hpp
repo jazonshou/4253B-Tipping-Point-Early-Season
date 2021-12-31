@@ -8,5 +8,12 @@
  */
 
 namespace Skills {
+    extern Trajectory path0;
+
+    extern Trajectory path1;
+
+    extern Trajectory path2;
+
+
 
 };

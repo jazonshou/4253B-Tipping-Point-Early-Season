@@ -23,14 +23,15 @@ void moveTime(std::pair<double, double> speed, QTime time) {
 
 void moveDistance(QLength target){
 	movePID->reset(); headingPID->reset();
-    movePID->setTarget(0); headingPID->setTarget(0);
+    movePID->setTarget(0); headingPID->setTarget(imu.get());
     (chassis->getModel())->resetSensors();
-    imu.reset();
+    // imu.reset();
+    double imuBeginningVal = imu.get();
 
 	do {
         double dist = Math::tickToFt(((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2) * 12;
         double error = target.convert(inch) - dist;
-        (chassis->getModel())->arcade(movePID->step(-error), headingPID->step(-imu.get()));
+        (chassis->getModel())->arcade(movePID->step(-error), headingPID->step(imu.get()));
 		pros::delay(10);
 	} while(!movePID->isSettled());
 
@@ -39,19 +40,19 @@ void moveDistance(QLength target){
 
 void turnToAngle(QAngle targetAngle){
 	turnPID->reset();
-    turnPID->setTarget(0);
-    turnPID->setIntegratorReset(true);
-    turnPID->setIntegralLimits(0.4 / TURNKI, -0.405/TURNKI);
-    turnPID->setErrorSumLimits(15, 0);
-    double integral = 0;
+    // turnPID->setTarget(0);
+    // turnPID->setIntegratorReset(true);
+    // turnPID->setIntegralLimits(0.4 / TURNKI, -0.405/TURNKI);
+    // turnPID->setErrorSumLimits(15, 0);
+    // double integral = 0;
 
 	do{
         double error = Math::rescale180(targetAngle.convert(degree)-imu.get());
-        if(error < 15 && error > 0){
-            integral += error;
-        }
+        // if(error < 15 && error > 0){
+        //     integral += error;
+        // }
         (chassis->getModel())->arcade(0, turnPID->step(-Math::rescale180(targetAngle.convert(degree)-imu.get())));
-        std::cout << integral * TURNKI << std::endl;
+        // std::cout << integral * TURNKI << std::endl;
         pros::delay(10);
     }while (!turnPID->isSettled());
 

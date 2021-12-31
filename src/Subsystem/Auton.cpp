@@ -92,7 +92,31 @@ void Auton::awp(){
 
 
 void Auton::skills(){
+    roller.moveVoltage(12000);
 
+    mogoClamp.set(true); pros::delay(250); mogo.set(true);
+    profiler->setTarget(Skills::path0);
+    profiler->waitUntilSettled();
+    moveTime({0.1, 0.1}, 250_ms);
+    claw.set(true);
+
+    profiler->setTarget(Skills::path1);
+    liftController->setTarget(715);
+    profiler->waitUntilSettled();
+    claw.set(false); pros::delay(500);
+
+    moveDistance(-8_in);
+    liftController->setTarget(0);
+    turnToAngle(0_deg);
+    mogo.set(false); mogoClamp.set(false);
+
+    moveDistance(3_ft);
+    moveTime({0.5, 0.5}, 500_ms);
+    claw.set(true); pros::delay(250);
+    liftController->setTarget(350);
+    
+    profiler->setTarget(Skills::path2);
+    profiler->waitUntilSettled();
 }
 
 

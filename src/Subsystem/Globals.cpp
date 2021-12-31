@@ -27,7 +27,7 @@ Pneumatics wings('H');
 
 // MOTION PROFILE CONSTANTS
 ProfileConstraint constraint({4.5_ftps, 30_ftps2, 40_ftps3});
-FFVelocityController leftMotorController(0.187, 0.04, 0.025, 2.5, 0.3);
+FFVelocityController leftMotorController(0.187, 0.04, 0.025, 2.5, 0.1);
 FFVelocityController rightMotorController(0.1915, 0.043, 0.02, 2.5, 0.1);
 
 // SUBSYSTEM CONTROLLERS
@@ -56,11 +56,12 @@ std::shared_ptr<AsyncMotionProfiler> profiler = AsyncMotionProfilerBuilder()
 // 0.00825 half
 // 0.0165
 
+//0.0165, 0.015, 0.0002
 
 const double TURNKI = 0.015;
 
 // 0.00026 was okish kD
-std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.0165, TURNKI, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(1, 1, 200_ms)); // #TODO - Tune Constant05
+std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.06, 0.005, 0.00115, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 200_ms)); // #TODO - Tune Constant05
 std::shared_ptr<IterativePosPIDController> visionPID = std::make_shared<IterativePosPIDController>(0.01, 0.0, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(5, 2, 100_ms)); // #TODO - Tune Constant
 
 std::shared_ptr<IterativePosPIDController> movePID = std::make_shared<IterativePosPIDController>(0.1, 0.0, 0.002, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms));
