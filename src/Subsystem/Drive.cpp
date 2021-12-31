@@ -40,14 +40,22 @@ void moveDistance(QLength target){
 void turnToAngle(QAngle targetAngle){
 	turnPID->reset();
     turnPID->setTarget(0);
+    turnPID->setIntegratorReset(true);
+    turnPID->setIntegralLimits(0.4 / TURNKI, -0.405/TURNKI);
+    turnPID->setErrorSumLimits(15, 0);
+    double integral = 0;
 
-	do {
+	do{
+        double error = Math::rescale180(targetAngle.convert(degree)-imu.get());
+        if(error < 15 && error > 0){
+            integral += error;
+        }
         (chassis->getModel())->arcade(0, turnPID->step(-Math::rescale180(targetAngle.convert(degree)-imu.get())));
-        
+        std::cout << integral * TURNKI << std::endl;
         pros::delay(10);
-	} while(!turnPID->isSettled());
+    }while (!turnPID->isSettled());
 
-	(chassis->getModel())->stop();
+    (chassis->getModel())->stop();
 }
 
 void turnToMogo() {

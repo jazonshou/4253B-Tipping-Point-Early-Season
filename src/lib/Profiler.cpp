@@ -27,6 +27,7 @@ void AsyncMotionProfiler::setTarget(QLength distance){
     chassis->getModel()->tank(0, 0);
     maxTime = profiler->getTotalTime() + 0.02_s;
     timer->placeMark();
+    std::cout << maxTime.convert(millisecond) << std::endl;
     lock.give();
 }
 
@@ -55,7 +56,7 @@ void AsyncMotionProfiler::loop(){
 
     while(true){
         lock.take(5);
-        std::cout<<timer->getDt().convert(millisecond) << '\n';
+        //std::cout<<timer->getDt().convert(millisecond) << '\n';
         QTime time = timer->getDtFromMark();
 
         if(getState() == MotionProfileState::IDLE){
@@ -66,10 +67,13 @@ void AsyncMotionProfiler::loop(){
             chassis->getModel()->tank(0, 0);
         }
         else if(getState() == MotionProfileState::MOVE){
+            //std::cout << "HERE" << std::endl;
             pt = profiler->get(time);
-            leftPower = leftVelController->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
-            rightPower = rightVelController->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
-            chassis->getModel()->tank(leftPower, rightPower);
+            //leftPower = leftVelController->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
+            //rightPower = rightVelController->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
+            //chassis->getModel()->tank(leftPower, rightPower);
+            leftDrive.moveVelocity(Math::ftpsToRPM(pt.leftVelocity));
+            rightDrive.moveVelocity(Math::ftpsToRPM(pt.rightVelocity));
         }
         else if(getState() == MotionProfileState::FOLLOW){
             pt = path[(int)(time.convert(millisecond) / 10)];

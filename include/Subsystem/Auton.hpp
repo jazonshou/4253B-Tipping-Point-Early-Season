@@ -1,13 +1,23 @@
 #pragma once
 #include "main.h"
 
-class Auton {
-    private:
-    std::shared_ptr<AsyncPositionController<double, double>> liftController;
-    std::shared_ptr<AsyncPositionController<double, double>> turn;
+namespace Auton {
+    extern pros::Mutex lock;
+    extern std::vector<std::function<void()>> auton;
+    extern std::vector<std::string> name;
+    extern int index;
 
-    public:
-    Auton();
+    void add(std::function<void()> iAutonomous, std::string iName);
+
+    void switchAuton();
+
+    void select();
+
+    void execute();
+
+    std::string getName();
+
+    void addPath(int ind);
 
     void init();
 

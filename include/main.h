@@ -80,6 +80,7 @@ void opcontrol(void);
 #include <cmath> 
 #include <algorithm>
 #include <map>
+#include <functional>
 
 #include "gif-pros/gifclass.hpp"
 

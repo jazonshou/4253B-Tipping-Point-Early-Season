@@ -20,10 +20,15 @@ IMU imu(3);
 pros::Vision vision_sensor (17, pros::E_VISION_ZERO_CENTER);
 
 // PNEUMATICS
-Pneumatics mogo('E');
-Pneumatics mogoClamp('F');
+Pneumatics mogo('E', true);
+Pneumatics mogoClamp('F', true);
 Pneumatics claw('D');
 Pneumatics wings('H');
+
+// MOTION PROFILE CONSTANTS
+ProfileConstraint constraint({4.5_ftps, 30_ftps2, 40_ftps3});
+FFVelocityController leftMotorController(0.187, 0.04, 0.025, 2.5, 0.3);
+FFVelocityController rightMotorController(0.1915, 0.043, 0.02, 2.5, 0.1);
 
 // SUBSYSTEM CONTROLLERS
 std::shared_ptr<ChassisController> chassis = ChassisControllerBuilder()
@@ -43,15 +48,22 @@ std::shared_ptr<AsyncMotionProfiler> profiler = AsyncMotionProfilerBuilder()
 	.build();
 
 // PID CONTROLLERS
-std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.05, 0.01, 0.00065, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms)); // #TODO - Tune Constant
+// 0.05, 0.01, 0.00065
+// kU = 0.1, Tu = 25	
+// 0.0048
+// 0.06, 0.005, 0.00115 works
+// 0.03 0.8 0 0 42 oscillation
+// 0.00825 half
+// 0.0165
 
+
+const double TURNKI = 0.015;
+
+// 0.00026 was okish kD
+std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.0165, TURNKI, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(1, 1, 200_ms)); // #TODO - Tune Constant05
 std::shared_ptr<IterativePosPIDController> visionPID = std::make_shared<IterativePosPIDController>(0.01, 0.0, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(5, 2, 100_ms)); // #TODO - Tune Constant
 
 std::shared_ptr<IterativePosPIDController> movePID = std::make_shared<IterativePosPIDController>(0.1, 0.0, 0.002, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms));
 
 std::shared_ptr<IterativePosPIDController> headingPID = std::make_shared<IterativePosPIDController>(0.118, 0, 0, 0, TimeUtilFactory::createDefault());
 
-// MOTION PROFILE CONSTANTS
-ProfileConstraint constraint({4.5_ftps, 9_ftps2, 20_ftps3});
-FFVelocityController leftMotorController(0.187, 0.04, 0.025, 2.5, 0.3);
-FFVelocityController rightMotorController(0.1915, 0.043, 0.02, 2.5, 0.1);

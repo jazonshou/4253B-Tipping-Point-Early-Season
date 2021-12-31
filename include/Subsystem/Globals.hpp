@@ -9,6 +9,8 @@ const double DEADBAND = 0.0500;
 const int MAX_LIFT_HEIGHT = 750; 
 const int LIFT_STEP = 11; 
 
+extern const double TURNKI;
+
 // CONTROLLER
 extern Controller master;
 
