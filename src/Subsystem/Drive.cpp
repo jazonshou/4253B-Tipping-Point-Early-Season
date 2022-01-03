@@ -21,6 +21,17 @@ void moveTime(std::pair<double, double> speed, QTime time) {
     (chassis->getModel())->tank(0, 0);
 }
 
+void moveTimeHeadingCorrect(double speed, QTime time) {
+    headingPID->reset();
+    headingPID->setTarget(imu.get());
+
+    int timeCnt = 0;
+    do {
+        (chassis->getModel())->arcade(speed, headingPID->step(imu.get()));
+        pros::delay(10);
+    } while(++timeCnt <= std::round(time.convert(millisecond) / 10));
+}
+
 void moveDistance(QLength target){
 	movePID->reset(); headingPID->reset();
     movePID->setTarget(0); headingPID->setTarget(imu.get());
@@ -32,6 +43,27 @@ void moveDistance(QLength target){
         double dist = Math::tickToFt(((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2) * 12;
         double error = target.convert(inch) - dist;
         (chassis->getModel())->arcade(movePID->step(-error), headingPID->step(imu.get()));
+		pros::delay(10);
+	} while(!movePID->isSettled());
+
+	(chassis->getModel())->stop();
+}
+
+void moveDistance(QLength target, QTime time) {
+    movePID->reset(); headingPID->reset();
+    movePID->setTarget(0); headingPID->setTarget(imu.get());
+    (chassis->getModel())->resetSensors();
+    // imu.reset();
+    double imuBeginningVal = imu.get();
+
+    int timeCnt = 0;
+    
+	do {
+        double dist = Math::tickToFt(((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2) * 12;
+        double error = target.convert(inch) - dist;
+        (chassis->getModel())->arcade(movePID->step(-error), headingPID->step(imu.get()));
+
+        if(++timeCnt >= std::round(time.convert(millisecond) / 10)) break;
 		pros::delay(10);
 	} while(!movePID->isSettled());
 

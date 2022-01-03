@@ -22,7 +22,28 @@ void curvatureDrive(double moveC, double turnC, bool quickTurn);
  */
 void moveTime(std::pair<double, double> speed, QTime time);
 
+/**
+ * @brief Moves for set amount of time at set speed and corrects heading
+ * 
+ * @param speed speed [-1, 1]
+ * @param time time
+ */
+void moveTimeHeadingCorrect(double speed, QTime time);
+
+/**
+ * @brief PID moves to desired target
+ * 
+ * @param target desired location
+ */
 void moveDistance(QLength target);
+
+/**
+ * @brief PID moves to desired target
+ * 
+ * @param target desired location
+ * @param time max time
+ */
+void moveDistance(QLength target, QTime time);
 
 /**
  * @brief Turns the robot to the desired global angle (using closed-loop control)
