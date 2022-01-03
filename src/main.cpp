@@ -23,13 +23,13 @@ void initialize(){
     pros::delay(2000);
     pros::lcd::set_text(2, "imu calibrated");
 
-    Auton::add([](){}, "Do Nothing");
-    Auton::add(Auton::skills, "Skills");
-    Auton::add(Auton::right, "Match");
+    // Auton::add([](){}, "Do Nothing");
+    // Auton::add(Auton::skills, "Skills");
+    // Auton::add(Auton::right, "Match");
 
-    pros::lcd::register_btn0_cb([](){lift.tarePosition();});
-    pros::lcd::register_btn1_cb([](){Auton::switchAuton();});
-    pros::lcd::register_btn2_cb([](){Auton::select();});
+    // pros::lcd::register_btn0_cb([](){lift.tarePosition();});
+    // pros::lcd::register_btn1_cb([](){Auton::switchAuton();});
+    // pros::lcd::register_btn2_cb([](){Auton::select();});
     /*
     for(int i = 0; i < 300; i++){
         std::string message = "Selected Autonomous: " + Auton::getName();
@@ -61,12 +61,12 @@ void autonomous(){
 
 void opcontrol(){
 
-    Auton::init();
-    Auton::skills();
+    // Auton::init();
+    // Auton::skills();
+    // Auton a = Auton();
+    // a.init();
+    // a.skills();
 
-    while(true){
-        pros::delay(10);
-    }
 
     
     // profiler->setTarget(pathTest);
@@ -91,7 +91,7 @@ void opcontrol(){
     lv_obj_align(background, NULL, LV_ALIGN_CENTER, 0, 0);
 
     // Starts crab rave gif
-	Gif gif("/usd/gif/niconiconii.gif", lv_scr_act());
+	Gif gif("/usd/gif/crab-rave.gif", lv_scr_act());
 
     int liftPos = 0;
     bool clampState = false, prevClampState = false;
@@ -99,17 +99,29 @@ void opcontrol(){
 
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
+    // lift.setBrakeMode(AbstractMotor::brakeMode::hold);
+    lift_pros.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
 
     while(true){
         double power = master.getAnalog(ControllerAnalog::leftY) * (abs(master.getAnalog(ControllerAnalog::leftY)) >= DEADBAND);
         double curvature = master.getAnalog(ControllerAnalog::rightX) * (abs(master.getAnalog(ControllerAnalog::rightX)) >= DEADBAND);
         curvatureDrive(power, curvature, power == 0);
 
-        liftPos += LIFT_STEP * master.getDigital(ControllerDigital::L1); 
-        liftPos -= LIFT_STEP * master.getDigital(ControllerDigital::L2);
-        liftController->setTarget(liftPos = std::max(std::min(liftPos, MAX_LIFT_HEIGHT), 0));
+        // liftPos += LIFT_STEP * master.getDigital(ControllerDigital::L1); 
+        // liftPos -= LIFT_STEP * master.getDigital(ControllerDigital::L2);
+        // liftController->setTarget(liftPos = std::max(std::min(liftPos, MAX_LIFT_HEIGHT), 0));
 
         roller.moveVoltage(12000*((master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2))-master.getDigital(ControllerDigital::A)));
+
+        if(master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2)) {
+            lift_pros.move_voltage(0);
+        } else if(master.getDigital(ControllerDigital::L1)) {
+            lift_pros.move_voltage(12000);
+        } else if (master.getDigital(ControllerDigital::L2)) {
+            lift_pros.move_voltage(-12000);
+        } else {
+            lift_pros.move_voltage(0);
+        }
 
         claw.set(master.getDigital(ControllerDigital::R1));
         wings.set(master.getDigital(ControllerDigital::Y));

@@ -1,12 +1,15 @@
 #pragma once
 #include "main.h"
 
-namespace Auton {
-    extern pros::Mutex lock;
-    extern std::vector<std::function<void()>> auton;
-    extern std::vector<std::string> name;
-    extern int index;
-
+class Auton {
+    // extern pros::Mutex lock;
+    // extern std::vector<std::function<void()>> auton;
+    // extern std::vector<std::string> name;
+    // extern int index;
+    private:
+    std::shared_ptr<AsyncPositionController<double, double>> liftController;
+    
+    public:
     void add(std::function<void()> iAutonomous, std::string iName);
 
     void switchAuton();

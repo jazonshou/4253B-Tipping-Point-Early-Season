@@ -15,13 +15,15 @@ Motor roller(9, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits
 MotorGroup leftDrive({leftTop, leftMiddle, leftBottom});
 MotorGroup rightDrive({rightTop, rightMiddle, rightBottom});
 
+pros::Motor lift_pros(4, true);
+
 // SENSORS
 IMU imu(3);
 pros::Vision vision_sensor (17, pros::E_VISION_ZERO_CENTER);
 
 // PNEUMATICS
-Pneumatics mogo('E', true);
-Pneumatics mogoClamp('F', true);
+Pneumatics mogo('E');
+Pneumatics mogoClamp('F');
 Pneumatics claw('D');
 Pneumatics wings('H');
 
@@ -36,10 +38,10 @@ std::shared_ptr<ChassisController> chassis = ChassisControllerBuilder()
 	.withDimensions({AbstractMotor::gearset::blue, 5.0/3.0}, {{3.25_in, 38.5_cm}, imev5BlueTPR})
 	.build();
 
-std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
-	.withMotor(lift)
-	.withGains({0.007, 0.0, 0.000075}) 
-	.build();
+// std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
+// 	.withMotor(lift)
+// 	.withGains({0.007, 0.0, 0.000075}) 
+// 	.build();
 
 std::shared_ptr<AsyncMotionProfiler> profiler = AsyncMotionProfilerBuilder()
 	.withOutput(chassis)

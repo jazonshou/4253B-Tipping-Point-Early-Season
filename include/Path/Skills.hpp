@@ -14,6 +14,6 @@ namespace Skills {
 
     extern Trajectory path2;
 
-
+    extern Trajectory path3;
 
 };
