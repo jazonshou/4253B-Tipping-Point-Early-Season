@@ -18,7 +18,6 @@ extern Controller master;
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
 extern Motor lift;
-extern pros::Motor lift_pros;
 extern Motor roller;
 
 // SENSORS
