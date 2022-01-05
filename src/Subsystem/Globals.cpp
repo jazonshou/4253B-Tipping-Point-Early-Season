@@ -40,10 +40,10 @@ std::shared_ptr<ChassisController> chassis = ChassisControllerBuilder()
 	.withDimensions({AbstractMotor::gearset::blue, 5.0/3.0}, {{3.25_in, 1.294_ft}, imev5BlueTPR})
 	.build();
 
-std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
-	.withMotor(lift)
-	.withGains({0.007, 0.0, 0.000075}) 
-	.build();
+// std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
+// 	.withMotor(lift)
+// 	.withGains({0.007, 0.0, 0.000075}) 
+// 	.build();
 
 std::shared_ptr<AsyncMotionProfiler> profiler = AsyncMotionProfilerBuilder()
 	.withOutput(chassis)

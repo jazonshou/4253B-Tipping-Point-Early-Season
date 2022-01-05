@@ -331,7 +331,7 @@ void opcontrol(){
         //liftController->setTarget(liftPos = std::max(std::min(liftPos, MAX_LIFT_HEIGHT), 0));
 
         roller.moveVoltage(12000*((master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2))-master.getDigital(ControllerDigital::A)));
-        /*
+        
         if(master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2)) {
             lift.moveVelocity(0);
         } else if(master.getDigital(ControllerDigital::L1)) {
@@ -341,7 +341,7 @@ void opcontrol(){
         } else {
             lift.moveVelocity(0);
         }
-        */
+        
 
         claw.set(master.getDigital(ControllerDigital::R1));
         wings.set(master.getDigital(ControllerDigital::Y));

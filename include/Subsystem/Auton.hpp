@@ -26,7 +26,7 @@ class Auton {
 
     void wingGrab();
 
-    static void skills();
+    void skills();
 
     void left();
 

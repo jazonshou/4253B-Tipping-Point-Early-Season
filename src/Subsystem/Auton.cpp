@@ -52,7 +52,7 @@ void Auton::init() {
 	    .withGains({0.007, 0.0, 0.000075}) 
 	    .build();
     liftController->reset();
-    */
+    
 }
 
 /**
@@ -321,20 +321,19 @@ void Auton::skills(){
     pros::delay(1000);
     liftController->setTarget(0);
     profiler->waitUntilSettled();
+    // ! moveTime({0.1, 0.1}, 250_ms); 
     claw.set(true);
     
-
-    profiler->setTarget(path1);
-    ::liftController->setTarget(710);
+    profiler->setTarget(Skills::path1);
+    liftController->setTarget(710);
     profiler->waitUntilSettled();
     // jerk around
     moveTime({-0.5, 0.5}, 400_ms);
     turnToAngle(90_deg);
     claw.set(false); pros::delay(500);
     
-    profiler->setTarget(-7_in);
-    ::liftController->setTarget(0);
-    profiler->waitUntilSettled();
+    moveDistance(-7_in);
+    liftController->setTarget(0);
     turnToAngle(0_deg);
     mogo.set(false); mogoClamp.set(false);
 
