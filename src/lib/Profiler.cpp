@@ -2,14 +2,18 @@
 
 AsyncMotionProfiler::AsyncMotionProfiler(std::shared_ptr<ChassisController> iChassis, 
                                          std::unique_ptr<LinearMotionProfile> iMove, 
-                                         std::unique_ptr<FFVelocityController> iLeftController, 
-                                         std::unique_ptr<FFVelocityController> iRightController,
+                                         std::unique_ptr<FFVelocityController> iLeftLinear, 
+                                         std::unique_ptr<FFVelocityController> iRightLinear,
+                                         std::unique_ptr<FFVelocityController> iLeftTrajectory,
+                                         std::unique_ptr<FFVelocityController> iRightTrajectory,
                                          const TimeUtil& iTimeUtil): timeUtil(iTimeUtil)
 {
     chassis = std::move(iChassis);
     profiler = std::move(iMove);
-    leftVelController = std::move(iLeftController);
-    rightVelController = std::move(iRightController);
+    leftLinear =  std::move(iLeftLinear);
+    rightLinear = std::move(iRightLinear);
+    leftTrajectory = std::move(iLeftTrajectory);
+    rightTrajectory = std::move(iRightTrajectory);
     rate = std::move(timeUtil.getRate());
     timer = std::move(timeUtil.getTimer());
 
@@ -27,7 +31,6 @@ void AsyncMotionProfiler::setTarget(QLength distance){
     chassis->getModel()->tank(0, 0);
     maxTime = profiler->getTotalTime() + 0.02_s;
     timer->placeMark();
-    std::cout << maxTime.convert(millisecond) << std::endl;
     lock.give();
 }
 
@@ -56,7 +59,6 @@ void AsyncMotionProfiler::loop(){
 
     while(true){
         lock.take(5);
-        //std::cout<<timer->getDt().convert(millisecond) << '\n';
         QTime time = timer->getDtFromMark();
 
         if(getState() == MotionProfileState::IDLE){
@@ -67,19 +69,17 @@ void AsyncMotionProfiler::loop(){
             chassis->getModel()->tank(0, 0);
         }
         else if(getState() == MotionProfileState::MOVE){
-            //std::cout << "HERE" << std::endl;
             pt = profiler->get(time);
-            //leftPower = leftVelController->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
-            //rightPower = rightVelController->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
-            //chassis->getModel()->tank(leftPower, rightPower);
-            leftDrive.moveVelocity(Math::ftpsToRPM(pt.leftVelocity));
-            rightDrive.moveVelocity(Math::ftpsToRPM(pt.rightVelocity));
+            leftPower = leftLinear->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
+            rightPower = rightLinear->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
+            chassis->getModel()->tank(leftPower, rightPower);
         }
         else if(getState() == MotionProfileState::FOLLOW){
             pt = path[(int)(time.convert(millisecond) / 10)];
-            leftPower = leftVelController->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
-            rightPower = rightVelController->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
+            leftPower = leftTrajectory->step(pt.leftPosition, pt.leftVelocity, pt.leftAcceleration, leftMotor->getPosition(), leftMotor->getActualVelocity());
+            rightPower = rightTrajectory->step(pt.rightPosition, pt.rightVelocity, pt.rightAcceleration, rightMotor->getPosition(), rightMotor->getActualVelocity());
             chassis->getModel()->tank(leftPower, rightPower);
+            std::cout << Math::tickToFt(rightDrive.getPosition()) << std::endl;
         }
 
         lock.give();
@@ -94,7 +94,8 @@ void AsyncMotionProfiler::waitUntilSettled(){
 }
 
 AsyncMotionProfilerBuilder::AsyncMotionProfilerBuilder(){
-    velInit = false;
+    linearInit = false;
+    trajInit = false;
     driveInit = false;
     profileInit = false;
 }
@@ -111,21 +112,35 @@ AsyncMotionProfilerBuilder& AsyncMotionProfilerBuilder::withProfiler(std::unique
     return *this;
 }
 
-AsyncMotionProfilerBuilder& AsyncMotionProfilerBuilder::withVelocityController(FFVelocityController iLeft, FFVelocityController iRight){
-    left = iLeft, right = iRight;
-    velInit = true;
+AsyncMotionProfilerBuilder& AsyncMotionProfilerBuilder::withLinearController(FFVelocityController iLeft, FFVelocityController iRight){
+    leftL = iLeft, rightL = iRight;
+    linearInit = true;
+    return *this;
+
+}
+
+AsyncMotionProfilerBuilder& AsyncMotionProfilerBuilder::withTrajectoryController(FFVelocityController iLeft, FFVelocityController iRight){
+    leftT = iLeft, rightT = iRight;
+    trajInit = true;
     return *this;
 }
 
 std::shared_ptr<AsyncMotionProfiler> AsyncMotionProfilerBuilder::build(){
-    std::shared_ptr<AsyncMotionProfiler> ret(new AsyncMotionProfiler(std::move(chassis), 
-                                          std::move(profile), 
-                                          std::make_unique<FFVelocityController>(left), 
-                                          std::make_unique<FFVelocityController>(right), 
-                                          TimeUtilFactory::createDefault()));
+    if(driveInit && profileInit && linearInit && trajInit){
+        std::shared_ptr<AsyncMotionProfiler> ret(new AsyncMotionProfiler(std::move(chassis), 
+                                            std::move(profile), 
+                                            std::make_unique<FFVelocityController>(leftL), 
+                                            std::make_unique<FFVelocityController>(rightL),
+                                            std::make_unique<FFVelocityController>(leftT), 
+                                            std::make_unique<FFVelocityController>(rightT),
+                                            TimeUtilFactory::createDefault()));
 
-    ret->startTask();
-    return std::move(ret);
+        ret->startTask();
+        return std::move(ret);
+    }
+    else{
+        throw std::runtime_error("AsyncMotionProfilerBuilder: Not all parameters given, failed to build");
+    }
 }
 
 

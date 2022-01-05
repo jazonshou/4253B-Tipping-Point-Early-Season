@@ -39,6 +39,10 @@ double ftToTick(double ft);
  */
 double tickToFt(double tick);
 
+QLength tickToDistance();
+
+QAngle rescale180(QAngle angle);
+
 /**
  * @brief Rescales an angle to [-180, 180]
  * 
@@ -46,6 +50,8 @@ double tickToFt(double tick);
  * @return scaled angle to [-180, 180]
  */
 double rescale180(double angle);
+
+QAngle rescale360(QAngle angle);
 
 /**
  * @brief Rescales an angle to [0, 360]

@@ -32,7 +32,7 @@ extern Pneumatics wings;
 
 // SUBSYSTEM CONTROLLERS
 extern std::shared_ptr<ChassisController> chassis;
-// extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
+extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<AsyncMotionProfiler> profiler;
 
 // PID CONTROLLERS
