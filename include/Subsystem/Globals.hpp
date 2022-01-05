@@ -18,7 +18,7 @@ extern Controller master;
 extern MotorGroup leftDrive;
 extern MotorGroup rightDrive;
 extern Motor lift;
-extern pros::Motor lift_pros;
+//extern pros::Motor lift_pros;
 extern Motor roller;
 
 // SENSORS
@@ -33,7 +33,7 @@ extern Pneumatics wings;
 
 // SUBSYSTEM CONTROLLERS
 extern std::shared_ptr<ChassisController> chassis;
-// extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
+extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<AsyncMotionProfiler> profiler;
 
 // PID CONTROLLERS
