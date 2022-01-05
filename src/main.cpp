@@ -60,9 +60,13 @@ void autonomous(){
 }
 
 void opcontrol(){
-    // Auton a = Auton();
-    // a.init();
-    // a.skills();
+    Auton a = Auton();
+    a.init();
+    a.skills();
+
+    while(true) {
+        pros::delay(10);
+    }
 
     // Creates a black background
     lv_obj_t *background;
