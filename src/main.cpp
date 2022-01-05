@@ -288,31 +288,9 @@ void autonomous(){
 }
 
 void opcontrol(){
-    //profiler->setTarget(1_m);
-    // Auton::init();
-    //Auton::skills();
     // Auton a = Auton();
     // a.init();
     // a.skills();
-    /*
-    claw.set(false);
-    mogoClamp.set(true);
-    mogo.set(true);
-    profiler->setTarget(Skills::path0);
-    profiler->waitUntilSettled();
-    claw.set(true);
-    profiler->setTarget(path);
-    liftController->setTarget(750);
-    */
-   /*
-    while(true){
-        pros::delay(10);
-    }
-    */
-    
-
-
-    // turnToAngle(90_deg);
 
     // Creates a black background
     lv_obj_t *background;
@@ -337,9 +315,8 @@ void opcontrol(){
 
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
     rightDrive.setBrakeMode(AbstractMotor::brakeMode::coast);
-    // lift.setBrakeMode(AbstractMotor::brakeMode::hold);
-    // lift_pros.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
-
+    lift.setBrakeMode(AbstractMotor::brakeMode::hold);
+    
     while(true){
         double power = master.getAnalog(ControllerAnalog::leftY) * (abs(master.getAnalog(ControllerAnalog::leftY)) >= DEADBAND);
         double curvature = master.getAnalog(ControllerAnalog::rightX) * (abs(master.getAnalog(ControllerAnalog::rightX)) >= DEADBAND);
@@ -352,13 +329,13 @@ void opcontrol(){
         roller.moveVoltage(12000*((master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2))-master.getDigital(ControllerDigital::A)));
         /*
         if(master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2)) {
-            lift_pros.move_voltage(0);
+            lift.moveVelocity(0);
         } else if(master.getDigital(ControllerDigital::L1)) {
-            lift_pros.move_voltage(12000);
+            lift.moveVoltage(12000);
         } else if (master.getDigital(ControllerDigital::L2)) {
-            lift_pros.move_voltage(-12000);
+            lift.moveVelocity(-12000);
         } else {
-            lift_pros.move_voltage(0);
+            lift.moveVelocity(0);
         }
         */
 
