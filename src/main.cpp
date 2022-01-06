@@ -290,7 +290,10 @@ void autonomous(){
 void opcontrol(){
     Auton a = Auton();
     a.init();
-    a.skills();
+    // a.skills();
+    // a.wingGrab();
+    // a.right();
+    a.awp();
 
     while(true) {
         pros::delay(10);
@@ -333,13 +336,15 @@ void opcontrol(){
         roller.moveVoltage(12000*((master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2))-master.getDigital(ControllerDigital::A)));
         
         if(master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2)) {
-            lift.moveVelocity(0);
+            // lift.moveVelocity(0);
+            lift.moveVoltage(0);
         } else if(master.getDigital(ControllerDigital::L1)) {
             lift.moveVoltage(12000);
         } else if (master.getDigital(ControllerDigital::L2)) {
             lift.moveVelocity(-12000);
         } else {
-            lift.moveVelocity(0);
+            // lift.moveVelocity(0);
+            lift.moveVoltage(0);
         }
         
 

@@ -30,6 +30,7 @@ void moveTimeHeadingCorrect(double speed, QTime time) {
         (chassis->getModel())->arcade(speed, headingPID->step(imu.get()));
         pros::delay(10);
     } while(++timeCnt <= std::round(time.convert(millisecond) / 10));
+    (chassis->getModel())->stop();
 }
 
 void moveDistance(QLength target){

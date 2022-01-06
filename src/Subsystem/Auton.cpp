@@ -63,13 +63,18 @@ void Auton::wingGrab() {
     std::cout << "hello world\n";
     wings.set(true);
     std::cout << "moving \n\n";
-    moveDistance(-3.5_ft);
+    // moveDistance(-3.5_ft);
+    profiler->setTarget(-2.75_ft);
+    pros::delay(775);
 
     wings.set(false);
-    pros::delay(250);
-    moveDistance(4.25_ft);
+    profiler->waitUntilSettled();
 
-    wings.set(true); pros::delay(250); wings.set(false); pros::delay(250);
+    // moveDistance(3_ft, 2_s);
+    profiler->setTarget(3.5_ft);
+    profiler->waitUntilSettled();
+
+    wings.set(true); pros::delay(500); wings.set(false); pros::delay(500);
 }
 
 void Auton::left(){
@@ -79,20 +84,88 @@ void Auton::left(){
 void Auton::right(){
     wingGrab();
     
-    moveDistance(-2_ft);
+    profiler->setTarget(-1.75_ft);
+    profiler->waitUntilSettled();
     turnToAngle(90_deg);
 
-    moveDistance(-4_ft);
-    moveTime({-0.5, -0.5}, 250_ms);
-    pros::delay(250);
+    profiler->setTarget(-3_ft);
+    profiler->waitUntilSettled();
+    // moveTime({-0.5, -0.5}, 250_ms);
+    // pros::delay(250);
     mogoClamp.set(true); pros::delay(250); mogo.set(true);
 
-    //followPathCustom(AWP::p0Left);
-    claw.set(true);
+    profiler->setTarget(6_in);
+    liftController->setTarget(710);
+    profiler->waitUntilSettled();
+    turnToAngle(180_deg);
+
+    roller.moveVoltage(12000);
+    profiler->setTarget(3_ft);
+    profiler->waitUntilSettled();
+    profiler->setTarget(-3_ft);
+    profiler->waitUntilSettled();
+    turnToAngle(0_deg);
+    
+    // oscillate match load
+    for(int i = 0; i < 3; i++) {
+        profiler->setTarget(2_ft);
+        profiler->waitUntilSettled();
+        profiler->setTarget(-2_ft);
+        profiler->waitUntilSettled();
+    }
 }
 
 void Auton::awp(){
+    wingGrab();
+    turnToAngle(0_deg);
     
+    profiler->setTarget(-1.6_ft);
+    profiler->waitUntilSettled();
+    turnToAngle(90_deg);
+
+    profiler->setTarget(-3_ft);
+    profiler->waitUntilSettled();
+    // moveTime({-0.5, -0.5}, 250_ms);
+    // pros::delay(250);
+    mogoClamp.set(true); pros::delay(250); mogo.set(true);
+
+    // profiler->setTarget(6_in);
+    // liftController->setTarget(710);
+    // profiler->waitUntilSettled();
+    // turnToAngle(180_deg);
+
+    // roller.moveVoltage(12000);
+    // profiler->setTarget(3_ft);
+    // profiler->waitUntilSettled();
+    // profiler->setTarget(-2.91_ft);
+    // profiler->waitUntilSettled();
+    // turnToAngle(90_deg);
+
+    profiler->setTarget(9_ft);
+    roller.moveVoltage(12000); pros::delay(125); roller.moveVoltage(0);
+    pros::delay(750);
+    mogoClamp.set(false); mogo.set(false);
+    roller.moveVoltage(0);
+    profiler->waitUntilSettled();
+
+    
+    profiler->setTarget(-2_ft);
+    profiler->waitUntilSettled();
+    turnToAngle(90_deg);
+    profiler->setTarget(2_ft);
+    profiler->waitUntilSettled();
+    profiler->setTarget(-1_ft);
+    profiler->waitUntilSettled();
+    
+    turnToAngle(140_deg);
+    profiler->setTarget(-2_ft);
+    profiler->waitUntilSettled();
+
+    mogoClamp.set(true); pros::delay(250); mogo.set(true);
+
+    turnToAngle(90_deg);
+    profiler->setTarget(1.5_ft);
+    profiler->waitUntilSettled();
 }
 
 Trajectory path1 = {
@@ -328,7 +401,7 @@ void Auton::skills(){
     liftController->setTarget(710);
     profiler->waitUntilSettled();
     // jerk around
-    moveTime({-0.5, 0.5}, 400_ms);
+    moveTime({-0.5, 0.5}, 500_ms);
     turnToAngle(90_deg);
     claw.set(false); pros::delay(500);
     
@@ -342,40 +415,45 @@ void Auton::skills(){
     moveTime({0.6, 0.6}, 800_ms);
     claw.set(true); pros::delay(250);
     liftController->setTarget(710); 
-    moveTime({-0.8, -0.8}, 390_ms);
+    moveTime({-0.6, -0.6}, 600_ms);
     liftController->waitUntilSettled();
     turnToAngle(90_deg);
     moveDistance(1.5_ft, 1_s);
     claw.set(false);
-    moveDistance(-5_ft, 4_s);
+    moveDistance(-6.5_ft, 3_s);
 
-    moveDistance(1.25_ft);
+    moveDistance(2.5_ft);
     turnToAngle(225_deg);
-    moveDistance(4_ft);
+    moveDistance(4.5_ft);
     turnToAngle(270_deg);
 
     moveTime({0.5, 0.5}, 1_s);
-    moveDistance(-1_ft);
+    // moveDistance(-1_ft);
+    profiler->setTarget(-10_in);
+    profiler->waitUntilSettled();
     turnToAngle(180_deg);
     moveTime({0.5, 0.5}, 1_s);
-    moveDistance(-4_in);
+    // moveDistance(-4_in);
+    profiler->setTarget(-4_in);
+    profiler->waitUntilSettled();
     turnToAngle(270_deg);
 
-    moveTime({-0.5, -0.5}, 600_ms); pros::delay(250);
+    moveTime({-0.5, -0.5}, 650_ms); pros::delay(250);
     mogoClamp.set(true); pros::delay(250); mogo.set(true);
     profiler->setTarget(Skills::path2);
     profiler->waitUntilSettled();
 
+    liftController->setTarget(0);
     turnToAngle(90_deg);
     moveDistance(1_ft);
-    liftController->setTarget(0);
-    moveDistance(-1_ft);
-    moveDistance(1_ft); pros::delay(500);
-    moveTime({0.2, 0.2}, 400_ms); 
+    // liftController->setTarget(0);
+    // moveDistance(-1_ft);
+    // moveDistance(1_ft); pros::delay(500);
+    moveTime({0.25, 0.25}, 600_ms); 
     claw.set(true); pros::delay(250);
 
     liftController->setTarget(710);
-    turnToAngle(45_deg); 
+    turnToAngle(47.5_deg); 
     // turnToAngle(-35_deg);
     moveDistance(5_ft, 2_s);
     turnToAngle(90_deg);
@@ -394,38 +472,79 @@ void Auton::skills(){
     moveTime({0.5, 0.5}, 850_ms);
     claw.set(true); pros::delay(250);
     liftController->setTarget(710);
-    turnToAngle(90_deg);
+    turnToAngle(100_deg);
     // turnToAngle(0_deg);
-    moveDistance(3_ft, 1500_ms);
+    moveDistance(4_ft, 2000_ms);
     claw.set(false); pros::delay(250);
 
     moveDistance(-1_ft);
     turnToAngle(0_deg);
     // turnToAngle(-90_deg);
-    liftController->setTarget(0);
-    moveDistance(-4.5_ft);
-    turnToAngle(50_deg);
+    // liftController->setTarget(0);
+    moveDistance(4_ft, 2_s);
+    // turnToAngle(55_deg);
     // turnToAngle(-45_deg);
-    moveDistance(2.5_ft);
-    claw.set(true);
+    // moveDistance(2_ft, 1.5_s);
+    turnToAngle(90_deg);
 
-    liftController->setTarget(710);
-    moveDistance(-1_ft);
-    turnToAngle(-90_deg);
-    // turnToAngle(180_deg); 
-    pros::delay(250);
-    moveTime({-0.5, -0.5}, 1.5_s); pros::delay(500);
-    moveDistance(2.5_ft); pros::delay(250);
+    moveTime({0.5, 0.5}, 1.5_s);
+    profiler->setTarget(-4_in);
+    profiler->waitUntilSettled();
     turnToAngle(0_deg);
-    // turnToAngle(-90_deg);
+    moveTime({0.5, 0.5}, 1.5_s);
+    profiler->setTarget(-4_in);
+    profiler->waitUntilSettled();
+    turnToAngle(-90_deg);
 
-    moveDistance(7_ft); pros::delay(500);
-    moveTimeHeadingCorrect(-0.5, 750_ms);
-    turnToAngle(180_deg);
-    // turnToAngle(90_deg); 
+    liftController->setTarget(0);
+    liftController->waitUntilSettled();
+    pros::delay(1200);
+
+    profiler->setTarget(8_ft);
+    pros::delay(800);
+    claw.set(true);
     pros::delay(250);
-    moveTime({-0.5, -0.5}, 1.5_s);
-    mogoClamp.set(true); pros::delay(250); mogo.set(true);
+    liftController->setTarget(710);
+    profiler->waitUntilSettled();
+
+    // moveTimeHeadingCorrect(-0.5, 0.5_s);
+    // mogoClamp.set(true); pros::delay(250); mogo.set(true);
+
+    // profiler->setTarget(Skills::path3);
+    // turnToAngle(-90_deg);
+    // moveDistance(7_ft, 2.5_s);
+    
+    // profiler->setTarget(-4_in);
+    // profiler->waitUntilSettled();
+    // turnToAngle(0_deg);
+    // moveTime({0.5, 0.5}, 1_s);
+    // profiler->setTarget(-12_in);
+    // profiler->waitUntilSettled();
+
+    // liftController->setTarget(710);
+    // // moveDistance(-1_ft);
+    // turnToAngle(-90_deg);
+    // // turnToAngle(180_deg); 
+    // // pros::delay(250);
+    // moveTime({-0.5, -0.5}, 1.5_s); pros::delay(500);
+    // // moveDistance(2.5_ft); 
+    // profiler->setTarget(2.25_ft);
+    // profiler->waitUntilSettled();
+    // pros::delay(250);
+    // turnToAngle(0_deg);
+    // // turnToAngle(-90_deg);
+
+    // // moveDistance(7_ft); 
+    // profiler->setTarget(7_ft);
+    // profiler->waitUntilSettled();
+    // turnToAngle(-90_deg);
+    // // pros::delay(500);
+    // // moveTimeHeadingCorrect(-0.5, 750_ms);
+    // // turnToAngle(180_deg);
+    // // turnToAngle(90_deg); 
+    // pros::delay(250);
+    // moveTime({-0.5, -0.5}, 1.5_s);
+    // mogoClamp.set(true); pros::delay(250); mogo.set(true);
 
     /*
     turnToAngle(270_deg);
