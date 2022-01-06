@@ -94,13 +94,13 @@ void opcontrol(void);
 #include "lib/LinearMotionProfile.hpp"
 #include "lib/Profiler.hpp"
 
-#include "Subsystem/Globals.hpp"
-#include "Subsystem/Drive.hpp"
-#include "Subsystem/Conveyor.hpp"
-#include "Subsystem/Auton.hpp"
+#include "Subsystems/Globals.hpp"
+#include "Subsystems/Drive.hpp"
+#include "Subsystems/Conveyor.hpp"
+#include "Subsystems/Auton.hpp"
 
-#include "Path/Skills.hpp"
-#include "Path/Match.hpp"
+#include "Pathing/Skills.hpp"
+#include "Pathing/Match.hpp"
 
 
 #endif

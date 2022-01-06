@@ -11,7 +11,6 @@ void curvatureDrive(double moveC, double turnC, bool quickTurn){
         leftSpeed /= maxMagnitude;
         rightSpeed /= maxMagnitude;
     }
-
     chassis->getModel()->tank(leftSpeed, rightSpeed);
 }
 

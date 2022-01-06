@@ -39,8 +39,19 @@ double ftToTick(double ft);
  */
 double tickToFt(double tick);
 
+/**
+ * @brief Converts encoder ticks to actual distance
+ * 
+ * @return actual distance
+ */
 QLength tickToDistance();
 
+/**
+ * @brief Rescales an angle to [-180, 180]
+ * 
+ * @param angle Angle to be rescaled
+ * @return rescaled angle
+ */
 QAngle rescale180(QAngle angle);
 
 /**
@@ -51,6 +62,12 @@ QAngle rescale180(QAngle angle);
  */
 double rescale180(double angle);
 
+/**
+ * @brief Rescales an angle to [0, 360]
+ * 
+ * @param angle angle to be rescaled
+ * @return rescaled angle
+ */
 QAngle rescale360(QAngle angle);
 
 /**
@@ -66,6 +83,16 @@ double rescale360(double angle);
     x1 is larger solution, x1 is smaller
     jason write a description for this
 */
+
+/**
+ * @brief The quadratic formula [https://youtu.be/VOXYMRcWbF8]
+ *        x = -b +- sqrt(pow(b) - 4ac) / 2a
+ * 
+ * @param a ^
+ * @param b ^
+ * @param c ^
+ * @return pair containing the solutions
+ */
 std::pair<double, double> quadraticFormula(double a, double b, double c);
 
 };

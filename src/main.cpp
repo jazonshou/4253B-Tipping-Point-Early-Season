@@ -292,8 +292,8 @@ void opcontrol(){
     a.init();
     // a.skills();
     // a.wingGrab();
-    // a.right();
-    a.awp();
+    a.right();
+    // a.awp();
 
     while(true) {
         pros::delay(10);

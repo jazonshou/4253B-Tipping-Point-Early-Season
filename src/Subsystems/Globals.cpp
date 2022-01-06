@@ -15,7 +15,6 @@ Motor roller(9, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits
 MotorGroup leftDrive({leftTop, leftMiddle, leftBottom});
 MotorGroup rightDrive({rightTop, rightMiddle, rightBottom});
 
-
 // SENSORS
 IMU imu(3);
 pros::Vision vision_sensor (17, pros::E_VISION_ZERO_CENTER);
