@@ -1,6 +1,15 @@
 #include "Math.hpp"
 #include <cmath>
 
+double Math::deadband(double value, double db){
+    if(abs(value) < db){
+        return 0;
+    }
+    else{
+        return value;
+    }
+}
+
 // vel (ft/s) -> vel(in/s) -> rps(wheel) -> rps -> rpm
 double Math::ftpsToRPM(double ftps){
     return ftps * 12 / (3.25 * M_PI) / (3.0/5) * 60;
@@ -37,6 +46,10 @@ QAngle Math::rescale360(QAngle angle){
 
 double Math::rescale360(double angle){
     return angle - 360.0 * (std::floor(angle * (1.0 / 360.0)));
+}
+
+QLength Math::angleToArcLength(okapi::QAngle angle, okapi::QLength rad){
+  return angle.convert(radian) * rad;
 }
 
 std::pair<double, double> Math::quadraticFormula(double a, double b, double c){

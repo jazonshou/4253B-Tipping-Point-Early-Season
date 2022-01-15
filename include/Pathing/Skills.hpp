@@ -2,8 +2,9 @@
 #include "main.h"
 
 /**
- * @brief The following class contains the route & all the paths
- *        for our skills auton. 
+ * @brief The following class contains the trajectories used in our skills autonomous
+ *        These trajectories are precalculated on our computer, then deployed into our
+ *        code to let our robot follow
  * 
  */
 
@@ -15,5 +16,4 @@ namespace Skills {
     extern Trajectory path2;
 
     extern Trajectory path3;
-
 };

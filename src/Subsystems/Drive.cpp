@@ -23,47 +23,29 @@ void moveTime(std::pair<double, double> speed, QTime time) {
 void moveTimeHeadingCorrect(double speed, QTime time) {
     headingPID->reset();
     headingPID->setTarget(imu.get());
+    auto timer = TimeUtilFactory().createDefault().getTimer();
+    timer->placeMark();  
 
-    int timeCnt = 0;
     do {
         (chassis->getModel())->arcade(speed, headingPID->step(imu.get()));
         pros::delay(10);
-    } while(++timeCnt <= std::round(time.convert(millisecond) / 10));
+    } while(timer->getDtFromMark() < time);
     (chassis->getModel())->stop();
-}
-
-void moveDistance(QLength target){
-	movePID->reset(); headingPID->reset();
-    movePID->setTarget(0); headingPID->setTarget(imu.get());
-    (chassis->getModel())->resetSensors();
-
-	do {
-        double dist = Math::tickToFt(((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2) * 12;
-        double error = target.convert(inch) - dist;
-        (chassis->getModel())->arcade(movePID->step(-error), headingPID->step(imu.get()));
-		pros::delay(10);
-	} while(!movePID->isSettled());
-
-	(chassis->getModel())->stop();
 }
 
 void moveDistance(QLength target, QTime time) {
     movePID->reset(); headingPID->reset();
     movePID->setTarget(0); headingPID->setTarget(imu.get());
     (chassis->getModel())->resetSensors();
-    // imu.reset();
-    double imuBeginningVal = imu.get();
+    auto timer = TimeUtilFactory().createDefault().getTimer();
+    timer->placeMark();  
 
-    int timeCnt = 0;
-    
 	do {
         double dist = Math::tickToFt(((chassis->getModel())->getSensorVals()[0] + (chassis->getModel())->getSensorVals()[1]) / 2) * 12;
         double error = target.convert(inch) - dist;
         (chassis->getModel())->arcade(movePID->step(-error), headingPID->step(imu.get()));
-
-        if(++timeCnt >= std::round(time.convert(millisecond) / 10)) break;
 		pros::delay(10);
-	} while(!movePID->isSettled());
+	} while(!movePID->isSettled() || timer->getDtFromMark() < time);
 
 	(chassis->getModel())->stop();
 }
@@ -72,11 +54,10 @@ void turnToAngle(QAngle targetAngle){
 	turnPID->reset();
     turnPID->setTarget(0);
     turnPID->setIntegratorReset(true);
-    turnPID->setIntegralLimits(0.4 / TURNKI, -0.405/TURNKI);
+    turnPID->setIntegralLimits(0.4 / 0.015, -0.4 / 0.015);
     turnPID->setErrorSumLimits(15, 0);
 
 	do{
-        double error = Math::rescale180(targetAngle.convert(degree)-imu.get());
         (chassis->getModel())->arcade(0, turnPID->step(-Math::rescale180(targetAngle.convert(degree)-imu.get())));
         pros::delay(10);
     }while (!turnPID->isSettled());
@@ -87,10 +68,7 @@ void turnToAngle(QAngle targetAngle){
 void turnToMogo() {
     do {
         pros::vision_object_s_t rtn = vision_sensor.get_by_size(0);
-        //std::cout << "sig: " << rtn.x_middle_coord << std::endl;
-
         (chassis->getModel())->arcade(0, visionPID->step(-rtn.x_middle_coord));
-
 		pros::delay(10);
 	} while(!visionPID->isSettled());
 	(chassis->getModel())->stop();

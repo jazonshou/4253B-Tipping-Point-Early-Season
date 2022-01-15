@@ -10,9 +10,17 @@
 #include "okapi/api/units/QAngularJerk.hpp"
 #include "okapi/api/units/QJerk.hpp"
 
+/*
+ * The unit library we uses allows us to check our math during compile time
+ * compile time using dimensional analysis. This file includes expansion
+ * to extra units such as curvature that we use within our code.
+ */
 namespace okapi{
 // Physical quantity types
-QUANTITY_TYPE(0, -1, 0, 1, QCurvature);
+QUANTITY_TYPE(0, -1, 0, 1, QCurvature); 
+
+// Predegined Number unit
+constexpr Number pct = number / 100;
 
 // Predefined Length Units
 constexpr QLength tile = 2 * foot;
@@ -41,6 +49,10 @@ constexpr QJerk ftps3 = ftps2 / second;
 constexpr QAngularJerk radps3 = radps2 / second;
 
 inline namespace literals{
+// number unit literals
+constexpr Number operator"" _pct(long double x) { return static_cast<double>(x)*pct; }
+constexpr Number operator"" _pct(unsigned long long int x) { return static_cast<double>(x)*pct; }
+
 // Length Unit Literals
 constexpr QLength operator"" _tile(long double x) { return static_cast<double>(x)*tile; }
 constexpr QLength operator"" _tile(unsigned long long int x) { return static_cast<double>(x)*tile; }
