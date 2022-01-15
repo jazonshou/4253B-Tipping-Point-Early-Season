@@ -1,12 +1,15 @@
 #include "main.h"
 
 // Profile Constraint
-ProfileConstraint::ProfileConstraint(QSpeed maxVel, QAcceleration maxAccel, QJerk maxJerk){
+ProfileConstraint::ProfileConstraint(QSpeed maxVel, QAcceleration maxAccel, QAcceleration maxDecel, QJerk maxJerk){
     if(maxVel == 0_mps){
         throw std::invalid_argument("ProfileConstraint: Max Velocity can't be zero");
     }
     else if(maxAccel == 0_mps2){
         throw std::invalid_argument("ProfileConstraint: Max Acceleration can't be zero");
+    }
+    else if(maxDecel == 0_mps2){
+        throw std::invalid_argument("ProfileConstraint: Max Deceleration can't be zero");
     }
     else if(maxJerk == 0_mps3){
         throw std::invalid_argument("ProfileConstraint: Max Jerk can't be zero (choose an arbitrary large number if you want a trapezoidal profile)");
@@ -14,6 +17,7 @@ ProfileConstraint::ProfileConstraint(QSpeed maxVel, QAcceleration maxAccel, QJer
 
     this->maxVelocity = abs(maxVel);
     this->maxAcceleration = abs(maxAccel);
+    this->maxDeceleration = abs(maxDecel);
     this->maxJerk = abs(maxJerk);
 }
 
@@ -28,7 +32,8 @@ TrapezoidalMotionProfile::TrapezoidalMotionProfile(ProfileConstraint iConstraint
 
 void TrapezoidalMotionProfile::setConstraint(ProfileConstraint iConstraint){
     constraint = iConstraint;
-    min3Stage = constraint.maxVelocity * constraint.maxVelocity / constraint.maxAcceleration;
+    min3Stage = constraint.maxVelocity * constraint.maxVelocity / constraint.maxAcceleration / 2 +
+                  constraint.maxVelocity * constraint.maxVelocity / constraint.maxDeceleration / 2;
     accPhase = {constraint.maxAcceleration, 0_mps2, -constraint.maxAcceleration};
     setDistance(distance);
 }
@@ -37,7 +42,7 @@ void TrapezoidalMotionProfile::setDistance(QLength iDistance){
     isReversed = (iDistance < 0_m);
     distance = abs(iDistance);
 
-    if(distance < min3Stage){
+    if(distance < min3Stage){ // 2 stage
         timePhase[0] = sqrt(distance / constraint.maxAcceleration);
         distPhase[0] = distance / 2;
         velPhase[0] = 0_mps;
@@ -50,7 +55,7 @@ void TrapezoidalMotionProfile::setDistance(QLength iDistance){
         distPhase[2] = distPhase[0];
         velPhase[2] = velPhase[1];
     }
-    else{
+    else{ // full trapezoidal profile
         timePhase[0] = constraint.maxVelocity / constraint.maxAcceleration;
         distPhase[0] = 0.5 * constraint.maxVelocity * constraint.maxVelocity / constraint.maxAcceleration;
         velPhase[0] = 0_mps;
@@ -178,7 +183,7 @@ void SCurveMotionProfile::setDistance(QLength iDistance){
     isReversed = iDistance < 0_m;
     distance = abs(iDistance);
 
-    if(distance < minDist){
+    if(distance < minDist){ // 4 stage
         timePhase[1] = timePhase[3] = timePhase[5] = 0_s;
         timePhase[0] = timePhase[2] = timePhase[4] = timePhase[6] = cbrt(distance / constraint.maxJerk / 2);
 
@@ -194,7 +199,7 @@ void SCurveMotionProfile::setDistance(QLength iDistance){
         accPhase[1] = accPhase[2] = constraint.maxJerk * timePhase[0];
         accPhase[5] = accPhase[6] = -accPhase[1];
     }
-    else if(!fullAccel){
+    else if(!fullAccel){ // 5 stage
         timePhase[0] = timePhase[2] = timePhase[4] = timePhase[6] = sqrt(constraint.maxVelocity / constraint.maxJerk);
         timePhase[1] = timePhase[5] = 0_s;
         timePhase[3] = (distance - constraint.maxVelocity * timePhase[0] * 2) / constraint.maxVelocity;
@@ -212,7 +217,7 @@ void SCurveMotionProfile::setDistance(QLength iDistance){
         accPhase[1] = accPhase[2] = constraint.maxJerk * timePhase[0];
         accPhase[5] = accPhase[6] = -accPhase[1];
     }
-    else if(distance < fullDist){
+    else if(distance < fullDist){ // 6 stage
         double a = (constraint.maxAcceleration).convert(ftps2);
         double b = (3 * constraint.maxAcceleration * constraint.maxAcceleration / constraint.maxJerk).convert(ftps);
         double c = (2 * constraint.maxAcceleration * constraint.maxAcceleration * constraint.maxAcceleration / constraint.maxJerk / constraint.maxJerk - distance).convert(foot);
@@ -236,7 +241,7 @@ void SCurveMotionProfile::setDistance(QLength iDistance){
         distPhase[2] = distPhase[4] = velPhase[2] * timePhase[2] + 0.5 * accPhase[2] * timePhase[2] * timePhase[2] - constraint.maxJerk * timePhase[2] * timePhase[2] * timePhase[2] / 6;
         distPhase[3] = 0_m;
     }
-    else{
+    else{ // full s curve
         velPhase[0] = 0_mps;
         accPhase[0] = 0_mps2;
         timePhase[0] = constraint.maxAcceleration / constraint.maxJerk;

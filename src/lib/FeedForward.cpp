@@ -20,3 +20,7 @@ double FFVelocityController::getTargetPower() const{
     return power;
 }
 
+double FFVelocityController::getkV() const{
+    return kV;
+}
+

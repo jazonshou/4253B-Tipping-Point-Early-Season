@@ -10,9 +10,14 @@
 #include "okapi/api/units/QAngularJerk.hpp"
 #include "okapi/api/units/QJerk.hpp"
 
+/*
+ * The unit library we uses allows us to check our math during compile time
+ * compile time using dimensional analysis. This file includes expansion
+ * to extra units such as curvature that we use within our code.
+ */
 namespace okapi{
 // Physical quantity types
-QUANTITY_TYPE(0, -1, 0, 1, QCurvature);
+QUANTITY_TYPE(0, -1, 0, 1, QCurvature); 
 
 // Predefined Length Units
 constexpr QLength tile = 2 * foot;

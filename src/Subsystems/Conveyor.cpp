@@ -11,9 +11,9 @@ void Conveyor::loop() {
                 motor->moveVoltage(12000);
             } else {
                 motor->moveVoltage(-12000);
-                pros::delay(500);
+                pros::delay(1000);
                 motor->moveVoltage(12000);
-                pros::delay(500);
+                pros::delay(1000);
             }
         } else {
             motor->moveVoltage(0);;

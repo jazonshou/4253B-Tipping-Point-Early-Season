@@ -1,42 +1,69 @@
 #pragma once
 #include "main.h"
 
+/*
+ * A utility class that wraps a task trampoline. To use, simply inherit your class from TaskWrapper
+ * and override the `loop` method. To start the task, the `startTask` method must be called, either
+ * from the constructor or from outside the class.
+ */
+
 class TaskWrapper {
     protected:
+    /**
+     * @brief Construct a new Task Wrapper object
+     * 
+     */
     TaskWrapper() = default;
+
+    /**
+     * @brief Copying between tasks is not allowed
+     */
     TaskWrapper(const TaskWrapper& iTask) = delete;
+
+    /**
+     * @brief Construct a new Task Wrapper object
+     * 
+     * @param iTask rvalue of a task
+     */
     TaskWrapper(TaskWrapper&& iTask) = default;
+
+    /**
+     * @brief Destroy the Task Wrapper object, virtual to allow inheritance
+     * 
+     */
     virtual ~TaskWrapper();
 
     /**
+     * @brief the task loop to run
      * Override this function to implement a custom task loop.
      */
     virtual void loop() = 0;
+
     public:
     /**   
-     * Start the task.
+     * @brief Start the task.
      *
      * @param iname The task name, optional.
      */
     virtual void startTask(const char* iname = "task");
 
     /**
-     * resumes the task.
+     * @brief resumes the task.
      */
     virtual void resumeTask();
 
     /**
-     * pauses the task.
+     * @brief pauses the task.
      */
     virtual void pauseTask();
 
     /**
-     * kills the task.
+     * @brief kills the task.
      */
     virtual void stopTask();
     
     /**
-     * Get the task name.
+     * @brief Get the task name.
      *
      * @return The name.
      */

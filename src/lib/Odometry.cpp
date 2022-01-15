@@ -1,13 +1,13 @@
 #include "Odometry.hpp"
-/*
-OdomDimension::OdomDimension(const QLength& wheelDiam, const QLength& leftOffset, const QLength& midOffset, const QLength& rightOffset){
+
+OdomDimension::OdomDimension(QLength wheelDiam, QLength leftOffset, QLength midOffset, QLength rightOffset){
     wheelDiameter = wheelDiam;
     lDist = leftOffset;
     mDist = midOffset;
     rDist = rightOffset;
 }
 
-OdomDimension::OdomDimension(const QLength& wheelDiam, const QLength& offset1, const QLength& offset2){
+OdomDimension::OdomDimension(QLength wheelDiam, QLength offset1, QLength offset2){
     wheelDiameter = wheelDiam;
     lDist = offset1;
     mDist = offset2;
@@ -45,26 +45,26 @@ double ::Odometry::getEncoderSide() const{
     return 0;
 }
 
-void ::Odometry::setPos(const OdomState& newPos){
-    globalPos = newPos;
+void ::Odometry::setPos(OdomState iPos){
+    globalPos = iPos;
 }
 
-void ::Odometry::setX(const QLength& x){
-    globalPos.x = x;
+void ::Odometry::setX(QLength iX){
+    globalPos.x = iX;
 }
 
-void ::Odometry::setY(const QLength& y){
-    globalPos.y = y;
+void ::Odometry::setY(QLength iY){
+    globalPos.y = iY;
 }
 
-void ::Odometry::setAngle(const QAngle& theta){
-    globalPos.theta = theta;
+void ::Odometry::setAngle(QAngle iTheta){
+    globalPos.theta = iTheta;
 }
 
 void ::Odometry::resetState(){
-    globalPos.x = 0 * meter;
-    globalPos.y = 0 * meter;
-    globalPos.theta = 0 * radian;
+    globalPos.x = 0_m;
+    globalPos.y = 0_m;
+    globalPos.theta = 0_rad;
 }
 
 void ::Odometry::reset(){
@@ -72,7 +72,7 @@ void ::Odometry::reset(){
     resetSensors();
 }
 
-ThreeWheelOdometry::ThreeWheelOdometry(const std::shared_ptr<ContinuousRotarySensor>& l, const std::shared_ptr<ContinuousRotarySensor>& m, const std::shared_ptr<ContinuousRotarySensor>& r, const OdomDimension& dim){
+ThreeWheelOdometry::ThreeWheelOdometry(std::shared_ptr<ContinuousRotarySensor> l, std::shared_ptr<ContinuousRotarySensor> m, std::shared_ptr<ContinuousRotarySensor> r, OdomDimension dim){
     left = l;
     mid = m;
     right = r;
@@ -80,7 +80,7 @@ ThreeWheelOdometry::ThreeWheelOdometry(const std::shared_ptr<ContinuousRotarySen
     if(dimension.rDist == (-1 * inch)){
         throw std::invalid_argument("MISSING RIGHT WHEEL OFFSET ARGUMENT");
     }
-    dimension.tpr = degree;
+    dimension.tpr = 360;
     setPos({0 * inch, 0 * inch, 0 * radian});
 }
 
@@ -137,13 +137,13 @@ void ThreeWheelOdometry::loop(){
     }
 }
 
-TwoWheelIMUOdometry::TwoWheelIMUOdometry(const std::shared_ptr<ContinuousRotarySensor>& s, const std::shared_ptr<ContinuousRotarySensor>& m, const std::shared_ptr<IMU>& imu, const OdomDimension& dim){
+TwoWheelIMUOdometry::TwoWheelIMUOdometry(std::shared_ptr<ContinuousRotarySensor> s, std::shared_ptr<ContinuousRotarySensor> m, std::shared_ptr<IMU> imu, OdomDimension dim){
     side = s;
     mid = m;
     inertial = imu;
     dimension = dim;
-    dimension.tpr = degree;
-    setPos({0 * inch, 0 * inch, 0 * radian});
+    dimension.tpr = 360;
+    setPos({0_m, 0_m, 0_rad});
 }
 
 void TwoWheelIMUOdometry::resetSensors(){
@@ -166,8 +166,8 @@ void TwoWheelIMUOdometry::loop(){
         // ldist is sdist
         sVal = side->get(), mVal = mid->get(), aVal = inertial->get();
         
-        QLength side = Math::angleToArcLength((sVal - sPrev) * dimension.tpr, dimension.wheelDiameter/2);
-        QLength mid = Math::angleToArcLength((mVal - mPrev) * dimension.tpr, dimension.wheelDiameter/2);
+        QLength side = Math::angleToArcLength((sVal - sPrev) / dimension.tpr * 360_deg, dimension.wheelDiameter/2);
+        QLength mid = Math::angleToArcLength((mVal - mPrev) / dimension.tpr * 360_deg, dimension.wheelDiameter/2);
         QAngle theta = (inertial->get() - aPrev) * degree;
         
         sPrev = sVal;
@@ -197,11 +197,11 @@ void TwoWheelIMUOdometry::loop(){
     }   
 }
 
-TwoWheelOdometry::TwoWheelOdometry(const std::shared_ptr<ContinuousRotarySensor>& l, const std::shared_ptr<ContinuousRotarySensor>& r, const OdomDimension& dim){
+TwoWheelOdometry::TwoWheelOdometry(std::shared_ptr<ContinuousRotarySensor> l, std::shared_ptr<ContinuousRotarySensor> r, OdomDimension dim){
     left = l;
     right = r;
     dimension = dim;
-    dimension.tpr = degree;
+    dimension.tpr = 360;
     setPos({0 * inch, 0 * inch, 0 * radian});
 }
 
@@ -224,8 +224,8 @@ void TwoWheelOdometry::loop(){
         //mdist is rdist
         lVal = left->get(), rVal = right->get();
 
-        QLength left = Math::angleToArcLength((lVal - lPrev) * dimension.tpr, dimension.wheelDiameter/2);
-        QLength right = Math::angleToArcLength((rVal - rPrev) * dimension.tpr, dimension.wheelDiameter/2);
+        QLength left = Math::angleToArcLength((lVal - lPrev) / dimension.tpr * 360_deg, dimension.wheelDiameter/2);
+        QLength right = Math::angleToArcLength((rVal - rPrev) / dimension.tpr * 360_deg, dimension.wheelDiameter/2);
 
         lPrev = lVal;
         rPrev = rVal;
@@ -249,4 +249,3 @@ void TwoWheelOdometry::loop(){
         pros::Task::delay_until(&t, 3);
     }
 }
-*/
