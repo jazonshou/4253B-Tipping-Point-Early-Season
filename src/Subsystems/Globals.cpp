@@ -26,7 +26,8 @@ Pneumatics claw('D');
 Pneumatics wings('H');
 
 // MOTION PROFILE CONSTANTS
-ProfileConstraint constraint({4.8_ftps, 17.5_ftps2, 25_ftps3});
+ProfileConstraint constraint({4.8_ftps, 17.5_ftps2, 17.5_ftps2, 25_ftps3});
+ProfileConstraint trapLimit({4.8_ftps, 9.5_ftps2, 4.8_ftps2, 25_ftps3});
 FFVelocityController leftLinear(0.187, 0.04, 0.025, 4.35, 0.1);
 FFVelocityController rightLinear(0.1915, 0.043, 0.02, 4, 0.1);
 FFVelocityController leftTrajectory(0.187, 0.04, 0.025, 2.5, 0);
@@ -39,10 +40,10 @@ std::shared_ptr<ChassisController> chassis = ChassisControllerBuilder()
 	.withDimensions({AbstractMotor::gearset::blue, 5.0/3.0}, {{3.25_in, 1.294_ft}, imev5BlueTPR})
 	.build();
 
-// std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
-// 	.withMotor(lift)
-// 	.withGains({0.007, 0.0, 0.000075}) 
-// 	.build();
+std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
+	.withMotor(lift)
+	.withGains({0.007, 0.0, 0.000075}) 
+	.build();
 
 std::shared_ptr<AsyncMotionProfiler> profiler = AsyncMotionProfilerBuilder()
 	.withOutput(chassis)
@@ -51,24 +52,16 @@ std::shared_ptr<AsyncMotionProfiler> profiler = AsyncMotionProfilerBuilder()
 	.withTrajectoryController(leftTrajectory, rightTrajectory)
 	.build();
 
+std::shared_ptr<AsyncMotionProfiler> astolfo = AsyncMotionProfilerBuilder()
+	.withOutput(chassis)
+	.withProfiler(std::make_unique<TrapezoidalMotionProfile>(trapLimit))
+	.withLinearController(leftLinear, rightLinear)
+	.withTrajectoryController(leftTrajectory, rightTrajectory)
+	.build();
+
 // PID CONTROLLERS
-// 0.05, 0.01, 0.00065 initially
-// kU = 0.1, Tu = 25	
-// 0.0048
-// 0.06, 0.005, 0.00115 works
-// 0.03 0.8 0 0 42 oscillation
-// 0.00825 half
-// 0.0165
-
-//0.0165, 0.015, 0.0002 tuning in progress
-
-const double TURNKI = 0.015;
-
-// 0.00026 was okish kD
-std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.06, 0.005, 0.00115, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 200_ms)); // #TODO - Tune Constant05
-std::shared_ptr<IterativePosPIDController> visionPID = std::make_shared<IterativePosPIDController>(0.01, 0.0, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(5, 2, 100_ms)); // #TODO - Tune Constant
-
+std::shared_ptr<IterativePosPIDController> turnPID = std::make_shared<IterativePosPIDController>(0.06, 0.005, 0.00115, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 200_ms));
+std::shared_ptr<IterativePosPIDController> visionPID = std::make_shared<IterativePosPIDController>(0.01, 0.0, 0.0002, 0, TimeUtilFactory::withSettledUtilParams(5, 2, 100_ms));
 std::shared_ptr<IterativePosPIDController> movePID = std::make_shared<IterativePosPIDController>(0.1, 0.0, 0.002, 0, TimeUtilFactory::withSettledUtilParams(2, 2, 100_ms));
-
 std::shared_ptr<IterativePosPIDController> headingPID = std::make_shared<IterativePosPIDController>(0.118, 0, 0, 0, TimeUtilFactory::createDefault());
 

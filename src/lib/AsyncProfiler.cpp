@@ -139,7 +139,7 @@ std::shared_ptr<AsyncMotionProfiler> AsyncMotionProfilerBuilder::build(){
         return std::move(ret);
     }
     else{
-        throw std::runtime_error("AsyncMotionProfilerBuilder: Not all parameters given, failed to build");
+        throw std::runtime_error("AsyncMotionProfilerBuilder: Not all parameters supplied, failed to build");
     }
 }
 

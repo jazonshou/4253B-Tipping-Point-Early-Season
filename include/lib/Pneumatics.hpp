@@ -2,7 +2,7 @@
 #include "main.h"
 
 /**
- * @brief A very necessary wrapper class for pneumatics
+ * @brief Wrapper class for vex pneumatics which allows more convenient control
  * 
  */
 class Pneumatics{
@@ -25,7 +25,7 @@ class Pneumatics{
     ~Pneumatics() = default;
 
     /**
-     * @brief Toggls the solinoid on/off
+     * @brief Toggles the solinoid to the value opposite to the current state
      * 
      */
     void toggle();

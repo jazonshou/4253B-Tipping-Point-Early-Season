@@ -1,7 +1,6 @@
 #pragma once
 #include "main.h"
 
-
 /**
  * @brief Class for our custom feedforward velocity controller
  * 
@@ -19,7 +18,7 @@ class FFVelocityController{
         FFVelocityController() = default;
 
         /**
-         * @brief Destroy the FFVelocityController object (completely unnecessary, just looks good)
+         * @brief Destroy the FFVelocityController object
          * 
          */
         ~FFVelocityController() = default;
@@ -28,8 +27,8 @@ class FFVelocityController{
          * @brief Construct a new FFVelocityController object
          * 
          * @param ikV velocity constant
-         * @param ikAU acceleration up constant
-         * @param ikAD acceleration down constant
+         * @param ikAU acceleration constant
+         * @param ikAD deceleration constant
          * @param ikP_Pos proportional constant for position
          * @param ikP_Vel proportional constant for velocity
          */
@@ -41,9 +40,9 @@ class FFVelocityController{
          * @param position desired position
          * @param velocity desired velocity
          * @param acceleration desired acceleration
-         * @param currentPos current position
+         * @param currentPos current position, in motor ticks
          * @param currentRPM current RPM
-         * @return calculated power
+         * @return calculated power to reach the target velocity
          */
         double step(double position, double velocity, double acceleration, double currentPos, double currentRPM);
 
@@ -59,6 +58,6 @@ class FFVelocityController{
          * 
          * @return kV
          */
-        double getkV() const {return kV;}
+        double getkV() const;
 };
 

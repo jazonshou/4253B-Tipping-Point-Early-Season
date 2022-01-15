@@ -92,7 +92,8 @@ void opcontrol(void);
 #include "lib/Trajectory.hpp"
 #include "lib/FeedForward.hpp"
 #include "lib/LinearMotionProfile.hpp"
-#include "lib/Profiler.hpp"
+#include "lib/AsyncProfiler.hpp"
+#include "lib/Odometry.hpp"
 
 #include "Subsystems/Globals.hpp"
 #include "Subsystems/Drive.hpp"

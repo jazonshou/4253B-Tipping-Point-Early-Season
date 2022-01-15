@@ -8,6 +8,28 @@
 namespace Math{
 
 /**
+ * @brief limits the value to zero if the value is smaller than deadband
+ * 
+ * @param value the value to limit
+ * @param db deadband limit
+ * @return double the value controlled with deadband
+ */
+double deadband(double value, double db);
+
+/**
+ * @brief clamps the value within [mn, mx]. Analogous to std::clamp()
+ *        The function works for any data type with an overloaded < and > operator
+ * 
+ * @tparam T the type to use
+ * @param val the value to clamp
+ * @param mn minimum value
+ * @param mx maximum value
+ * @return T the clamped value
+ */
+template<typename T>
+T clamp(T val, T mn, T mx){return std::max(std::min(mx, val), mn);}
+
+/**
  * @brief Converts feets per second to rounds per minute
  * 
  * @param ftps feets per second
@@ -47,6 +69,15 @@ double tickToFt(double tick);
 QLength tickToDistance();
 
 /**
+ * @brief converts radius and angle to arc length using the formula s = rw
+ * 
+ * @param angle angle
+ * @param rad radius
+ * @return QLength computed arc length
+ */
+QLength angleToArcLength(QAngle angle, QLength rad);
+
+/**
  * @brief Rescales an angle to [-180, 180]
  * 
  * @param angle Angle to be rescaled
@@ -78,20 +109,15 @@ QAngle rescale360(QAngle angle);
  */
 double rescale360(double angle);
 
-
-/*
-    x1 is larger solution, x1 is smaller
-    jason write a description for this
-*/
-
 /**
  * @brief The quadratic formula [https://youtu.be/VOXYMRcWbF8]
- *        x = -b +- sqrt(pow(b) - 4ac) / 2a
+ *        Computes the two roots of a quadratic equation
+ *        x = -b +- sqrt(b^2 - 4ac) / 2a
  * 
  * @param a ^
  * @param b ^
  * @param c ^
- * @return pair containing the solutions
+ * @return pair containing the two roots, first value is the larger solution
  */
 std::pair<double, double> quadraticFormula(double a, double b, double c);
 
