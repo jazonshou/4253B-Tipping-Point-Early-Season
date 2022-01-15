@@ -2,7 +2,7 @@
 #include "main.h"
 
 /**
- * @brief struct that stores the physical constraints of the robot
+ * @brief A struct that stores the physical constraints of the chassis
  * 
  */
 struct ProfileConstraint{
@@ -12,7 +12,7 @@ struct ProfileConstraint{
     QJerk maxJerk{0.0};
 
     /**
-     * @brief Construct a new Profile Constraint object
+     * @brief Constructs a new Profile Constraint object
      * 
      * @param maxVel max velocity
      * @param maxAccel max acceleration
@@ -22,14 +22,14 @@ struct ProfileConstraint{
     ProfileConstraint(QSpeed maxVel, QAcceleration maxAccel, QAcceleration maxDecel, QJerk maxJerk);
 
     /**
-     * @brief Destroy the Profile Constraint object
+     * @brief Destroys the Profile Constraint object
      * 
      */
     ~ProfileConstraint() = default;
 
     protected:
     /**
-     * @brief Construct a default Profile Constraint object, only accessible by the LinearMotionProfile class
+     * @brief Constructs a Profile Constraint object - only accessible by the LinearMotionProfile class
      * 
      */
     ProfileConstraint() = default;
@@ -42,7 +42,7 @@ struct ProfileConstraint{
 };
 
 /**
- * @brief abstract class for the generation of linear motion profiles
+ * @brief An abstract class which acts as a base of all linear motion profile classes
  * 
  */
 class LinearMotionProfile{
@@ -59,19 +59,19 @@ class LinearMotionProfile{
 
     public:
     /**
-     * @brief Construct a new Linear Motion Profile object
+     * @brief Constructs a new Linear Motion Profile object
      * 
      */
     LinearMotionProfile() = default;
 
     /**
-     * @brief Destroy the Linear Motion Profile object
+     * @brief Destroys the Linear Motion Profile object
      * 
      */
     ~LinearMotionProfile() = default;
 
     /**
-     * @brief set the target distance to travel
+     * @brief sets the target distance 
      * 
      * @param iDistance new target distance
      */
@@ -85,14 +85,14 @@ class LinearMotionProfile{
     virtual void setConstraint(ProfileConstraint iConstraint) = 0;
 
     /**
-     * @brief Get the total time to run the profile
+     * @brief Gets the total time to run the profile
      * 
      * @return QTime total time to run the profile
      */
     virtual QTime getTotalTime() const = 0;
 
     /**
-     * @brief Get the target position at a given time
+     * @brief Gets the target position at a given time
      * 
      * @param time time step to query
      * @return QLength the distance travelled at the target time
@@ -100,7 +100,7 @@ class LinearMotionProfile{
     virtual QLength getPosition(QTime time) const = 0;
 
     /**
-     * @brief Get the target velocity at a given time
+     * @brief Gets the target velocity at a given time
      * 
      * @param time time step to query
      * @return QSpeed target velocity at the target time
@@ -108,7 +108,7 @@ class LinearMotionProfile{
     virtual QSpeed getVelocity(QTime time) const = 0;
 
     /**
-     * @brief Get the target acceleration at a given time
+     * @brief Gets the target acceleration at a given time
      * 
      * @param time time step to query
      * @return QAcceleration target acceleration at the target time
@@ -125,13 +125,14 @@ class LinearMotionProfile{
 };
 
 /**
- * @brief class which generates "trapezoidal linear motion profiles" for the robot to follow
- *        Given a target distance, it generates a set of velocity that makes the robot
+ * @brief class which generates "trapezoidal linear motion profiles" for the chassis to follow.
+ *        Given a target distance, it generates a set of velocities which makes the chassis
  *        accelerate at max acceleration, cruise at max velocity, then decelerate at max
- *        deceleration. The robot's velocity curve looks like a trapezoid for this reason 
+ *        deceleration. As a result, the velocity curve of the chassis' translation looks like
+ *        a trapezoid. 
  * 
-  *       Since all the methods are inherited from the LinearMotionProfile class, repeated comments
- *        are omitted. 
+ *       Since all the methods are inherited from the LinearMotionProfile class, repeated comments
+ *       are omitted. 
  */
 class TrapezoidalMotionProfile : public LinearMotionProfile{
     private:
@@ -153,11 +154,11 @@ class TrapezoidalMotionProfile : public LinearMotionProfile{
 };
 
 /**
- * @brief class which generates "s curve linear motion profiles" for the robot to follow
- *        Given a target distance, it generates a set of velocity that makes the robot
- *        move at max jerk, max acceleration, max velocity, and decelerate the same way
- *        The robot's velocity curve looks like a smoothed s shapred trapezoid, which is 
- *        why it is called s curve motion profiling
+ * @brief class which generates "s curve linear motion profiles" for the chassis to follow
+ *        Given a target distance, it generates a set of velocities which makes the chassis
+ *        move at max jerk, max acceleration, max velocity, and decelerate the same way. 
+ *        As a result, the velocity curve of the chassis' translation looks like
+ *        a smooth s shaped trapezoid. 
  * 
  *        Since all the methods are inherited from the LinearMotionProfile class, repeated comments
  *        are omitted. 

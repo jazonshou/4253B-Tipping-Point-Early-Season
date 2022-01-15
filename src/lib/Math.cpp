@@ -28,10 +28,6 @@ double Math::tickToFt(double tick){
     return (tick/300)*(3.0/5)*(3.25*M_PI)/12;
 }
 
-QLength Math::tickToDistance(){
-    return 0_m;
-}
-
 QAngle Math::rescale180(QAngle angle){
     return rescale180(angle.convert(degree)) * degree;
 }

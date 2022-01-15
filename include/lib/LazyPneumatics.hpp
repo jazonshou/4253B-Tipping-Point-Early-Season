@@ -5,24 +5,24 @@
  * @brief Wrapper class for vex pneumatics which allows more convenient control
  * 
  */
-class Pneumatics{
+class LazyPneumatics {
     pros::ADIDigitalOut piston;
     bool state;
 
     public:
     /**
-     * @brief Construct a new Pneumatics object
+     * @brief Construct a new LazyPneumatics object
      * 
      * @param iPort solinoid port
      * @param initState initial state of the piston
      */
-    Pneumatics(char iPort, bool initState = false);
+    LazyPneumatics(char iPort, bool initState = false);
 
     /**
-     * @brief Destroys the Pneumatics object
+     * @brief Destroys the LazyPneumatics object
      * 
      */
-    ~Pneumatics() = default;
+    ~LazyPneumatics() = default;
 
     /**
      * @brief Toggles the solinoid to the value opposite to the current state

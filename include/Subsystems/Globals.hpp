@@ -23,10 +23,10 @@ extern IMU imu;
 extern pros::Vision vision_sensor;
 
 // PNEUMATICS
-extern Pneumatics mogo;
-extern Pneumatics mogoClamp;
-extern Pneumatics claw;
-extern Pneumatics wings;
+extern LazyPneumatics mogo;
+extern LazyPneumatics mogoClamp;
+extern LazyPneumatics claw;
+extern LazyPneumatics wings;
 
 // MOTION PROFILE CONSTANTS
 extern ProfileConstraint constraint;

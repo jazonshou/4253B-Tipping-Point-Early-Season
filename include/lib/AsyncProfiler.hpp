@@ -2,7 +2,7 @@
 #include "main.h"
 
 /**
- * @brief an enum that contains all the possible states for our motion profile controller
+ * @brief an enum containing all possible states for our motion profile controller
  * 
  */
 enum class MotionProfileState{
@@ -19,16 +19,16 @@ template class StateMachine<MotionProfileState>;
 class AsyncMotionProfiler : public StateMachine<MotionProfileState, MotionProfileState::IDLE>, public TaskWrapper{
     protected:
     /**
-     * @brief Construct a new Async Motion Profiler object. The constructor is declared to be protected to make sure
-     *        that this can only be constructed by its friend profiler builder class
+     * @brief Construct a new Async Motion Profiler object. The constructor is protected to ensure 
+     *        that it can only be constructed by its friend: the profiler builder class.
      * 
-     * @param iChassis the chassis to output the power to
+     * @param iChassis the chassis object to output the power to
      * @param iMove the motion profile generator for linear movements
      * @param iLeftLinear the left motor controller for linaer movements
      * @param iRightLinear the right motor controller for linear movements
      * @param iLeftTrajectory the left motor controller for following trajectories
      * @param iRightTrajectory the left motor controller for following trajectories
-     * @param iTimeUtil timer for the object
+     * @param iTimeUtil timer for the profiler
      */
     AsyncMotionProfiler(std::shared_ptr<ChassisController> iChassis, 
                         std::unique_ptr<LinearMotionProfile> iMove, 
@@ -69,53 +69,53 @@ class AsyncMotionProfiler : public StateMachine<MotionProfileState, MotionProfil
 
     public:
     /**
-     * @brief Set the target distance to travel linearly
+     * @brief Sets the target distance 
      * 
-     * @param iDistance 
+     * @param iDistance distance to travel
      */
     void setTarget(QLength iDistance);
 
     /**
-     * @brief Set the target trajectory for the robot to follow
+     * @brief Sets the trajectory for the robot to follow
      * 
      * @param iPath the trajectory to follow
      */
     void setTarget(const Trajectory& iPath);
 
     /**
-     * @brief stops the chassis movement
+     * @brief stops all chassis movement
      * 
      */
     void stop();
 
     /**
-     * @brief Task loop to run for the chassis to be controlled asynchronously
+     * @brief Task loop which allows the chassis to be controlled asynchronously
      * 
      */
     void loop() override;
 
     /**
-     * @brief Blocks the most recent movement until it is complete
+     * @brief Blocks the current movement until chassis is settled
      * 
      */
     void waitUntilSettled();
 };
 
+
 /**
- * @brief since constructing an AsyncMotionProfiler requires a lot of parameter that can be confusing to users, 
- *        we wrote this builder class which allows easier / more straight forward instantiation of the class
+ * @brief An AsyncMotionProfile builder class which allows more intuitive instantiation of the class
  * 
  */
 class AsyncMotionProfilerBuilder{
     public:
     /**
-     * @brief Construct a new Async Motion Profiler Builder object
+     * @brief Constructs a new Async Motion Profiler Builder object
      * 
      */
     AsyncMotionProfilerBuilder();
 
     /**
-     * @brief Destroy the Async Motion Profiler Builder object
+     * @brief Destroys the Async Motion Profiler Builder object
      * 
      */
     ~AsyncMotionProfilerBuilder() = default;

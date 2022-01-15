@@ -87,7 +87,7 @@ void opcontrol(void);
 #include "lib/Units.hpp"
 #include "lib/Math.hpp"
 #include "lib/TaskWrapper.hpp"
-#include "lib/Pneumatics.hpp"
+#include "lib/LazyPneumatics.hpp"
 #include "lib/StateMachine.hpp"
 #include "lib/Trajectory.hpp"
 #include "lib/FeedForward.hpp"

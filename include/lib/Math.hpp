@@ -8,7 +8,7 @@
 namespace Math{
 
 /**
- * @brief limits the value to zero if the value is smaller than deadband
+ * @brief sets the value to zero if the value is less than the deadband
  * 
  * @param value the value to limit
  * @param db deadband limit
@@ -30,7 +30,7 @@ template<typename T>
 T clamp(T val, T mn, T mx){return std::max(std::min(mx, val), mn);}
 
 /**
- * @brief Converts feets per second to rounds per minute
+ * @brief Converts ft/s to RPM
  * 
  * @param ftps feets per second
  * @return rounds per minute
@@ -38,7 +38,7 @@ T clamp(T val, T mn, T mx){return std::max(std::min(mx, val), mn);}
 double ftpsToRPM(double ftps);
 
 /**
- * @brief Converts rounds per minute to feet per second
+ * @brief Converts RPM to ft/s
  * 
  * @param rpm rounds per minute
  * @return feet per second
@@ -46,7 +46,7 @@ double ftpsToRPM(double ftps);
 double rpmToFtps(double rpm);
 
 /**
- * @brief Converts feets to encoder ticks (aka. degrees)
+ * @brief Converts ft to encoder ticks (aka. encoder degrees)
  * 
  * @param ft feet
  * @return encoder ticks 
@@ -54,19 +54,12 @@ double rpmToFtps(double rpm);
 double ftToTick(double ft);
 
 /**
- * @brief Converts encoder ticks to feet
+ * @brief Converts encoder ticks to ft
  * 
  * @param tick encoder ticks
  * @return feet
  */
 double tickToFt(double tick);
-
-/**
- * @brief Converts encoder ticks to actual distance
- * 
- * @return actual distance
- */
-QLength tickToDistance();
 
 /**
  * @brief converts radius and angle to arc length using the formula s = rw

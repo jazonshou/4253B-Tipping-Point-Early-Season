@@ -20,10 +20,10 @@ IMU imu(3);
 pros::Vision vision_sensor (17, pros::E_VISION_ZERO_CENTER);
 
 // PNEUMATICS
-Pneumatics mogo('E');
-Pneumatics mogoClamp('F');
-Pneumatics claw('D');
-Pneumatics wings('H');
+LazyPneumatics mogo('E');
+LazyPneumatics mogoClamp('F');
+LazyPneumatics claw('D');
+LazyPneumatics wings('H');
 
 // MOTION PROFILE CONSTANTS
 ProfileConstraint constraint({4.8_ftps, 17.5_ftps2, 17.5_ftps2, 25_ftps3});

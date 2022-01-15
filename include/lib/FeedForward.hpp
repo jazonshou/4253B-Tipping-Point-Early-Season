@@ -2,7 +2,7 @@
 #include "main.h"
 
 /**
- * @brief Class for our custom feedforward velocity controller
+ * @brief Our custom feedforward velocity controller class - used for motion profiles
  * 
  */
 class FFVelocityController{
@@ -12,19 +12,19 @@ class FFVelocityController{
 
     public:
         /**
-         * @brief Construct a new FFVelocityController object
+         * @brief Constructs a new FFVelocityController object
          * 
          */
         FFVelocityController() = default;
 
         /**
-         * @brief Destroy the FFVelocityController object
+         * @brief Destroys the FFVelocityController object
          * 
          */
         ~FFVelocityController() = default;
 
         /**
-         * @brief Construct a new FFVelocityController object
+         * @brief Constructs a new FFVelocityController object
          * 
          * @param ikV velocity constant
          * @param ikAU acceleration constant
@@ -35,7 +35,7 @@ class FFVelocityController{
         FFVelocityController(double ikV, double ikAU, double ikAD, double ikP_Pos, double ikP_Vel);
 
         /**
-         * @brief Calculates one step given the parameters
+         * @brief Calculates one step in accordance to the given parameters
          * 
          * @param position desired position
          * @param velocity desired velocity
