@@ -23,7 +23,7 @@ class OdomDimension{
  *        implement different kinds of odometry
  * 
  */
-class Odometry: public TaskWrapper{
+class Odometry: public LazyTask {
     protected:
     OdomState globalPos{0_m, 0_m, 0_rad}; // the global position of the robot
     OdomDimension dimension{-1_in, -1_in, -1_in, -1_in};

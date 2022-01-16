@@ -6,7 +6,7 @@
  *        and acceleration at a specific time segment
  * 
  */
-struct  TrajectoryPoint{
+struct TrajectoryPoint {
     /**
      * @brief Construct an empty Trajectory Point 
      * 

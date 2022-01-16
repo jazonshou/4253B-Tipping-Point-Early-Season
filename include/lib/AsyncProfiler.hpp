@@ -16,7 +16,7 @@ template class StateMachine<MotionProfileState>;
  * @brief class that allows us to control our chassis asynchronously using motion profiles
  * 
  */
-class AsyncMotionProfiler : public StateMachine<MotionProfileState, MotionProfileState::IDLE>, public TaskWrapper{
+class AsyncMotionProfiler : public StateMachine<MotionProfileState, MotionProfileState::IDLE>, public LazyTask {
     protected:
     /**
      * @brief Construct a new Async Motion Profiler object. The constructor is protected to ensure 

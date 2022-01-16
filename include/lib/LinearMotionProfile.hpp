@@ -45,7 +45,7 @@ struct ProfileConstraint{
  * @brief An abstract class which acts as a base of all linear motion profile classes
  * 
  */
-class LinearMotionProfile{
+class LinearMotionProfile {
     protected:
     ProfileConstraint constraint;
     QLength distance{0.0};
