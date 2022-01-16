@@ -1,34 +1,34 @@
 #include "main.h"
 
-TaskWrapper::~TaskWrapper(){
+LazyTask::~LazyTask(){
     task->remove();
     task.reset(nullptr);
 }
 
-void TaskWrapper::startTask(const char* iname){
+void LazyTask::startTask(const char* iname){
     task = std::move(std::make_unique<pros::Task>(trampoline, this, iname));
 }
 
-void TaskWrapper::pauseTask(){
+void LazyTask::pauseTask(){
     task->suspend();
 }
 
-void TaskWrapper::resumeTask(){
+void LazyTask::resumeTask(){
     task->resume();
 }
 
-void TaskWrapper::stopTask(){
+void LazyTask::stopTask(){
     task->remove();
     task = nullptr;
 }
 
-const char* TaskWrapper::getName(){
+const char* LazyTask::getName(){
     return task->get_name();
 }
 
-void TaskWrapper::trampoline(void* iparam){
+void LazyTask::trampoline(void* iparam){
     if(iparam){
-        TaskWrapper* that = static_cast<TaskWrapper*>(iparam);
+        LazyTask* that = static_cast<LazyTask*>(iparam);
         that->loop();
     }
 }
