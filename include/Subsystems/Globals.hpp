@@ -38,7 +38,7 @@ extern FFVelocityController rightTrajectory;
 
 // SUBSYSTEM CONTROLLERS
 extern std::shared_ptr<ChassisController> chassis;
-extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
+// extern std::shared_ptr<AsyncPositionController<double, double>> liftController;
 extern std::shared_ptr<AsyncMotionProfiler> profiler;
 extern std::shared_ptr<AsyncMotionProfiler> astolfo;
 

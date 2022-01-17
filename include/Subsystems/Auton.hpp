@@ -6,45 +6,11 @@
  *        using pros' LLEMU buttons, as well as all our auton routes
  * 
  */
-namespace Auton {
-    extern pros::Mutex lock;
-    extern std::vector<std::function<void()>> auton;
-    extern std::vector<std::string> name;
-    extern int index;
+class Auton {
+    private: 
+    std::shared_ptr<AsyncPositionController<double, double>> liftController;
 
-    /**
-     * @brief Adds a new autonomous routine to our selector
-     * 
-     * @param iAutonomous the autonomous function
-     * @param iName name of the autonomous
-     */
-    void add(std::function<void()> iAutonomous, std::string iName);
-
-    /**
-     * @brief switched selected auton to the next option
-     * 
-     */
-    void switchAuton();
-
-    /**
-     * @brief locks the routine to the current autonomous
-     * 
-     */
-    void select();
-
-    /**
-     * @brief executes the selected autonomous
-     * 
-     */
-    void execute();
-
-    /**
-     * @brief Get the name of the currently selected autonomous
-     * 
-     * @return std::string 
-     */
-    std::string getName();
-
+    public:
     /**
      * @brief initializes robot for autonomous
      * 

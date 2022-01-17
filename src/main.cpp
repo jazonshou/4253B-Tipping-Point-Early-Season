@@ -32,31 +32,16 @@ void initialize(){
     imu.calibrate();
     pros::delay(3000);
     pros::lcd::set_text(2, "imu calibrated");
-
-    // Adds autonomous functions
-    Auton::add([](){}, "Do Nothing");
-    Auton::add(Auton::skills, "Skills");
-    Auton::add(Auton::right, "Right Wing");
-    Auton::add(Auton::awp, "AWP Wing");
 }
 
 void disabled(){}
 
-void competition_initialize(){
-    // Simple autonomous selector implemented using lambda functions
-    pros::lcd::register_btn0_cb([](){lift.tarePosition();});
-    pros::lcd::register_btn1_cb([](){Auton::switchAuton();});
-    pros::lcd::register_btn2_cb([](){Auton::select();});
-    
-    while(true){
-        std::string message = "Selected Autonomous: " + Auton::getName();
-        pros::lcd::print(0, message.c_str());
-        pros::delay(10);
-    }
-}
+void competition_initialize(){}
 
 void autonomous(){
-    Auton::execute();
+    Auton a = Auton();
+    a.init();
+    a.skills();
 }
 
 void opcontrol(){
@@ -84,16 +69,15 @@ void opcontrol(){
         double curvature = Math::deadband(master.getAnalog(ControllerAnalog::rightX), DEADBAND);
         curvatureDrive(power, curvature, power == 0);
 
-        /**
-         * @brief lift control using an async PID controller
-         *        L1 pressed: increments target angle by LIFT_STEP
-         *        L2 pressed: decrements target angle by LIFT_STEP
-         *        note: target angle is capped to [0, MAX_LIFT_HEIGHT] to protect the lift
-         * 
-         */
-        liftPos += LIFT_STEP * master.getDigital(ControllerDigital::L1); 
-        liftPos -= LIFT_STEP * master.getDigital(ControllerDigital::L2);
-        liftController->setTarget(liftPos = Math::clamp(liftPos, MAX_LIFT_HEIGHT, 0));
+        if(master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2)) {
+            lift.moveVelocity(0);
+        } else if(master.getDigital(ControllerDigital::L1)) {
+            lift.moveVoltage(12000);
+        } else if(master.getDigital(ControllerDigital::L2)) {
+            lift.moveVoltage(-12000);
+        } else {
+            lift.moveVelocity(0);
+        }
 
         /**
          * @brief controlls our roller
@@ -138,6 +122,14 @@ void opcontrol(){
             mogoClamp.toggle();
         }
         prevClampState = clampState;
+
+        if((leftDrive.getTemperature() + rightDrive.getTemperature()) / 2 >= 55 && lift.getTemperature() >= 55) {
+            master.rumble(". - ");
+        } else if(lift.getTemperature() >= 55) {
+            master.rumble(". ");
+        } else if((leftDrive.getTemperature() + rightDrive.getTemperature()) / 2 >= 55) {
+            master.rumble("- ");
+        }
 
         pros::delay(10);
     }

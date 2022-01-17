@@ -1,42 +1,5 @@
 #include "main.h"
 
-pros::Mutex Auton::lock;
-std::vector<std::function<void()>> Auton::auton;
-std::vector<std::string> Auton::name;
-int Auton::index = 0;
-
-
-void Auton::add(std::function<void()> iAutonomous, std::string iName){
-    auton.push_back(iAutonomous);
-    name.push_back(iName);
-}
-
-void Auton::switchAuton(){
-    lock.take(5);
-    index++;
-    index %= auton.size();
-    lock.give();
-}
-
-void Auton::select(){
-    pros::lcd::register_btn0_cb([](){});
-    pros::lcd::register_btn1_cb([](){});
-    pros::lcd::register_btn2_cb([](){});
-}
-
-std::string Auton::getName(){
-    lock.take(5);
-    std::string ret = name[index];
-    lock.give();
-    return ret;
-}
-
-void Auton::execute(){
-    lock.take(5);
-    auton[index];
-    lock.give();
-}
-
 void Auton::init() {
     // sets brake mode
     leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
@@ -44,6 +7,10 @@ void Auton::init() {
     lift.setBrakeMode(AbstractMotor::brakeMode::hold);
 
     // resets lift controller
+    std::shared_ptr<AsyncPositionController<double, double>> liftController = AsyncPosControllerBuilder()
+	    .withMotor(lift)
+	    .withGains({0.007, 0.0, 0.000075}) 
+	    .build();
     liftController->reset();
     
 }
